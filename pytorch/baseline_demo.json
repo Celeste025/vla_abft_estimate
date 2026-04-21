@@ -1,0 +1,163 @@
+{
+  "config": {
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "prompt_lens": [
+      128
+    ],
+    "gen_lens": [
+      32
+    ],
+    "batch_size": 1,
+    "warmup_prefill": 5,
+    "warmup_decode": 5,
+    "iters_prefill": 10,
+    "iters_decode": 300,
+    "abft": {
+      "enable": false,
+      "enable_linear": true,
+      "enable_matmul": true,
+      "enable_bmm": true,
+      "phase": "all",
+      "sample_rate": 1.0,
+      "tol_abs": 0.01,
+      "tol_rel": 0.01,
+      "seed": 2026,
+      "force_fp32_check": true,
+      "detect_only": true,
+      "inject_fault": false,
+      "inject_phase": "all",
+      "inject_probability": 0.0,
+      "inject_magnitude": 1.0
+    }
+  },
+  "global_latency": {
+    "prefill": {
+      "count": 10,
+      "mean_ms": 26.56415672302246,
+      "p50_ms": 26.28947162628174,
+      "p90_ms": 27.165352821350098,
+      "p99_ms": 27.843239307403564
+    },
+    "decode_step": {
+      "count": 10,
+      "mean_ms": 24.817255771160127,
+      "p50_ms": 24.77915945649147,
+      "p90_ms": 24.93541579246521,
+      "p99_ms": 25.30999857664108
+    },
+    "e2e_request": {
+      "count": 10,
+      "mean_ms": 820.7163414001465,
+      "p50_ms": 819.7190046310425,
+      "p90_ms": 824.3032054901123,
+      "p99_ms": 836.9304412841797
+    }
+  },
+  "global_throughput_tps": {
+    "prefill_mean_tps_by_prompt_len": {
+      "128": 4818.522994523133
+    },
+    "decode_mean_tps": 40.294543813425555
+  },
+  "by_prompt_and_gen": {
+    "prompt_128": {
+      "gen_32": {
+        "prefill": {
+          "count": 10,
+          "mean_ms": 26.56415672302246,
+          "p50_ms": 26.28947162628174,
+          "p90_ms": 27.165352821350098,
+          "p99_ms": 27.843239307403564
+        },
+        "decode_step": {
+          "count": 10,
+          "mean_ms": 24.817255771160127,
+          "p50_ms": 24.77915945649147,
+          "p90_ms": 24.93541579246521,
+          "p99_ms": 25.30999857664108
+        },
+        "e2e_request": {
+          "count": 10,
+          "mean_ms": 820.7163414001465,
+          "p50_ms": 819.7190046310425,
+          "p90_ms": 824.3032054901123,
+          "p99_ms": 836.9304412841797
+        },
+        "throughput_tps": {
+          "prefill_mean_tps": 4818.522994523133,
+          "decode_mean_tps": 40.294543813425555
+        }
+      }
+    }
+  },
+  "stats": {
+    "latency": {
+      "prefill": {
+        "count": 20,
+        "mean_ms": 38.15447425842285,
+        "p50_ms": 26.41759967803955,
+        "p90_ms": 27.256649208068847,
+        "p99_ms": 214.48598819732638
+      },
+      "decode_step": {
+        "count": 480,
+        "mean_ms": 24.83474618991216,
+        "p50_ms": 24.625231742858887,
+        "p90_ms": 25.504892921447755,
+        "p99_ms": 27.437211608886717
+      },
+      "e2e_request": {
+        "count": 10,
+        "mean_ms": 820.7163414001465,
+        "p50_ms": 819.7190046310425,
+        "p90_ms": 824.3032054901123,
+        "p99_ms": 836.9304412841797
+      },
+      "by_prompt_len": {
+        "128": {
+          "prefill": {
+            "count": 20,
+            "mean_ms": 38.15447425842285,
+            "p50_ms": 26.41759967803955,
+            "p90_ms": 27.256649208068847,
+            "p99_ms": 214.48598819732638
+          },
+          "decode_step": {
+            "count": 480,
+            "mean_ms": 24.83474618991216,
+            "p50_ms": 24.625231742858887,
+            "p90_ms": 25.504892921447755,
+            "p99_ms": 27.437211608886717
+          },
+          "e2e_request": {
+            "count": 10,
+            "mean_ms": 820.7163414001465,
+            "p50_ms": 819.7190046310425,
+            "p90_ms": 824.3032054901123,
+            "p99_ms": 836.9304412841797
+          }
+        }
+      }
+    },
+    "abft": {
+      "checks_total": 0,
+      "fail_total": 0,
+      "checks_by_phase": {},
+      "fails_by_phase": {},
+      "checks_by_op": {},
+      "fails_by_op": {},
+      "top_shapes_by_checks": [],
+      "top_shapes_by_fails": []
+    },
+    "fault_injection": {
+      "injections_total": 0,
+      "detected_injections_total": 0,
+      "injections_by_phase": {},
+      "detected_injections_by_phase": {},
+      "detection_rate": 0.0
+    }
+  },
+  "run_seconds": 23.4958016872406
+}

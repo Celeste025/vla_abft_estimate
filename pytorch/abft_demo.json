@@ -1,0 +1,255 @@
+{
+  "config": {
+    "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "prompt_lens": [
+      128
+    ],
+    "gen_lens": [
+      32
+    ],
+    "batch_size": 1,
+    "warmup_prefill": 5,
+    "warmup_decode": 5,
+    "iters_prefill": 10,
+    "iters_decode": 300,
+    "abft": {
+      "enable": true,
+      "enable_linear": true,
+      "enable_matmul": true,
+      "enable_bmm": true,
+      "phase": "all",
+      "sample_rate": 1.0,
+      "tol_abs": 0.01,
+      "tol_rel": 0.01,
+      "seed": 2026,
+      "force_fp32_check": true,
+      "detect_only": true,
+      "inject_fault": false,
+      "inject_phase": "all",
+      "inject_probability": 0.0,
+      "inject_magnitude": 1.0
+    }
+  },
+  "global_latency": {
+    "prefill": {
+      "count": 10,
+      "mean_ms": 93.70616302490234,
+      "p50_ms": 92.52811050415039,
+      "p90_ms": 97.9147933959961,
+      "p99_ms": 98.16704086303712
+    },
+    "decode_step": {
+      "count": 10,
+      "mean_ms": 91.55871510505676,
+      "p50_ms": 91.17768466472626,
+      "p90_ms": 93.02123293876647,
+      "p99_ms": 93.05799585342407
+    },
+    "e2e_request": {
+      "count": 10,
+      "mean_ms": 3023.5850463867187,
+      "p50_ms": 3013.2245140075684,
+      "p90_ms": 3068.4504844665526,
+      "p99_ms": 3069.325601119995
+    }
+  },
+  "global_throughput_tps": {
+    "prefill_mean_tps_by_prompt_len": {
+      "128": 1365.972054217865
+    },
+    "decode_mean_tps": 10.92195318438638
+  },
+  "by_prompt_and_gen": {
+    "prompt_128": {
+      "gen_32": {
+        "prefill": {
+          "count": 10,
+          "mean_ms": 93.70616302490234,
+          "p50_ms": 92.52811050415039,
+          "p90_ms": 97.9147933959961,
+          "p99_ms": 98.16704086303712
+        },
+        "decode_step": {
+          "count": 10,
+          "mean_ms": 91.55871510505676,
+          "p50_ms": 91.17768466472626,
+          "p90_ms": 93.02123293876647,
+          "p99_ms": 93.05799585342407
+        },
+        "e2e_request": {
+          "count": 10,
+          "mean_ms": 3023.5850463867187,
+          "p50_ms": 3013.2245140075684,
+          "p90_ms": 3068.4504844665526,
+          "p99_ms": 3069.325601119995
+        },
+        "throughput_tps": {
+          "prefill_mean_tps": 1365.972054217865,
+          "decode_mean_tps": 10.92195318438638
+        }
+      }
+    }
+  },
+  "stats": {
+    "latency": {
+      "prefill": {
+        "count": 20,
+        "mean_ms": 111.60048942565918,
+        "p50_ms": 94.80588912963867,
+        "p90_ms": 104.06243896484376,
+        "p99_ms": 351.3272402191159
+      },
+      "decode_step": {
+        "count": 480,
+        "mean_ms": 91.87961452802023,
+        "p50_ms": 90.8185920715332,
+        "p90_ms": 95.7817008972168,
+        "p99_ms": 114.00590614318844
+      },
+      "e2e_request": {
+        "count": 10,
+        "mean_ms": 3023.5850463867187,
+        "p50_ms": 3013.2245140075684,
+        "p90_ms": 3068.4504844665526,
+        "p99_ms": 3069.325601119995
+      },
+      "by_prompt_len": {
+        "128": {
+          "prefill": {
+            "count": 20,
+            "mean_ms": 111.60048942565918,
+            "p50_ms": 94.80588912963867,
+            "p90_ms": 104.06243896484376,
+            "p99_ms": 351.3272402191159
+          },
+          "decode_step": {
+            "count": 480,
+            "mean_ms": 91.87961452802023,
+            "p50_ms": 90.8185920715332,
+            "p90_ms": 95.7817008972168,
+            "p99_ms": 114.00590614318844
+          },
+          "e2e_request": {
+            "count": 10,
+            "mean_ms": 3023.5850463867187,
+            "p50_ms": 3013.2245140075684,
+            "p90_ms": 3068.4504844665526,
+            "p99_ms": 3069.325601119995
+          }
+        }
+      }
+    },
+    "abft": {
+      "checks_total": 98500,
+      "fail_total": 98360,
+      "checks_by_phase": {
+        "prefill": 3940,
+        "decode": 94560
+      },
+      "fails_by_phase": {
+        "prefill": 3920,
+        "decode": 94440
+      },
+      "checks_by_op": {
+        "linear": 98500
+      },
+      "fails_by_op": {
+        "linear": 98360
+      },
+      "top_shapes_by_checks": [
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 1536)_C(1, 1536)')",
+          "count": 26880
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 256)_C(1, 256)')",
+          "count": 26880
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 8960)_C(1, 8960)')",
+          "count": 26880
+        },
+        {
+          "key": "('decode', 'linear:A(1, 8960)_B(8960, 1536)_C(1, 1536)')",
+          "count": 13440
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 1536)_C(128, 1536)')",
+          "count": 1120
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 256)_C(128, 256)')",
+          "count": 1120
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 8960)_C(128, 8960)')",
+          "count": 1120
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 8960)_B(8960, 1536)_C(128, 1536)')",
+          "count": 560
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 151936)_C(1, 151936)')",
+          "count": 480
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 151936)_C(128, 151936)')",
+          "count": 20
+        }
+      ],
+      "top_shapes_by_fails": [
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 1536)_C(1, 1536)')",
+          "count": 26865
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 256)_C(1, 256)')",
+          "count": 26865
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 8960)_C(1, 8960)')",
+          "count": 26805
+        },
+        {
+          "key": "('decode', 'linear:A(1, 8960)_B(8960, 1536)_C(1, 1536)')",
+          "count": 13425
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 1536)_C(128, 1536)')",
+          "count": 1120
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 8960)_C(128, 8960)')",
+          "count": 1120
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 256)_C(128, 256)')",
+          "count": 1100
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 8960)_B(8960, 1536)_C(128, 1536)')",
+          "count": 560
+        },
+        {
+          "key": "('decode', 'linear:A(1, 1536)_B(1536, 151936)_C(1, 151936)')",
+          "count": 480
+        },
+        {
+          "key": "('prefill', 'linear:A(128, 1536)_B(1536, 151936)_C(128, 151936)')",
+          "count": 20
+        }
+      ]
+    },
+    "fault_injection": {
+      "injections_total": 0,
+      "detected_injections_total": 0,
+      "injections_by_phase": {},
+      "detected_injections_by_phase": {},
+      "detection_rate": 0.0
+    }
+  },
+  "run_seconds": 56.44774627685547
+}

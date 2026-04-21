@@ -1,0 +1,32 @@
+{
+  "description": "CogACT 风格：DINOv2-L + SigLIP So400m 视觉 + Qwen2.5-1.5B LLM + DiT-L 扩散动作头",
+  "huggingface_ids": {
+    "dinov2": "facebook/dinov2-large",
+    "siglip_vision": "google/siglip-so400m-patch14-384",
+    "llm": "Qwen/Qwen2.5-1.5B"
+  },
+  "dit": {
+    "hidden_size": 1024,
+    "num_layers": 24,
+    "num_heads": 16,
+    "mlp_ratio": 4,
+    "in_channels": 7,
+    "patch_size": 1,
+    "num_tokens": 32,
+    "num_diffusion_steps": 10,
+    "cond_dim": 1024,
+    "comment": "num_diffusion_steps 即 n；单步 DiT 前向 FLOPs 乘 n"
+  },
+  "llm": {
+    "prefill_text_tokens": 512,
+    "vision_fused_tokens": 256
+  },
+  "abft": {
+    "pad_each_side": 16,
+    "comment": "GEMM (M,K)x(K,N)：ABFT FLOPs=2*(M+p)*K*(N+p)"
+  },
+  "memory_model": {
+    "bytes_per_param": 2,
+    "comment": "访存(权重)≈参数量×字节；校验和现场算"
+  }
+}
