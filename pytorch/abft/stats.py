@@ -65,6 +65,12 @@ class AbftStatsCollector:
         self.op_failures: Counter[str] = Counter()
         self.shape_checks: Counter[Tuple[str, str]] = Counter()
         self.shape_failures: Counter[Tuple[str, str]] = Counter()
+        self.max_abs_err: float = 0.0
+        self.max_rel_err: float = 0.0
+        self.max_abs_err_meta: Dict[str, Any] = {}
+        self.max_rel_err_meta: Dict[str, Any] = {}
+        self.top_abs_errs: List[Dict[str, Any]] = []
+        self.shape_max_abs_err: Dict[str, Dict[str, Any]] = {}
 
         self.prefill_ms: List[float] = []
         self.decode_step_ms: List[float] = []
@@ -96,6 +102,53 @@ class AbftStatsCollector:
             if injected:
                 self.total_detected_injections += 1
                 self.phase_detected_injections[self.current_phase] += 1
+        self.max_abs_err = max(self.max_abs_err, result.abs_err)
+        self.max_rel_err = max(self.max_rel_err, result.rel_err)
+        if result.abs_err >= self.max_abs_err:
+            self.max_abs_err_meta = {
+                "phase": self.current_phase,
+                "op_name": op_name,
+                "shape_key": shape_key,
+                "abs_err": result.abs_err,
+                "rel_err": result.rel_err,
+                "abft_corner": result.abft_corner,
+                "sum_c": result.sum_c,
+            }
+        if result.rel_err >= self.max_rel_err:
+            self.max_rel_err_meta = {
+                "phase": self.current_phase,
+                "op_name": op_name,
+                "shape_key": shape_key,
+                "abs_err": result.abs_err,
+                "rel_err": result.rel_err,
+                "abft_corner": result.abft_corner,
+                "sum_c": result.sum_c,
+            }
+        self.top_abs_errs.append(
+            {
+                "phase": self.current_phase,
+                "op_name": op_name,
+                "shape_key": shape_key,
+                "abs_err": result.abs_err,
+                "rel_err": result.rel_err,
+                "abft_corner": result.abft_corner,
+                "sum_c": result.sum_c,
+            }
+        )
+        if len(self.top_abs_errs) > 100:
+            self.top_abs_errs = sorted(self.top_abs_errs, key=lambda x: -x["abs_err"])[:100]
+        shape_bucket_key = f"{self.current_phase}|{op_name}|{shape_key}"
+        prev = self.shape_max_abs_err.get(shape_bucket_key)
+        if prev is None or result.abs_err > float(prev["abs_err"]):
+            self.shape_max_abs_err[shape_bucket_key] = {
+                "phase": self.current_phase,
+                "op_name": op_name,
+                "shape_key": shape_key,
+                "abs_err": result.abs_err,
+                "rel_err": result.rel_err,
+                "abft_corner": result.abft_corner,
+                "sum_c": result.sum_c,
+            }
 
     def record_injection(self) -> None:
         self.total_injections += 1
@@ -142,6 +195,14 @@ class AbftStatsCollector:
             "abft": {
                 "checks_total": int(self.total_checks),
                 "fail_total": int(self.total_failures),
+                "max_abs_err": float(self.max_abs_err),
+                "max_rel_err": float(self.max_rel_err),
+                "max_abs_err_meta": self.max_abs_err_meta,
+                "max_rel_err_meta": self.max_rel_err_meta,
+                "top_abs_errs": sorted(self.top_abs_errs, key=lambda x: -x["abs_err"])[:10],
+                "top_abs_errs_by_shape": sorted(
+                    self.shape_max_abs_err.values(), key=lambda x: -float(x["abs_err"])
+                )[:10],
                 "checks_by_phase": dict(self.phase_checks),
                 "fails_by_phase": dict(self.phase_failures),
                 "checks_by_op": dict(self.op_checks),

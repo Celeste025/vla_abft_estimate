@@ -25,6 +25,7 @@ class AbftChecker(ABC):
         b_2d: torch.Tensor,
         c_2d: torch.Tensor,
         meta: OpMeta,
+        bias_1d: Optional[torch.Tensor] = None,
     ) -> CheckResult:
         raise NotImplementedError
 
@@ -32,9 +33,9 @@ class AbftChecker(ABC):
 class CheapSumChecker(AbftChecker):
     """
     经济型 ABFT:
-    sA = A按行求和 (m)
-    sB = B按列求和 (n)
-    abft_corner = sum(sA) * sum(sB)
+    sA = A按列求和 (k)
+    sB = B按行求和 (k)
+    abft_corner = dot(sA, sB)
     sumC = sum(C)
     """
 
@@ -52,14 +53,20 @@ class CheapSumChecker(AbftChecker):
         b_2d: torch.Tensor,
         c_2d: torch.Tensor,
         meta: OpMeta,
+        bias_1d: Optional[torch.Tensor] = None,
     ) -> CheckResult:
         a = self._cast(a_2d)
         b = self._cast(b_2d)
         c = self._cast(c_2d)
 
-        s_a = a.sum(dim=1)  # [m]
-        s_b = b.sum(dim=0)  # [n]
-        abft_corner = s_a.sum() * s_b.sum()
+        s_a = a.sum(dim=0)  # [k]
+        s_b = b.sum(dim=1)  # [k]
+        abft_corner = torch.dot(s_a, s_b)
+        # linear 带 bias 时，sum(C)=sum(A@B)+m*sum(bias)
+        if bias_1d is not None:
+            bias = self._cast(bias_1d)
+            m = a.shape[0]
+            abft_corner = abft_corner + float(m) * bias.sum()
         sum_c = c.sum()
 
         diff = torch.abs(abft_corner - sum_c)

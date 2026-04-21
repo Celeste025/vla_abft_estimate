@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -22,6 +23,9 @@ class AbftConfig:
     inject_phase: str = "all"  # all | prefill | decode
     inject_probability: float = 0.0
     inject_magnitude: float = 1.0
+    dump_shape_key: str = ""
+    dump_phase: str = "all"  # all | prefill | decode
+    dump_file: str = ""
 
     def phase_enabled(self, current_phase: str) -> bool:
         if self.phase == "all":
@@ -32,3 +36,8 @@ class AbftConfig:
         if self.inject_phase == "all":
             return True
         return self.inject_phase == current_phase
+
+    def dump_phase_enabled(self, current_phase: str) -> bool:
+        if self.dump_phase == "all":
+            return True
+        return self.dump_phase == current_phase

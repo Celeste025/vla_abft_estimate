@@ -43,6 +43,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--inject-phase", default="all", choices=["all", "prefill", "decode"])
     ap.add_argument("--inject-probability", type=float, default=0.0)
     ap.add_argument("--inject-magnitude", type=float, default=1.0)
+    ap.add_argument("--dump-shape-key", default="", help="匹配到该shape_key时导出A/B/C/bias")
+    ap.add_argument("--dump-phase", default="all", choices=["all", "prefill", "decode"])
+    ap.add_argument("--dump-file", default="", help="导出文件路径(.pt)")
     ap.add_argument("--max-new-tokens", type=int, default=128)
     ap.add_argument(
         "--prompt-text",
@@ -196,6 +199,9 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
         inject_phase=args.inject_phase,
         inject_probability=args.inject_probability,
         inject_magnitude=args.inject_magnitude,
+        dump_shape_key=args.dump_shape_key,
+        dump_phase=args.dump_phase,
+        dump_file=args.dump_file,
     )
     stats = AbftStatsCollector()
     checker = CheapSumChecker(cfg)
