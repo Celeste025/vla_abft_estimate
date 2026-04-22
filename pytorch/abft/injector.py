@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from contextlib import AbstractContextManager
+import random
 from typing import Any, Callable, Optional, Tuple
 
 import torch
@@ -20,8 +21,7 @@ class AbftInjector(AbstractContextManager):
         self.cfg = cfg
         self.checker = checker
         self.stats = stats
-        self.rng = torch.Generator(device="cpu")
-        self.rng.manual_seed(cfg.seed)
+        self.rng = random.Random(cfg.seed)
 
         self._orig_linear: Optional[Callable[..., torch.Tensor]] = None
         self._orig_matmul: Optional[Callable[..., torch.Tensor]] = None
@@ -53,7 +53,7 @@ class AbftInjector(AbstractContextManager):
     def _sample(self) -> bool:
         if self.cfg.sample_rate >= 1.0:
             return True
-        return bool(torch.rand(1, generator=self.rng).item() < self.cfg.sample_rate)
+        return self.rng.random() < self.cfg.sample_rate
 
     def _maybe_inject_fault(self, out: torch.Tensor) -> Tuple[torch.Tensor, bool]:
         if not self.cfg.inject_fault:
@@ -62,13 +62,13 @@ class AbftInjector(AbstractContextManager):
             return out, False
         if self.cfg.inject_probability <= 0.0:
             return out, False
-        if torch.rand(1, generator=self.rng).item() >= self.cfg.inject_probability:
+        if self.rng.random() >= self.cfg.inject_probability:
             return out, False
 
         flat = out.reshape(-1)
         if flat.numel() == 0:
             return out, False
-        idx = int(torch.randint(0, flat.numel(), (1,), generator=self.rng).item())
+        idx = self.rng.randrange(flat.numel())
         perturbed = out.clone()
         perturbed.reshape(-1)[idx] += self.cfg.inject_magnitude
         self.stats.record_injection()
@@ -84,6 +84,8 @@ class AbftInjector(AbstractContextManager):
         bias_1d: Optional[torch.Tensor] = None,
     ) -> None:
         if not self.cfg.enable:
+            return
+        if not self.cfg.check_enable:
             return
         if not self.cfg.phase_enabled(self.stats.current_phase):
             return
@@ -103,7 +105,8 @@ class AbftInjector(AbstractContextManager):
             OpMeta(op_name=op_name, phase=self.stats.current_phase, shape_key=shape_key),
             bias_1d=bias_1d,
         )
-        self.stats.record_check(op_name=op_name, shape_key=shape_key, result=result, injected=injected)
+        if self.cfg.record_enable:
+            self.stats.record_check(op_name=op_name, shape_key=shape_key, result=result, injected=injected)
         self._maybe_dump_tensors(
             op_name=op_name,
             shape_key=shape_key,

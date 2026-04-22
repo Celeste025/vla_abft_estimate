@@ -7,6 +7,8 @@ from typing import Optional
 @dataclass
 class AbftConfig:
     enable: bool = False
+    check_enable: bool = True
+    record_enable: bool = True
     enable_linear: bool = True
     enable_matmul: bool = True
     enable_bmm: bool = True

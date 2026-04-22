@@ -32,6 +32,8 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--iters-decode", type=int, default=300)
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--abft-enable", action="store_true")
+    ap.add_argument("--abft-check-disable", action="store_true")
+    ap.add_argument("--abft-record-disable", action="store_true")
     ap.add_argument("--abft-sample-rate", type=float, default=1.0)
     ap.add_argument("--abft-phase", default="all", choices=["all", "prefill", "decode"])
     ap.add_argument("--abft-tol-abs", type=float, default=1e-2)
@@ -186,6 +188,8 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
 
     cfg = AbftConfig(
         enable=args.abft_enable,
+        check_enable=not args.abft_check_disable,
+        record_enable=not args.abft_record_disable,
         enable_linear=not args.abft_disable_linear,
         enable_matmul=not args.abft_disable_matmul,
         enable_bmm=not args.abft_disable_bmm,

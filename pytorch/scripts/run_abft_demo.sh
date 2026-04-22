@@ -15,6 +15,7 @@ conda run -n abft_cost python qwen_abft_benchmark.py \
   --warmup-decode 1 \
   --iters-prefill 1 \
   --abft-enable \
+  --abft-record-disable \
   --abft-sample-rate 1.0 \
   --verbose \
   --verbose-max-tokens 32 \
