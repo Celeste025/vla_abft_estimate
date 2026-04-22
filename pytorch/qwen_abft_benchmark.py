@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from contextlib import contextmanager
 from dataclasses import asdict
 from typing import Any, Dict, List, Tuple
 
@@ -34,6 +35,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--abft-enable", action="store_true")
     ap.add_argument("--abft-check-disable", action="store_true")
     ap.add_argument("--abft-record-disable", action="store_true")
+    ap.add_argument("--abft-checker-backend", default="python", choices=["python", "fused", "triton"])
     ap.add_argument("--abft-sample-rate", type=float, default=1.0)
     ap.add_argument("--abft-phase", default="all", choices=["all", "prefill", "decode"])
     ap.add_argument("--abft-tol-abs", type=float, default=1e-2)
@@ -60,6 +62,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--out-json", default="qwen_abft_benchmark_out.json")
     ap.add_argument("--verbose", action="store_true", help="在终端打印每次迭代输入输出与时延")
     ap.add_argument("--verbose-max-tokens", type=int, default=32, help="verbose模式下最多打印多少token")
+    ap.add_argument("--nvtx-enable", action="store_true", help="开启 NVTX 分段标记（用于 Nsight GUI）")
     return ap.parse_args()
 
 
@@ -113,6 +116,17 @@ def _tokens_per_s(tokens: int, latency_ms: float) -> float:
     return float(tokens) * 1000.0 / float(latency_ms)
 
 
+@contextmanager
+def _nvtx_range(enabled: bool, name: str):
+    if enabled:
+        torch.cuda.nvtx.range_push(name)
+    try:
+        yield
+    finally:
+        if enabled:
+            torch.cuda.nvtx.range_pop()
+
+
 @torch.no_grad()
 def run_one_prefill(
     model: AutoModelForCausalLM,
@@ -120,18 +134,20 @@ def run_one_prefill(
     attention_mask: torch.Tensor,
     stats: AbftStatsCollector,
     prompt_len: int,
+    nvtx_enable: bool = False,
 ) -> Tuple[Any, float]:
     stats.set_phase("prefill")
     st = torch.cuda.Event(enable_timing=True)
     ed = torch.cuda.Event(enable_timing=True)
-    st.record()
-    out = model(
-        input_ids=input_ids,
-        attention_mask=attention_mask,
-        use_cache=True,
-        return_dict=True,
-    )
-    ed.record()
+    with _nvtx_range(nvtx_enable, f"prefill_len_{prompt_len}"):
+        st.record()
+        out = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            use_cache=True,
+            return_dict=True,
+        )
+        ed.record()
     torch.cuda.synchronize()
     ms = _elapsed_ms(st, ed)
     stats.record_prefill_latency(prompt_len=prompt_len, ms=ms)
@@ -148,26 +164,28 @@ def run_decode_steps(
     prompt_len: int,
     device: str,
     collect_tokens: bool = False,
+    nvtx_enable: bool = False,
 ) -> Tuple[float, List[int]]:
     token = torch.tensor([[start_token]], device=device, dtype=torch.long)
     st_total = torch.cuda.Event(enable_timing=True)
     ed_total = torch.cuda.Event(enable_timing=True)
-    st_total.record()
     generated_tokens: List[int] = []
-    for _ in range(decode_len):
-        stats.set_phase("decode")
-        out = model(
-            input_ids=token,
-            use_cache=True,
-            past_key_values=past_key_values,
-            return_dict=True,
-        )
-        logits = out.logits[:, -1, :]
-        token = torch.argmax(logits, dim=-1, keepdim=True)
-        if collect_tokens:
-            generated_tokens.append(int(token[0, 0].item()))
-        past_key_values = out.past_key_values
-    ed_total.record()
+    with _nvtx_range(nvtx_enable, f"decode_len_{decode_len}"):
+        st_total.record()
+        for _ in range(decode_len):
+            stats.set_phase("decode")
+            out = model(
+                input_ids=token,
+                use_cache=True,
+                past_key_values=past_key_values,
+                return_dict=True,
+            )
+            logits = out.logits[:, -1, :]
+            token = torch.argmax(logits, dim=-1, keepdim=True)
+            if collect_tokens:
+                generated_tokens.append(int(token[0, 0].item()))
+            past_key_values = out.past_key_values
+        ed_total.record()
     torch.cuda.synchronize()
     total_ms = _elapsed_ms(st_total, ed_total)
     step_ms = total_ms / float(max(decode_len, 1))
@@ -179,7 +197,6 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
     torch.manual_seed(args.seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(args.seed)
-
     device = args.device
     dtype = get_dtype(args.dtype)
     model, tokenizer = build_model_and_tokenizer(args.model_id, dtype=dtype, device=device)
@@ -190,6 +207,7 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
         enable=args.abft_enable,
         check_enable=not args.abft_check_disable,
         record_enable=not args.abft_record_disable,
+        checker_backend=args.abft_checker_backend,
         enable_linear=not args.abft_disable_linear,
         enable_matmul=not args.abft_disable_matmul,
         enable_bmm=not args.abft_disable_bmm,
@@ -213,7 +231,6 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
     decode_step_global: List[float] = []
     request_global: List[float] = []
     per_case: Dict[str, Dict[str, Dict[str, float]]] = {}
-
     with AbftInjector(cfg=cfg, checker=checker, stats=stats):
         for prompt_len in prompt_lens:
             prompt = make_prompt(tokenizer, prompt_len, args.prompt_text)
@@ -232,7 +249,9 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
             for _ in range(args.warmup_prefill):
                 run_one_prefill(model, input_ids, attention_mask, stats, prompt_len)
             for _ in range(args.warmup_decode):
-                pkv, _ = run_one_prefill(model, input_ids, attention_mask, stats, prompt_len)
+                pkv, _ = run_one_prefill(
+                    model, input_ids, attention_mask, stats, prompt_len, nvtx_enable=args.nvtx_enable
+                )
                 _ = run_decode_steps(
                     model=model,
                     past_key_values=pkv,
@@ -242,6 +261,7 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
                     prompt_len=prompt_len,
                     device=device,
                     collect_tokens=False,
+                    nvtx_enable=args.nvtx_enable,
                 )
 
             for gen_len in gen_lens:
@@ -250,7 +270,9 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
                 e2e_samples: List[float] = []
                 for _ in range(args.iters_prefill):
                     iter_idx = len(prefill_samples) + 1
-                    pkv, prefill_ms = run_one_prefill(model, input_ids, attention_mask, stats, prompt_len)
+                    pkv, prefill_ms = run_one_prefill(
+                        model, input_ids, attention_mask, stats, prompt_len, nvtx_enable=args.nvtx_enable
+                    )
                     prefill_samples.append(prefill_ms)
                     prefill_global.append(prefill_ms)
 
@@ -263,6 +285,7 @@ def run_suite(args: argparse.Namespace) -> Dict[str, Any]:
                         prompt_len=prompt_len,
                         device=device,
                         collect_tokens=args.verbose,
+                        nvtx_enable=args.nvtx_enable,
                     )
                     decode_step = decode_total / float(max(gen_len, 1))
                     decode_step_samples.append(decode_step)
