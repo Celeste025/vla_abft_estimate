@@ -11,9 +11,9 @@ conda run -n abft_cost python qwen_abft_benchmark.py \
   --prompt-lens 128 \
   --gen-lens 32 \
   --batch-size 1 \
-  --warmup-prefill 5 \
-  --warmup-decode 5 \
-  --iters-prefill 10 \
+  --warmup-prefill 0 \
+  --warmup-decode 1 \
+  --iters-prefill 1 \
   --abft-enable \
   --abft-sample-rate 1.0 \
   --verbose \

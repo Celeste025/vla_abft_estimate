@@ -148,29 +148,28 @@ def run_decode_steps(
     collect_tokens: bool = False,
 ) -> Tuple[float, List[int]]:
     token = torch.tensor([[start_token]], device=device, dtype=torch.long)
-    total_ms = 0.0
+    st_total = torch.cuda.Event(enable_timing=True)
+    ed_total = torch.cuda.Event(enable_timing=True)
+    st_total.record()
     generated_tokens: List[int] = []
     for _ in range(decode_len):
         stats.set_phase("decode")
-        st = torch.cuda.Event(enable_timing=True)
-        ed = torch.cuda.Event(enable_timing=True)
-        st.record()
         out = model(
             input_ids=token,
             use_cache=True,
             past_key_values=past_key_values,
             return_dict=True,
         )
-        ed.record()
-        torch.cuda.synchronize()
-        step_ms = _elapsed_ms(st, ed)
-        stats.record_decode_step_latency(prompt_len=prompt_len, ms=step_ms)
-        total_ms += step_ms
         logits = out.logits[:, -1, :]
         token = torch.argmax(logits, dim=-1, keepdim=True)
         if collect_tokens:
             generated_tokens.append(int(token[0, 0].item()))
         past_key_values = out.past_key_values
+    ed_total.record()
+    torch.cuda.synchronize()
+    total_ms = _elapsed_ms(st_total, ed_total)
+    step_ms = total_ms / float(max(decode_len, 1))
+    stats.record_decode_step_latency(prompt_len=prompt_len, ms=step_ms)
     return total_ms, generated_tokens
 
 
