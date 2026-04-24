@@ -9,6 +9,8 @@
 - `triton_abft_full`：ABFT kernel + 后规约
 - `triton_abft_naive_full`：先 matmul，再独立计算 `sum(A列)`/`sum(B行)`/`sum(C全部)`/点积
 
+进阶（独立模块，不影响主脚本输出）：K 向批量 flush 的融合 ABFT 见 `abft_fused_smem.py`；对比性能可运行 `python bench_abft_fused_smem.py --m-min 8 --m-max 17`。
+
 ## 环境要求
 
 - Python 3.10+
