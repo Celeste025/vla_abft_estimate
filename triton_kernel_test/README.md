@@ -1,71 +1,54 @@
-# Triton GEMM Baseline + Fused ABFT
+# Triton Matmul + ABFT Benchmark
 
-本目录实现了基于 Triton `03-matrix-multiplication` 官方教程结构的 GEMM baseline 与融合 ABFT 校验版本，并提供统一验证与 benchmark 框架。
+当前目录仅保留一个主脚本：`reproduce_tutorial_matmul_bench.py`。  
+该脚本用于对比以下实现的性能与 ABFT 指标：
 
-## 文件说明
-
-- `triton_gemm_baseline.py`  
-  教程风格 GEMM kernel（无 ABFT），输出 `float32`。
-- `triton_gemm_abft_fused.py`  
-  在 GEMM tile 循环中融合 `sumA/sumB/sumC` 累积，并输出 `dot(sumA,sumB)` 与 `sumC` 的误差。
-- `verify_abft.py`  
-  正确性验证脚本：baseline/fused vs `torch.matmul`，并检查 ABFT 标量一致性。
-- `benchmark_abft.py`  
-  统一性能测试脚本，输出 `torch.matmul(=cuBLAS)` / `baseline` / `fused ABFT` 的时间、TFLOPS 与差异。
-- `run_bench.sh`  
-  一键执行验证和 benchmark。
+- `cublas`：`torch.matmul`
+- `triton`：教程风格 Triton matmul
+- `triton_abft_kernel`：仅 ABFT kernel（不含 host 端后规约）
+- `triton_abft_full`：ABFT kernel + 后规约
+- `triton_abft_naive_full`：先 matmul，再独立计算 `sum(A列)`/`sum(B行)`/`sum(C全部)`/点积
 
 ## 环境要求
 
 - Python 3.10+
-- CUDA 可用 GPU
+- CUDA GPU
 - `torch`（CUDA 版本）
 - `triton`
 
-## 快速开始
+## 运行方式
+
+在目录下执行：
 
 ```bash
-cd /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test
-python verify_abft.py --dtype fp16 --shape 4096,4096,4096 --shape 8192,4096,4096
-python benchmark_abft.py --dtype fp16 --warmup 20 --repeat 100 --shape 4096,4096,4096 --shape 8192,4096,4096
+python reproduce_tutorial_matmul_bench.py
 ```
 
-或直接运行：
+可选参数：
 
 ```bash
-./run_bench.sh
+python reproduce_tutorial_matmul_bench.py --m-min 2 --m-max 33
 ```
 
-## 输出指标
+其中矩阵规模为：`M=N=K=128*i`，`i` 从 `m-min` 到 `m-max-1`。
 
-- 正确性：
-  - `baseline_ok`、`fused_ok`、`fused_vs_baseline_ok`
-- ABFT 一致性：
-  - `abft_abs_error = |dot(sumA,sumB) - sumC|`
-  - `abft_rel_error = abft_abs_error / max(|sumC|, 1e-8)`
-- 性能：
-  - `torch_ms`、`baseline_ms`、`fused_ms`
-  - `torch_tflops`、`baseline_tflops`、`fused_tflops`
-  - `baseline_vs_torch_pct = (baseline_ms - torch_ms) / torch_ms * 100`
-  - `fused_vs_torch_pct = (fused_ms - torch_ms) / torch_ms * 100`
-  - `overhead_pct = (fused_ms - baseline_ms) / baseline_ms * 100`
+## 输出字段说明
 
-## 形状与阈值建议
+脚本输出 CSV 格式，表头为：
 
-- 默认形状：
-  - `4096 x 4096 x 4096`
-  - `8192 x 4096 x 4096`
-- 容差建议：
-  - matmul 一致性默认 `atol=1e-2, rtol=1e-2`
-  - ABFT 标量检查可先用 `abft_tol=5e-1`，再按 dtype 和规模收紧
+`provider,M,N,K,TFLOPS,abft_kernel_overhead_pct,abft_full_overhead_pct,abft_abs_error,abft_rel_error`
 
-## 后续优化建议
+- `provider`：实现名称
+- `TFLOPS`：按 `2*M*N*K / time` 计算
+- `abft_kernel_overhead_pct`：`(ms_abft_kernel - ms_triton) / ms_triton * 100`
+- `abft_full_overhead_pct`：`(ms_abft_full - ms_triton) / ms_triton * 100`
+- `abft_abs_error`：`|dot(sum_a, sum_b) - sum_c|`
+- `abft_rel_error`：`abft_abs_error / max(|sum_c|, 1e-8)`
 
-- 使用两级归约（block 局部缓冲 -> 最终归约）降低 `sumA/sumB/sumC` 的原子竞争。
-- 分 dtype 调整 `BLOCK_M/N/K`、`num_warps`、`num_stages`。
-- 对 ABFT 累积路径单独 profile，评估寄存器压力与 occupancy 变化。
+说明：对于 `cublas` / `triton` 行，ABFT 相关字段为空。
 
-## 参考实现
+## 当前实现要点
 
-- Triton 官方教程源码：`python/tutorials/03-matrix-multiplication.py`
-- Triton 教程文档（含基准测试）：HyperAI 镜像文档的 Matrix Multiplication 章节
+- ABFT 版本在 Triton kernel 内融合了部分 checksum 计算，并写入 partial buffer。
+- `triton_abft_full` 在 kernel 结束后会做 `sum_a_partial`、`sum_b_partial`、`sum_c_partial` 的归约并计算点积误差。
+- `triton_abft_naive_full` 作为参考基线，采用“先乘法后校验”的直接流程。
