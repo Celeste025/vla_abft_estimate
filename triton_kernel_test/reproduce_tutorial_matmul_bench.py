@@ -1,4 +1,5 @@
 import argparse
+import builtins
 
 import torch
 import triton
@@ -132,7 +133,7 @@ def matmul(a, b):
 
 
 @triton.autotune(
-    configs=get_cuda_autotune_config(),
+    configs=get_abft_autotune_config(),
     key=["M", "N", "K"],
     reset_to_zero=["sum_a_partial_ptr", "sum_b_partial_ptr", "sum_c_partial_ptr"],
 )
@@ -178,18 +179,23 @@ def matmul_abft_kernel(
     # Keep per-program partial checksum in fp32 and write once per k-block.
     # This avoids vector atomic-add hotspots on global sum_a/sum_b.
     accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+    pid_n_is_zero = pid_n == 0
+    pid_m_is_zero = pid_m == 0
     for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
         k_offsets = k * BLOCK_SIZE_K + offs_k
         a = tl.load(a_ptrs, mask=offs_k[None, :] < K - k * BLOCK_SIZE_K, other=0.0)
         b = tl.load(b_ptrs, mask=offs_k[:, None] < K - k * BLOCK_SIZE_K, other=0.0)
         accumulator = tl.dot(a, b, accumulator)
 
-        partial_a = tl.sum(a.to(tl.float32), axis=0)
-        partial_b = tl.sum(b.to(tl.float32), axis=1)
-        sum_a_ptrs = sum_a_partial_ptr + pid_m * K + k_offsets
-        sum_b_ptrs = sum_b_partial_ptr + pid_n * K + k_offsets
-        tl.store(sum_a_ptrs, partial_a, mask=(k_offsets < K) & (pid_n == 0))
-        tl.store(sum_b_ptrs, partial_b, mask=(k_offsets < K) & (pid_m == 0))
+        k_mask = k_offsets < K
+        if pid_n_is_zero:
+            partial_a = tl.sum(a.to(tl.float32), axis=0)
+            sum_a_ptrs = sum_a_partial_ptr + pid_m * K + k_offsets
+            tl.store(sum_a_ptrs, partial_a, mask=k_mask)
+        if pid_m_is_zero:
+            partial_b = tl.sum(b.to(tl.float32), axis=1)
+            sum_b_ptrs = sum_b_partial_ptr + pid_n * K + k_offsets
+            tl.store(sum_b_ptrs, partial_b, mask=k_mask)
 
         a_ptrs += BLOCK_SIZE_K * stride_ak
         b_ptrs += BLOCK_SIZE_K * stride_bk
@@ -257,20 +263,22 @@ def matmul_abft_component_kernel(
     b_ptrs = b_ptr + (offs_k[:, None] * stride_bk + offs_bn[None, :] * stride_bn)
 
     accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+    pid_n_is_zero = pid_n == 0
+    pid_m_is_zero = pid_m == 0
     for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
         k_offsets = k * BLOCK_SIZE_K + offs_k
         a = tl.load(a_ptrs, mask=offs_k[None, :] < K - k * BLOCK_SIZE_K, other=0.0)
         b = tl.load(b_ptrs, mask=offs_k[:, None] < K - k * BLOCK_SIZE_K, other=0.0)
         accumulator = tl.dot(a, b, accumulator)
 
-        if DO_SUM_A:
+        if DO_SUM_A and pid_n_is_zero:
             partial_a = tl.sum(a.to(tl.float32), axis=0)
             sum_a_ptrs = sum_a_partial_ptr + pid_m * K + k_offsets
-            tl.store(sum_a_ptrs, partial_a, mask=(k_offsets < K) & (pid_n == 0))
-        if DO_SUM_B:
+            tl.store(sum_a_ptrs, partial_a, mask=(k_offsets < K))
+        if DO_SUM_B and pid_m_is_zero:
             partial_b = tl.sum(b.to(tl.float32), axis=1)
             sum_b_ptrs = sum_b_partial_ptr + pid_n * K + k_offsets
-            tl.store(sum_b_ptrs, partial_b, mask=(k_offsets < K) & (pid_m == 0))
+            tl.store(sum_b_ptrs, partial_b, mask=(k_offsets < K))
 
         a_ptrs += BLOCK_SIZE_K * stride_ak
         b_ptrs += BLOCK_SIZE_K * stride_bk
@@ -287,6 +295,75 @@ def matmul_abft_component_kernel(
         sum_c_slot = sum_c_partial_ptr + pid_m * num_pid_n + pid_n
         sum_c_tile = tl.sum(tl.sum(accumulator, axis=1), axis=0)
         tl.store(sum_c_slot, sum_c_tile)
+
+
+@triton.autotune(
+    configs=get_cuda_autotune_config(),
+    key=["M", "N", "K"],
+    reset_to_zero=["sum_a_partial_ptr", "sum_b_partial_ptr", "sum_c_partial_ptr"],
+)
+@triton.jit
+def partial_reduce_only_abft_kernel(
+    a_ptr,
+    b_ptr,
+    c_rand_ptr,
+    sum_a_partial_ptr,
+    sum_b_partial_ptr,
+    sum_c_partial_ptr,
+    M,
+    N,
+    K,
+    stride_am,
+    stride_ak,
+    stride_bk,
+    stride_bn,
+    stride_crm,
+    stride_crn,
+    BLOCK_SIZE_M: tl.constexpr,
+    BLOCK_SIZE_N: tl.constexpr,
+    BLOCK_SIZE_K: tl.constexpr,
+    GROUP_SIZE_M: tl.constexpr,
+):
+    pid = tl.program_id(axis=0)
+    num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)
+    num_pid_n = tl.cdiv(N, BLOCK_SIZE_N)
+    num_pid_in_group = GROUP_SIZE_M * num_pid_n
+    group_id = pid // num_pid_in_group
+    first_pid_m = group_id * GROUP_SIZE_M
+    group_size_m = tl.minimum(num_pid_m - first_pid_m, GROUP_SIZE_M)
+    pid_m = first_pid_m + ((pid % num_pid_in_group) % group_size_m)
+    pid_n = (pid % num_pid_in_group) // group_size_m
+
+    offs_am = (pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)) % M
+    offs_bn = (pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)) % N
+    offs_k = tl.arange(0, BLOCK_SIZE_K)
+    a_ptrs = a_ptr + (offs_am[:, None] * stride_am + offs_k[None, :] * stride_ak)
+    b_ptrs = b_ptr + (offs_k[:, None] * stride_bk + offs_bn[None, :] * stride_bn)
+
+    for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
+        k_offsets = k * BLOCK_SIZE_K + offs_k
+        a = tl.load(a_ptrs, mask=offs_k[None, :] < K - k * BLOCK_SIZE_K, other=0.0)
+        b = tl.load(b_ptrs, mask=offs_k[:, None] < K - k * BLOCK_SIZE_K, other=0.0)
+
+        partial_a = tl.sum(a.to(tl.float32), axis=0)
+        partial_b = tl.sum(b.to(tl.float32), axis=1)
+        sum_a_ptrs = sum_a_partial_ptr + pid_m * K + k_offsets
+        sum_b_ptrs = sum_b_partial_ptr + pid_n * K + k_offsets
+        tl.store(sum_a_ptrs, partial_a, mask=(k_offsets < K) & (pid_n == 0))
+        tl.store(sum_b_ptrs, partial_b, mask=(k_offsets < K) & (pid_m == 0))
+
+        a_ptrs += BLOCK_SIZE_K * stride_ak
+        b_ptrs += BLOCK_SIZE_K * stride_bk
+
+    offs_cm = pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)
+    offs_cn = pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)
+    c_rand_ptrs = c_rand_ptr + stride_crm * offs_cm[:, None] + stride_crn * offs_cn[None, :]
+    c_rand_mask = (offs_cm[:, None] < M) & (offs_cn[None, :] < N)
+    c_rand_tile = tl.load(c_rand_ptrs, mask=c_rand_mask, other=0.0).to(tl.float32)
+    num_pid_n_sc = tl.cdiv(N, BLOCK_SIZE_N)
+    sum_c_slot = sum_c_partial_ptr + pid_m * num_pid_n_sc + pid_n
+    sum_c_tile = tl.sum(tl.sum(c_rand_tile, axis=1), axis=0)
+    tl.store(sum_c_slot, sum_c_tile)
 
 
 # ABFT fused-path ablations (same grid / partial layout as matmul_abft_kernel):
@@ -386,6 +463,85 @@ def matmul_abft_ablation_kernel(
     sum_c_slot = sum_c_partial_ptr + pid_m * num_pid_n_sc + pid_n
     sum_c_tile = tl.sum(tl.sum(accumulator, axis=1), axis=0)
     tl.store(sum_c_slot, sum_c_tile)
+
+
+@triton.autotune(
+    configs=get_abft_autotune_config(),
+    key=["M", "N", "K"],
+    reset_to_zero=["compute_sink_ptr"],
+)
+@triton.jit
+def matmul_compute_isolation_kernel(
+    a_ptr,
+    b_ptr,
+    scratch_a_ptr,
+    scratch_b_ptr,
+    compute_sink_ptr,
+    M,
+    N,
+    K,
+    stride_am,
+    stride_ak,
+    stride_bk,
+    stride_bn,
+    stride_sam,
+    stride_sak,
+    stride_sbk,
+    stride_sbn,
+    ISOLATION_MODE: tl.constexpr,
+    BLOCK_SIZE_M: tl.constexpr,
+    BLOCK_SIZE_N: tl.constexpr,
+    BLOCK_SIZE_K: tl.constexpr,
+    GROUP_SIZE_M: tl.constexpr,
+):
+    pid = tl.program_id(axis=0)
+    num_pid_m = tl.cdiv(M, BLOCK_SIZE_M)
+    num_pid_n = tl.cdiv(N, BLOCK_SIZE_N)
+    num_pid_in_group = GROUP_SIZE_M * num_pid_n
+    group_id = pid // num_pid_in_group
+    first_pid_m = group_id * GROUP_SIZE_M
+    group_size_m = tl.minimum(num_pid_m - first_pid_m, GROUP_SIZE_M)
+    pid_m = first_pid_m + ((pid % num_pid_in_group) % group_size_m)
+    pid_n = (pid % num_pid_in_group) // group_size_m
+
+    offs_am = (pid_m * BLOCK_SIZE_M + tl.arange(0, BLOCK_SIZE_M)) % M
+    offs_bn = (pid_n * BLOCK_SIZE_N + tl.arange(0, BLOCK_SIZE_N)) % N
+    offs_k = tl.arange(0, BLOCK_SIZE_K)
+    a_ptrs = a_ptr + (offs_am[:, None] * stride_am + offs_k[None, :] * stride_ak)
+    b_ptrs = b_ptr + (offs_k[:, None] * stride_bk + offs_bn[None, :] * stride_bn)
+    scratch_a_ptrs = scratch_a_ptr + (offs_am[:, None] * stride_sam + offs_k[None, :] * stride_sak)
+    scratch_b_ptrs = scratch_b_ptr + (offs_k[:, None] * stride_sbk + offs_bn[None, :] * stride_sbn)
+
+    accumulator = tl.zeros((BLOCK_SIZE_M, BLOCK_SIZE_N), dtype=tl.float32)
+    sink_acc = tl.zeros((), dtype=tl.float32)
+    for k in range(0, tl.cdiv(K, BLOCK_SIZE_K)):
+        a = tl.load(a_ptrs, mask=offs_k[None, :] < K - k * BLOCK_SIZE_K, other=0.0)
+        b = tl.load(b_ptrs, mask=offs_k[:, None] < K - k * BLOCK_SIZE_K, other=0.0)
+        # Force full-tile memory traffic (load + store) in all modes.
+        tl.store(scratch_a_ptrs, a, mask=offs_k[None, :] < K - k * BLOCK_SIZE_K)
+        tl.store(scratch_b_ptrs, b, mask=offs_k[:, None] < K - k * BLOCK_SIZE_K)
+
+        if ISOLATION_MODE == 0:
+            # No extra arithmetic in pure memory skeleton.
+            pass
+        elif ISOLATION_MODE == 1:
+            accumulator = tl.dot(a, b, accumulator)
+        elif ISOLATION_MODE == 2:
+            partial_a = tl.sum(a.to(tl.float32), axis=0)
+            partial_b = tl.sum(b.to(tl.float32), axis=1)
+            if pid_n == 0:
+                sink_acc += tl.sum(partial_a)
+            if pid_m == 0:
+                sink_acc += tl.sum(partial_b)
+
+        a_ptrs += BLOCK_SIZE_K * stride_ak
+        b_ptrs += BLOCK_SIZE_K * stride_bk
+        scratch_a_ptrs += BLOCK_SIZE_K * stride_sak
+        scratch_b_ptrs += BLOCK_SIZE_K * stride_sbk
+
+    if ISOLATION_MODE == 1:
+        sink_acc += tl.sum(tl.sum(accumulator, axis=1), axis=0)
+    tl.store(compute_sink_ptr + pid, sink_acc)
 
 
 @triton.autotune(
@@ -781,6 +937,30 @@ def launch_matmul_abft_component_kernel_only(
     )
 
 
+def launch_partial_reduce_only_abft_kernel(a, b, c_rand, sum_a_partial, sum_b_partial, sum_c_partial):
+    """Launch ABFT-style partial reductions only (no tl.dot matmul)."""
+    M, K = a.shape
+    _, N = b.shape
+    grid = lambda META: (triton.cdiv(M, META["BLOCK_SIZE_M"]) * triton.cdiv(N, META["BLOCK_SIZE_N"]),)
+    partial_reduce_only_abft_kernel[grid](
+        a,
+        b,
+        c_rand,
+        sum_a_partial,
+        sum_b_partial,
+        sum_c_partial,
+        M,
+        N,
+        K,
+        a.stride(0),
+        a.stride(1),
+        b.stride(0),
+        b.stride(1),
+        c_rand.stride(0),
+        c_rand.stride(1),
+    )
+
+
 def launch_matmul_abft_ablation_kernel_only(
     a,
     b,
@@ -816,6 +996,34 @@ def launch_matmul_abft_ablation_kernel_only(
     )
 
 
+def launch_matmul_compute_isolation_kernel_only(a, b, compute_sink, isolation_mode):
+    """Launch compute-isolation kernel: 0 mem-skeleton, 1 mm-only, 2 AB-reduce-only."""
+    M, K = a.shape
+    _, N = b.shape
+    scratch_a = torch.empty_like(a)
+    scratch_b = torch.empty_like(b)
+    grid = lambda META: (triton.cdiv(M, META["BLOCK_SIZE_M"]) * triton.cdiv(N, META["BLOCK_SIZE_N"]),)
+    matmul_compute_isolation_kernel[grid](
+        a,
+        b,
+        scratch_a,
+        scratch_b,
+        compute_sink,
+        M,
+        N,
+        K,
+        a.stride(0),
+        a.stride(1),
+        b.stride(0),
+        b.stride(1),
+        scratch_a.stride(0),
+        scratch_a.stride(1),
+        scratch_b.stride(0),
+        scratch_b.stride(1),
+        ISOLATION_MODE=isolation_mode,
+    )
+
+
 def run_abft_sanity(m=1024, n=1024, k=1024, atol=1e-2, rtol=1e-2):
     a = torch.randn((m, k), device="cuda", dtype=torch.float16)
     b = torch.randn((k, n), device="cuda", dtype=torch.float16)
@@ -837,18 +1045,28 @@ def run_abft_sanity(m=1024, n=1024, k=1024, atol=1e-2, rtol=1e-2):
     )
 
 
-def run_benchmark(m_min=2, m_max=33):
+def run_benchmark(m_min=1, m_max=21, csv_out="benchmark_results.csv"):
     if not is_cuda():
         raise RuntimeError("This reproduction script expects CUDA backend.")
     ref_lib = "cublas"
+    csv_rows = []
+    _builtin_print = builtins.print
+
+    def print(*args, **kwargs):
+        line = " ".join(str(x) for x in args)
+        if line and not line.startswith("-"):
+            csv_rows.append(line)
+        _builtin_print(*args, **kwargs)
+
     print(
         "provider,M,N,K,TFLOPS,abft_kernel_overhead_pct,abft_full_overhead_pct,"
         "abft_abs_error,abft_rel_error"
     )
     for i in range(m_min, m_max):
-        m = n = k = 128 * i
+        m = n = k = 256 * i
         a = torch.randn((m, k), device="cuda", dtype=torch.float16)
         b = torch.randn((k, n), device="cuda", dtype=torch.float16)
+        c_rand = torch.randn((m, n), device="cuda", dtype=torch.float16)
         quantiles = [0.5, 0.2, 0.8]
         ms_ref, _, _ = triton.testing.do_bench(lambda: torch.matmul(a, b), quantiles=quantiles)
         ms_tri, _, _ = triton.testing.do_bench(lambda: matmul(a, b), quantiles=quantiles)
@@ -877,6 +1095,58 @@ def run_benchmark(m_min=2, m_max=33):
         ms_abft_sum_c_only_kernel, _, _ = triton.testing.do_bench(
             lambda: launch_matmul_abft_component_kernel_only(
                 a, b, c_abft, sum_a_partial, sum_b_partial, sum_c_partial, do_sum_c=True
+            ),
+            quantiles=quantiles,
+        )
+        ms_abft_partial_reduce_fast_torch, _, _ = triton.testing.do_bench(
+            lambda: (
+                a.to(torch.float32).sum(dim=0),
+                b.to(torch.float32).sum(dim=1),
+                c_rand.to(torch.float32).sum(),
+            ),
+            quantiles=quantiles,
+        )
+        ms_abft_partial_reduce_abft_like, _, _ = triton.testing.do_bench(
+            lambda: launch_partial_reduce_only_abft_kernel(
+                a, b, c_rand, sum_a_partial, sum_b_partial, sum_c_partial
+            ),
+            quantiles=quantiles,
+        )
+        sum_a_ck = torch.zeros((k,), device=a.device, dtype=torch.float32)
+        sum_b_ck = torch.zeros((k,), device=a.device, dtype=torch.float32)
+        grid_a = (triton.cdiv(m, 128) * triton.cdiv(k, 128),)
+        grid_b = (triton.cdiv(n, 128) * triton.cdiv(k, 128),)
+        ms_checksum_ab_kernels, _, _ = triton.testing.do_bench(
+            lambda: (
+                sum_a_ck.zero_(),
+                sum_b_ck.zero_(),
+                checksum_a_kernel[grid_a](
+                    a,
+                    sum_a_ck,
+                    m,
+                    k,
+                    a.stride(0),
+                    a.stride(1),
+                    BLOCK_SIZE_M=128,
+                    BLOCK_SIZE_K=128,
+                ),
+                checksum_b_kernel[grid_b](
+                    b,
+                    sum_b_ck,
+                    k,
+                    n,
+                    b.stride(0),
+                    b.stride(1),
+                    BLOCK_SIZE_N=128,
+                    BLOCK_SIZE_K=128,
+                ),
+            ),
+            quantiles=quantiles,
+        )
+        ms_checksum_ab_torch_sum, _, _ = triton.testing.do_bench(
+            lambda: (
+                a.to(torch.float32).sum(dim=0),
+                b.to(torch.float32).sum(dim=1),
             ),
             quantiles=quantiles,
         )
@@ -922,6 +1192,19 @@ def run_benchmark(m_min=2, m_max=33):
             ),
             quantiles=quantiles,
         )
+        compute_sink = torch.zeros((num_pid_m * num_pid_n,), device=a.device, dtype=torch.float32)
+        ms_iso_mem_skeleton, _, _ = triton.testing.do_bench(
+            lambda: launch_matmul_compute_isolation_kernel_only(a, b, compute_sink, 0),
+            quantiles=quantiles,
+        )
+        ms_iso_mm_only, _, _ = triton.testing.do_bench(
+            lambda: launch_matmul_compute_isolation_kernel_only(a, b, compute_sink, 1),
+            quantiles=quantiles,
+        )
+        ms_iso_ab_reduce_only, _, _ = triton.testing.do_bench(
+            lambda: launch_matmul_compute_isolation_kernel_only(a, b, compute_sink, 2),
+            quantiles=quantiles,
+        )
         ms_abft_naive_kernel, _, _ = triton.testing.do_bench(
             lambda: launch_matmul_naive_kernel_only(a, b),
             quantiles=quantiles,
@@ -944,6 +1227,10 @@ def run_benchmark(m_min=2, m_max=33):
         abft_sum_a_only_kernel_overhead_pct = (ms_abft_sum_a_only_kernel - ms_tri) / ms_tri * 100.0
         abft_sum_b_only_kernel_overhead_pct = (ms_abft_sum_b_only_kernel - ms_tri) / ms_tri * 100.0
         abft_sum_c_only_kernel_overhead_pct = (ms_abft_sum_c_only_kernel - ms_tri) / ms_tri * 100.0
+        abft_partial_reduce_fast_torch_overhead_pct = (ms_abft_partial_reduce_fast_torch - ms_tri) / ms_tri * 100.0
+        abft_partial_reduce_abft_like_overhead_pct = (ms_abft_partial_reduce_abft_like - ms_tri) / ms_tri * 100.0
+        checksum_ab_kernels_overhead_pct = (ms_checksum_ab_kernels - ms_tri) / ms_tri * 100.0
+        checksum_ab_torch_sum_overhead_pct = (ms_checksum_ab_torch_sum - ms_tri) / ms_tri * 100.0
         abft_ablate_no_sum_store0_overhead_pct = (ms_abft_ablate_no_sum_store0 - ms_tri) / ms_tri * 100.0
         abft_ablate_sum_no_partial_store_overhead_pct = (
             (ms_abft_ablate_sum_no_partial_store - ms_tri) / ms_tri * 100.0
@@ -951,6 +1238,12 @@ def run_benchmark(m_min=2, m_max=33):
         abft_ablate_loop_matmul_only_overhead_pct = (
             (ms_abft_ablate_loop_matmul_only - ms_tri) / ms_tri * 100.0
         )
+        iso_mem_skeleton_overhead_pct = (ms_iso_mem_skeleton - ms_tri) / ms_tri * 100.0
+        iso_mm_only_overhead_pct = (ms_iso_mm_only - ms_tri) / ms_tri * 100.0
+        iso_ab_reduce_only_overhead_pct = (ms_iso_ab_reduce_only - ms_tri) / ms_tri * 100.0
+        ms_mm_compute_est = max(ms_iso_mm_only - ms_iso_mem_skeleton, 1e-6)
+        ms_ab_reduce_compute_est = max(ms_iso_ab_reduce_only - ms_iso_mem_skeleton, 1e-6)
+        reduce_vs_mm_ratio = ms_ab_reduce_compute_est / ms_mm_compute_est
         abft_naive_kernel_overhead_pct = (ms_abft_naive_kernel - ms_tri) / ms_tri * 100.0
         abft_two_stage_kernel_overhead_pct = (ms_abft_two_stage_kernel - ms_tri) / ms_tri * 100.0
         abft_full_overhead_pct = (ms_abft_full - ms_tri) / ms_tri * 100.0
@@ -976,6 +1269,22 @@ def run_benchmark(m_min=2, m_max=33):
             f"{abft_sum_c_only_kernel_overhead_pct:.2f},,,"
         )
         print(
+            f"triton_abft_partial_reduce_fast_torch,{m},{n},{k},{perf(ms_abft_partial_reduce_fast_torch):.4f},"
+            f"{abft_partial_reduce_fast_torch_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_abft_partial_reduce_abft_like,{m},{n},{k},{perf(ms_abft_partial_reduce_abft_like):.4f},"
+            f"{abft_partial_reduce_abft_like_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_checksum_ab_kernels,{m},{n},{k},{perf(ms_checksum_ab_kernels):.4f},"
+            f"{checksum_ab_kernels_overhead_pct:.2f},,,"
+        )
+        print(
+            f"torch_checksum_ab_sum,{m},{n},{k},{perf(ms_checksum_ab_torch_sum):.4f},"
+            f"{checksum_ab_torch_sum_overhead_pct:.2f},,,"
+        )
+        print(
             f"triton_abft_ablate_no_sum_store0,{m},{n},{k},{perf(ms_abft_ablate_no_sum_store0):.4f},"
             f"{abft_ablate_no_sum_store0_overhead_pct:.2f},,,"
         )
@@ -988,6 +1297,30 @@ def run_benchmark(m_min=2, m_max=33):
             f"triton_abft_ablate_loop_matmul_sumc,{m},{n},{k},"
             f"{perf(ms_abft_ablate_loop_matmul_only):.4f},"
             f"{abft_ablate_loop_matmul_only_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_iso_mem_skeleton,{m},{n},{k},{perf(ms_iso_mem_skeleton):.4f},"
+            f"{iso_mem_skeleton_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_iso_mm_only,{m},{n},{k},{perf(ms_iso_mm_only):.4f},"
+            f"{iso_mm_only_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_iso_ab_reduce_only,{m},{n},{k},{perf(ms_iso_ab_reduce_only):.4f},"
+            f"{iso_ab_reduce_only_overhead_pct:.2f},,,"
+        )
+        print(
+            f"triton_iso_mm_compute_est,{m},{n},{k},{perf(ms_mm_compute_est):.4f},"
+            f"{(ms_mm_compute_est - ms_tri) / ms_tri * 100.0:.2f},,,"
+        )
+        print(
+            f"triton_iso_ab_reduce_compute_est,{m},{n},{k},{perf(ms_ab_reduce_compute_est):.4f},"
+            f"{(ms_ab_reduce_compute_est - ms_tri) / ms_tri * 100.0:.2f},,,"
+        )
+        print(
+            f"triton_iso_reduce_vs_mm_ratio,{m},{n},{k},,"
+            f"{reduce_vs_mm_ratio:.4f},,,"
         )
         print(
             f"triton_abft_full,{m},{n},{k},{perf(ms_abft_full):.4f},"
@@ -1018,16 +1351,20 @@ def run_benchmark(m_min=2, m_max=33):
             f"{abft_two_stage_out['abft_abs_error'].item():.6e},{abft_two_stage_out['abft_rel_error'].item():.6e}"
         )
         print("------------------------------------------------------------------")
+    with open(csv_out, "w", encoding="utf-8") as f:
+        f.write("\n".join(csv_rows) + "\n")
+    _builtin_print(f"csv_saved,{csv_out}")
 
 
 def _parse_args():
     parser = argparse.ArgumentParser(description="Reproduce Triton tutorial matmul benchmark.")
-    parser.add_argument("--m-min", type=int, default=2, help="Start index i in M=N=K=128*i.")
-    parser.add_argument("--m-max", type=int, default=33, help="End index i (exclusive).")
+    parser.add_argument("--m-min", type=int, default=1, help="Start index i in M=N=K=256*i.")
+    parser.add_argument("--m-max", type=int, default=16, help="End index i (exclusive) in M=N=K=256*i.")
+    parser.add_argument("--csv-out", type=str, default="benchmark_results.csv", help="Output CSV file path.")
     return parser.parse_args()
 
 
 if __name__ == "__main__":
     args = _parse_args()
     torch.manual_seed(0)
-    run_benchmark(m_min=args.m_min, m_max=args.m_max)
+    run_benchmark(m_min=args.m_min, m_max=args.m_max, csv_out=args.csv_out)
