@@ -138,6 +138,22 @@ def parse_providers(provider_arg):
     return [p.strip() for p in provider_arg.split(",") if p.strip()]
 
 
+def _available_providers(rows, providers):
+    present = {r["provider"] for r in rows}
+    return [p for p in providers if p in present]
+
+
+def _plot_if_available(rows, providers, output_path, plot_fn, title=None):
+    available = _available_providers(rows, providers)
+    if not available:
+        print(f"plot_skipped,{output_path},reason=no_matching_provider_in_csv")
+        return
+    if len(available) < len(providers):
+        missing = [p for p in providers if p not in available]
+        print(f"plot_partial,{output_path},missing={','.join(missing)}")
+    plot_fn(rows, available, output_path, title=title)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Plot benchmark TFLOPS curves from CSV.")
     parser.add_argument(
@@ -172,40 +188,44 @@ def main():
     rows = load_rows(csv_path)
     if not rows:
         raise RuntimeError(f"No valid rows loaded from csv: {csv_path}")
-    plot_tflops_vs_dim(rows, providers, output_path)
+    _plot_if_available(rows, providers, output_path, plot_tflops_vs_dim)
 
     component_output = Path(__file__).resolve().parent / "plots/tflops_compare_abft_components.png"
-    plot_tflops_vs_dim(rows, COMPONENT_COMPARE_PROVIDERS, component_output)
+    _plot_if_available(rows, COMPONENT_COMPARE_PROVIDERS, component_output, plot_tflops_vs_dim)
 
     partial_reduce_output = Path(__file__).resolve().parent / "plots/tflops_compare_partial_reduce.png"
-    plot_tflops_vs_dim(
+    _plot_if_available(
         rows,
         PARTIAL_REDUCE_COMPARE_PROVIDERS,
         partial_reduce_output,
+        plot_tflops_vs_dim,
         title="TFLOPS vs Matrix Dimension (matmul vs partial-reduce baselines)",
     )
 
     ablation_output = Path(__file__).resolve().parent / "plots/tflops_compare_ablation.png"
-    plot_tflops_vs_dim(
+    _plot_if_available(
         rows,
         ABLATION_COMPARE_PROVIDERS,
         ablation_output,
+        plot_tflops_vs_dim,
         title="TFLOPS vs Matrix Dimension (ablation comparison)",
     )
 
     two_stage_output = Path(__file__).resolve().parent / "plots/tflops_compare_two_stage.png"
-    plot_tflops_vs_dim(
+    _plot_if_available(
         rows,
         TWO_STAGE_COMPARE_PROVIDERS,
         two_stage_output,
+        plot_tflops_vs_dim,
         title="TFLOPS vs Matrix Dimension (two-stage comparison)",
     )
 
     isolation_output = Path(__file__).resolve().parent / "plots/tflops_compare_isolation_three_curves.png"
-    plot_time_vs_dim(
+    _plot_if_available(
         rows,
         ISOLATION_COMPARE_PROVIDERS,
         isolation_output,
+        plot_time_vs_dim,
         title="Time t (ms) vs Matrix Dimension (compute-isolation kernels)",
     )
 

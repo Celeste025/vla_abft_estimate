@@ -1,3 +1,4 @@
 # Local helper scripts that should never be pushed
 scripts/push_to_origin_main.sh
 pytorch/data/
+triton_kernel_test/ncu_reports/
