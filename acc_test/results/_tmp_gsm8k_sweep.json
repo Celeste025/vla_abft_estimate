@@ -1,0 +1,56 @@
+{
+  "baseline": {
+    "total": 2,
+    "correct": 2,
+    "accuracy": 1.0,
+    "pred_none": 0,
+    "pred_format_fail": 0
+  },
+  "rows": [
+    {
+      "layer": 0,
+      "site_id": "L0_q_proj",
+      "op_type": "q_proj",
+      "acc_baseline": 1.0,
+      "acc_fault": 1.0,
+      "format_fail_rate": 0.0,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_k_proj",
+      "op_type": "k_proj",
+      "acc_baseline": 1.0,
+      "acc_fault": 0.5,
+      "format_fail_rate": 0.5,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_v_proj",
+      "op_type": "v_proj",
+      "acc_baseline": 1.0,
+      "acc_fault": 0.0,
+      "format_fail_rate": 1.0,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_attn_core",
+      "op_type": "attn_core(qk^t+s*v)",
+      "acc_baseline": 1.0,
+      "acc_fault": 0.5,
+      "format_fail_rate": 0.0,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_o_proj",
+      "op_type": "o_proj",
+      "acc_baseline": 1.0,
+      "acc_fault": 1.0,
+      "format_fail_rate": 0.0,
+      "hit_rate": 1.0
+    }
+  ]
+}

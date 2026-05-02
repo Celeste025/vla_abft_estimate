@@ -1,0 +1,281 @@
+{
+  "benchmark": "hellaswag",
+  "mode": "prefill",
+  "baseline_summary": {
+    "total": 8,
+    "correct": 6,
+    "accuracy": 0.75
+  },
+  "fault_summary": {
+    "total": 8,
+    "correct": 1,
+    "accuracy": 0.125
+  },
+  "run_meta_baseline": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": null,
+    "fault_delta": 10000.0,
+    "inject_count": 0,
+    "expected_site_count": 224,
+    "registered_site_count": 224,
+    "missing_sites": []
+  },
+  "run_meta_fault": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": "L0_v_proj",
+    "fault_delta": 10000.0,
+    "inject_count": 32,
+    "expected_site_count": 224,
+    "registered_site_count": 224,
+    "missing_sites": []
+  },
+  "per_example": [
+    {
+      "ind": 40007,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -70.5,
+          "score_fault": -334.0,
+          "delta_score": -263.5
+        },
+        {
+          "score_baseline": -155.0,
+          "score_fault": -418.0,
+          "delta_score": -263.0
+        },
+        {
+          "score_baseline": -96.5,
+          "score_fault": -304.0,
+          "delta_score": -207.5
+        },
+        {
+          "score_baseline": -107.5,
+          "score_fault": -464.0,
+          "delta_score": -356.5
+        }
+      ]
+    },
+    {
+      "ind": 40211,
+      "label": 0,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -30.25,
+          "score_fault": -99.5,
+          "delta_score": -69.25
+        },
+        {
+          "score_baseline": -39.0,
+          "score_fault": -93.5,
+          "delta_score": -54.5
+        },
+        {
+          "score_baseline": -116.0,
+          "score_fault": -276.0,
+          "delta_score": -160.0
+        },
+        {
+          "score_baseline": -26.375,
+          "score_fault": -91.5,
+          "delta_score": -65.125
+        }
+      ]
+    },
+    {
+      "ind": 23296,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -135.0,
+          "score_fault": -280.0,
+          "delta_score": -145.0
+        },
+        {
+          "score_baseline": -123.0,
+          "score_fault": -288.0,
+          "delta_score": -165.0
+        },
+        {
+          "score_baseline": -123.0,
+          "score_fault": -163.0,
+          "delta_score": -40.0
+        },
+        {
+          "score_baseline": -60.0,
+          "score_fault": -118.5,
+          "delta_score": -58.5
+        }
+      ]
+    },
+    {
+      "ind": 39915,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 1,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -96.0,
+          "score_fault": -334.0,
+          "delta_score": -238.0
+        },
+        {
+          "score_baseline": -94.0,
+          "score_fault": -146.0,
+          "delta_score": -52.0
+        },
+        {
+          "score_baseline": -50.25,
+          "score_fault": -334.0,
+          "delta_score": -283.75
+        },
+        {
+          "score_baseline": -82.0,
+          "score_fault": -248.0,
+          "delta_score": -166.0
+        }
+      ]
+    },
+    {
+      "ind": 6145,
+      "label": 2,
+      "pred_baseline": 1,
+      "pred_fault": 1,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -59.25,
+          "score_fault": -109.5,
+          "delta_score": -50.25
+        },
+        {
+          "score_baseline": -33.75,
+          "score_fault": -101.0,
+          "delta_score": -67.25
+        },
+        {
+          "score_baseline": -38.25,
+          "score_fault": -187.0,
+          "delta_score": -148.75
+        },
+        {
+          "score_baseline": -41.75,
+          "score_fault": -118.5,
+          "delta_score": -76.75
+        }
+      ]
+    },
+    {
+      "ind": 49011,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -142.0,
+          "score_fault": -232.0,
+          "delta_score": -90.0
+        },
+        {
+          "score_baseline": -106.0,
+          "score_fault": -356.0,
+          "delta_score": -250.0
+        },
+        {
+          "score_baseline": -204.0,
+          "score_fault": -612.0,
+          "delta_score": -408.0
+        },
+        {
+          "score_baseline": -87.5,
+          "score_fault": -412.0,
+          "delta_score": -324.5
+        }
+      ]
+    },
+    {
+      "ind": 24333,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -184.0,
+          "score_fault": -366.0,
+          "delta_score": -182.0
+        },
+        {
+          "score_baseline": -108.0,
+          "score_fault": -392.0,
+          "delta_score": -284.0
+        },
+        {
+          "score_baseline": -96.5,
+          "score_fault": -596.0,
+          "delta_score": -499.5
+        },
+        {
+          "score_baseline": -125.0,
+          "score_fault": -222.0,
+          "delta_score": -97.0
+        }
+      ]
+    },
+    {
+      "ind": 24946,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -145.0,
+          "score_fault": -145.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -152.0,
+          "score_fault": -322.0,
+          "delta_score": -170.0
+        },
+        {
+          "score_baseline": -136.0,
+          "score_fault": -450.0,
+          "delta_score": -314.0
+        },
+        {
+          "score_baseline": -71.0,
+          "score_fault": -203.0,
+          "delta_score": -132.0
+        }
+      ]
+    }
+  ],
+  "selected_site": "L0_v_proj"
+}

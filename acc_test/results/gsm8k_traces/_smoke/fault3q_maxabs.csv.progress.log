@@ -1,0 +1,2 @@
+[baseline:reuse] acc=1.0000 total=3
+[1/1] layer=14 site=L14_v_proj op_type=v_proj acc=0.0000 format_fail=0.667 hit_rate=1.000

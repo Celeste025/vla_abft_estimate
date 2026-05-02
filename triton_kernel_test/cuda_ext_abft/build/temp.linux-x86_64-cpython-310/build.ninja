@@ -1,0 +1,34 @@
+ninja_required_version = 1.3
+cxx = /data/home/jinqiwen/miniconda3/envs/abft_cost/bin/x86_64-conda-linux-gnu-c++
+nvcc = /usr/local/cuda-12.4/bin/nvcc
+
+cflags = -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /data/home/jinqiwen/miniconda3/envs/abft_cost/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /data/home/jinqiwen/miniconda3/envs/abft_cost/include -fPIC -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/torch/csrc/api/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/TH -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/THC -I/usr/local/cuda-12.4/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/include/python3.10 -c
+post_cflags = -O3 -std=c++17 -DTORCH_API_INCLUDE_EXTENSION_H '-DPYBIND11_COMPILER_TYPE="_gcc"' '-DPYBIND11_STDLIB="_libstdcpp"' '-DPYBIND11_BUILD_ABI="_cxxabi1011"' -DTORCH_EXTENSION_NAME=abft_handwritten_cuda -D_GLIBCXX_USE_CXX11_ABI=0
+cuda_cflags = -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/torch/csrc/api/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/TH -I/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/include/THC -I/usr/local/cuda-12.4/include -I/data/home/jinqiwen/miniconda3/envs/abft_cost/include/python3.10 -c
+cuda_post_cflags = -D__CUDA_NO_HALF_OPERATORS__ -D__CUDA_NO_HALF_CONVERSIONS__ -D__CUDA_NO_BFLOAT16_CONVERSIONS__ -D__CUDA_NO_HALF2_OPERATORS__ --expt-relaxed-constexpr --compiler-options ''"'"'-fPIC'"'"'' -O3 -std=c++17 --use_fast_math -lineinfo -U__CUDA_NO_HALF_OPERATORS__ -U__CUDA_NO_HALF_CONVERSIONS__ -U__CUDA_NO_HALF2_OPERATORS__ -gencode=arch=compute_89,code=sm_89 -DTORCH_API_INCLUDE_EXTENSION_H '-DPYBIND11_COMPILER_TYPE="_gcc"' '-DPYBIND11_STDLIB="_libstdcpp"' '-DPYBIND11_BUILD_ABI="_cxxabi1011"' -DTORCH_EXTENSION_NAME=abft_handwritten_cuda -D_GLIBCXX_USE_CXX11_ABI=0 -ccbin /data/home/jinqiwen/miniconda3/envs/abft_cost/bin/x86_64-conda-linux-gnu-cc
+cuda_dlink_post_cflags = 
+ldflags = 
+
+rule compile
+  command = $cxx -MMD -MF $out.d $cflags -c $in -o $out $post_cflags
+  depfile = $out.d
+  deps = gcc
+
+rule cuda_compile
+  depfile = $out.d
+  deps = gcc
+  command = $nvcc --generate-dependencies-with-compile --dependency-output $out.d $cuda_cflags -c $in -o $out $cuda_post_cflags
+
+
+
+
+
+build /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/build/temp.linux-x86_64-cpython-310/data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/bindings.o: compile /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/bindings.cpp
+build /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/build/temp.linux-x86_64-cpython-310/data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/gemm_tc_sm89.o: cuda_compile /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/gemm_tc_sm89.cu
+build /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/build/temp.linux-x86_64-cpython-310/data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/gemm_tc_sm89_abft.o: cuda_compile /data/home/jinqiwen/workspace/vla_abft_estimate/triton_kernel_test/cuda_ext_abft/abft_cuda/gemm_tc_sm89_abft.cu
+
+
+
+
+
+

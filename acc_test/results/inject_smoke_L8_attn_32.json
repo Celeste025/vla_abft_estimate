@@ -1,0 +1,1001 @@
+{
+  "benchmark": "hellaswag",
+  "mode": "prefill",
+  "baseline_summary": {
+    "total": 32,
+    "correct": 25,
+    "accuracy": 0.78125
+  },
+  "fault_summary": {
+    "total": 32,
+    "correct": 23,
+    "accuracy": 0.71875
+  },
+  "run_meta_baseline": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": null,
+    "fault_delta": 10000.0,
+    "inject_count": 0,
+    "expected_site_count": 112,
+    "registered_site_count": 112,
+    "missing_sites": []
+  },
+  "run_meta_fault": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": "L8_attn",
+    "fault_delta": 10000.0,
+    "inject_count": 128,
+    "expected_site_count": 112,
+    "registered_site_count": 112,
+    "missing_sites": []
+  },
+  "per_example": [
+    {
+      "ind": 40007,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -70.5,
+          "score_fault": -69.0,
+          "delta_score": 1.5
+        },
+        {
+          "score_baseline": -155.0,
+          "score_fault": -154.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -96.5,
+          "score_fault": -112.5,
+          "delta_score": -16.0
+        },
+        {
+          "score_baseline": -107.5,
+          "score_fault": -120.0,
+          "delta_score": -12.5
+        }
+      ]
+    },
+    {
+      "ind": 40211,
+      "label": 0,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -30.25,
+          "score_fault": -31.25,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -39.0,
+          "score_fault": -39.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -116.0,
+          "score_fault": -115.5,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -26.375,
+          "score_fault": -24.75,
+          "delta_score": 1.625
+        }
+      ]
+    },
+    {
+      "ind": 23296,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -135.0,
+          "score_fault": -148.0,
+          "delta_score": -13.0
+        },
+        {
+          "score_baseline": -123.0,
+          "score_fault": -146.0,
+          "delta_score": -23.0
+        },
+        {
+          "score_baseline": -123.0,
+          "score_fault": -141.0,
+          "delta_score": -18.0
+        },
+        {
+          "score_baseline": -60.0,
+          "score_fault": -75.5,
+          "delta_score": -15.5
+        }
+      ]
+    },
+    {
+      "ind": 39915,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -96.0,
+          "score_fault": -113.0,
+          "delta_score": -17.0
+        },
+        {
+          "score_baseline": -94.0,
+          "score_fault": -100.0,
+          "delta_score": -6.0
+        },
+        {
+          "score_baseline": -50.25,
+          "score_fault": -50.5,
+          "delta_score": -0.25
+        },
+        {
+          "score_baseline": -82.0,
+          "score_fault": -97.5,
+          "delta_score": -15.5
+        }
+      ]
+    },
+    {
+      "ind": 6145,
+      "label": 2,
+      "pred_baseline": 1,
+      "pred_fault": 3,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -59.25,
+          "score_fault": -74.5,
+          "delta_score": -15.25
+        },
+        {
+          "score_baseline": -33.75,
+          "score_fault": -43.5,
+          "delta_score": -9.75
+        },
+        {
+          "score_baseline": -38.25,
+          "score_fault": -61.75,
+          "delta_score": -23.5
+        },
+        {
+          "score_baseline": -41.75,
+          "score_fault": -42.25,
+          "delta_score": -0.5
+        }
+      ]
+    },
+    {
+      "ind": 49011,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -142.0,
+          "score_fault": -139.0,
+          "delta_score": 3.0
+        },
+        {
+          "score_baseline": -106.0,
+          "score_fault": -107.5,
+          "delta_score": -1.5
+        },
+        {
+          "score_baseline": -204.0,
+          "score_fault": -206.0,
+          "delta_score": -2.0
+        },
+        {
+          "score_baseline": -87.5,
+          "score_fault": -87.0,
+          "delta_score": 0.5
+        }
+      ]
+    },
+    {
+      "ind": 24333,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -184.0,
+          "score_fault": -195.0,
+          "delta_score": -11.0
+        },
+        {
+          "score_baseline": -108.0,
+          "score_fault": -108.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -96.5,
+          "score_fault": -95.5,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -125.0,
+          "score_fault": -125.0,
+          "delta_score": 0.0
+        }
+      ]
+    },
+    {
+      "ind": 24946,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -145.0,
+          "score_fault": -155.0,
+          "delta_score": -10.0
+        },
+        {
+          "score_baseline": -152.0,
+          "score_fault": -162.0,
+          "delta_score": -10.0
+        },
+        {
+          "score_baseline": -136.0,
+          "score_fault": -155.0,
+          "delta_score": -19.0
+        },
+        {
+          "score_baseline": -71.0,
+          "score_fault": -78.5,
+          "delta_score": -7.5
+        }
+      ]
+    },
+    {
+      "ind": 33875,
+      "label": 3,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -27.25,
+          "score_fault": -24.75,
+          "delta_score": 2.5
+        },
+        {
+          "score_baseline": -56.0,
+          "score_fault": -55.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -36.5,
+          "score_fault": -34.75,
+          "delta_score": 1.75
+        },
+        {
+          "score_baseline": -62.75,
+          "score_fault": -76.0,
+          "delta_score": -13.25
+        }
+      ]
+    },
+    {
+      "ind": 30577,
+      "label": 1,
+      "pred_baseline": 2,
+      "pred_fault": 0,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -65.0,
+          "score_fault": -64.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -55.75,
+          "score_fault": -71.5,
+          "delta_score": -15.75
+        },
+        {
+          "score_baseline": -52.25,
+          "score_fault": -70.0,
+          "delta_score": -17.75
+        },
+        {
+          "score_baseline": -94.5,
+          "score_fault": -108.0,
+          "delta_score": -13.5
+        }
+      ]
+    },
+    {
+      "ind": 27933,
+      "label": 0,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -148.0,
+          "score_fault": -166.0,
+          "delta_score": -18.0
+        },
+        {
+          "score_baseline": -116.0,
+          "score_fault": -115.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -107.0,
+          "score_fault": -109.0,
+          "delta_score": -2.0
+        },
+        {
+          "score_baseline": -157.0,
+          "score_fault": -156.0,
+          "delta_score": 1.0
+        }
+      ]
+    },
+    {
+      "ind": 1103,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -56.5,
+          "score_fault": -61.25,
+          "delta_score": -4.75
+        },
+        {
+          "score_baseline": -125.0,
+          "score_fault": -154.0,
+          "delta_score": -29.0
+        },
+        {
+          "score_baseline": -157.0,
+          "score_fault": -175.0,
+          "delta_score": -18.0
+        },
+        {
+          "score_baseline": -125.0,
+          "score_fault": -143.0,
+          "delta_score": -18.0
+        }
+      ]
+    },
+    {
+      "ind": 47995,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -39.0,
+          "score_fault": -38.5,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -43.25,
+          "score_fault": -48.5,
+          "delta_score": -5.25
+        },
+        {
+          "score_baseline": -34.75,
+          "score_fault": -34.25,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -19.125,
+          "score_fault": -19.625,
+          "delta_score": -0.5
+        }
+      ]
+    },
+    {
+      "ind": 41355,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -75.0,
+          "score_fault": -75.5,
+          "delta_score": -0.5
+        },
+        {
+          "score_baseline": -228.0,
+          "score_fault": -222.0,
+          "delta_score": 6.0
+        },
+        {
+          "score_baseline": -78.5,
+          "score_fault": -90.0,
+          "delta_score": -11.5
+        },
+        {
+          "score_baseline": -37.0,
+          "score_fault": -54.0,
+          "delta_score": -17.0
+        }
+      ]
+    },
+    {
+      "ind": 46612,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 1,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -143.0,
+          "score_fault": -142.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -137.0,
+          "score_fault": -137.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -166.0,
+          "score_fault": -185.0,
+          "delta_score": -19.0
+        },
+        {
+          "score_baseline": -125.5,
+          "score_fault": -151.0,
+          "delta_score": -25.5
+        }
+      ]
+    },
+    {
+      "ind": 29432,
+      "label": 1,
+      "pred_baseline": 1,
+      "pred_fault": 1,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -100.0,
+          "score_fault": -98.5,
+          "delta_score": 1.5
+        },
+        {
+          "score_baseline": -75.0,
+          "score_fault": -74.5,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -111.0,
+          "score_fault": -121.0,
+          "delta_score": -10.0
+        },
+        {
+          "score_baseline": -135.0,
+          "score_fault": -138.0,
+          "delta_score": -3.0
+        }
+      ]
+    },
+    {
+      "ind": 35403,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -49.25,
+          "score_fault": -61.0,
+          "delta_score": -11.75
+        },
+        {
+          "score_baseline": -119.0,
+          "score_fault": -132.0,
+          "delta_score": -13.0
+        },
+        {
+          "score_baseline": -169.0,
+          "score_fault": -170.0,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -134.0,
+          "score_fault": -136.0,
+          "delta_score": -2.0
+        }
+      ]
+    },
+    {
+      "ind": 6587,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -118.5,
+          "score_fault": -138.0,
+          "delta_score": -19.5
+        },
+        {
+          "score_baseline": -126.5,
+          "score_fault": -126.0,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -58.75,
+          "score_fault": -58.0,
+          "delta_score": 0.75
+        },
+        {
+          "score_baseline": -118.0,
+          "score_fault": -133.0,
+          "delta_score": -15.0
+        }
+      ]
+    },
+    {
+      "ind": 25503,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -58.25,
+          "score_fault": -58.5,
+          "delta_score": -0.25
+        },
+        {
+          "score_baseline": -106.0,
+          "score_fault": -107.5,
+          "delta_score": -1.5
+        },
+        {
+          "score_baseline": -104.5,
+          "score_fault": -103.5,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -104.5,
+          "score_fault": -114.0,
+          "delta_score": -9.5
+        }
+      ]
+    },
+    {
+      "ind": 4493,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -218.0,
+          "score_fault": -219.0,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -342.0,
+          "score_fault": -356.0,
+          "delta_score": -14.0
+        },
+        {
+          "score_baseline": -127.5,
+          "score_fault": -125.0,
+          "delta_score": 2.5
+        },
+        {
+          "score_baseline": -112.0,
+          "score_fault": -118.5,
+          "delta_score": -6.5
+        }
+      ]
+    },
+    {
+      "ind": 26371,
+      "label": 2,
+      "pred_baseline": 1,
+      "pred_fault": 1,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -103.5,
+          "score_fault": -101.0,
+          "delta_score": 2.5
+        },
+        {
+          "score_baseline": -39.0,
+          "score_fault": -40.25,
+          "delta_score": -1.25
+        },
+        {
+          "score_baseline": -66.0,
+          "score_fault": -89.0,
+          "delta_score": -23.0
+        },
+        {
+          "score_baseline": -117.0,
+          "score_fault": -133.0,
+          "delta_score": -16.0
+        }
+      ]
+    },
+    {
+      "ind": 4105,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -137.0,
+          "score_fault": -154.0,
+          "delta_score": -17.0
+        },
+        {
+          "score_baseline": -113.0,
+          "score_fault": -112.0,
+          "delta_score": 1.0
+        },
+        {
+          "score_baseline": -31.5,
+          "score_fault": -49.0,
+          "delta_score": -17.5
+        },
+        {
+          "score_baseline": -120.0,
+          "score_fault": -120.0,
+          "delta_score": 0.0
+        }
+      ]
+    },
+    {
+      "ind": 28055,
+      "label": 3,
+      "pred_baseline": 3,
+      "pred_fault": 3,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -43.75,
+          "score_fault": -44.75,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -34.75,
+          "score_fault": -38.25,
+          "delta_score": -3.5
+        },
+        {
+          "score_baseline": -13.375,
+          "score_fault": -25.0,
+          "delta_score": -11.625
+        },
+        {
+          "score_baseline": -9.25,
+          "score_fault": -9.25,
+          "delta_score": 0.0
+        }
+      ]
+    },
+    {
+      "ind": 2757,
+      "label": 1,
+      "pred_baseline": 1,
+      "pred_fault": 1,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -78.0,
+          "score_fault": -78.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -20.875,
+          "score_fault": -32.5,
+          "delta_score": -11.625
+        },
+        {
+          "score_baseline": -87.5,
+          "score_fault": -85.5,
+          "delta_score": 2.0
+        },
+        {
+          "score_baseline": -74.0,
+          "score_fault": -91.0,
+          "delta_score": -17.0
+        }
+      ]
+    },
+    {
+      "ind": 27594,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -22.625,
+          "score_fault": -24.125,
+          "delta_score": -1.5
+        },
+        {
+          "score_baseline": -23.5,
+          "score_fault": -38.0,
+          "delta_score": -14.5
+        },
+        {
+          "score_baseline": -14.8125,
+          "score_fault": -14.8125,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -45.75,
+          "score_fault": -62.0,
+          "delta_score": -16.25
+        }
+      ]
+    },
+    {
+      "ind": 9510,
+      "label": 0,
+      "pred_baseline": 1,
+      "pred_fault": 1,
+      "correct_baseline": 0,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -105.0,
+          "score_fault": -125.5,
+          "delta_score": -20.5
+        },
+        {
+          "score_baseline": -63.0,
+          "score_fault": -63.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -152.0,
+          "score_fault": -164.0,
+          "delta_score": -12.0
+        },
+        {
+          "score_baseline": -151.0,
+          "score_fault": -151.0,
+          "delta_score": 0.0
+        }
+      ]
+    },
+    {
+      "ind": 15171,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -75.5,
+          "score_fault": -74.0,
+          "delta_score": 1.5
+        },
+        {
+          "score_baseline": -123.0,
+          "score_fault": -123.0,
+          "delta_score": 0.0
+        },
+        {
+          "score_baseline": -163.0,
+          "score_fault": -164.0,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -163.0,
+          "score_fault": -162.0,
+          "delta_score": 1.0
+        }
+      ]
+    },
+    {
+      "ind": 29843,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -122.0,
+          "score_fault": -126.0,
+          "delta_score": -4.0
+        },
+        {
+          "score_baseline": -119.5,
+          "score_fault": -119.0,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -83.0,
+          "score_fault": -81.5,
+          "delta_score": 1.5
+        },
+        {
+          "score_baseline": -140.0,
+          "score_fault": -171.0,
+          "delta_score": -31.0
+        }
+      ]
+    },
+    {
+      "ind": 2547,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 0,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -77.5,
+          "score_fault": -87.5,
+          "delta_score": -10.0
+        },
+        {
+          "score_baseline": -115.0,
+          "score_fault": -127.0,
+          "delta_score": -12.0
+        },
+        {
+          "score_baseline": -135.0,
+          "score_fault": -163.0,
+          "delta_score": -28.0
+        },
+        {
+          "score_baseline": -154.0,
+          "score_fault": -168.0,
+          "delta_score": -14.0
+        }
+      ]
+    },
+    {
+      "ind": 4410,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -156.0,
+          "score_fault": -157.0,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -97.5,
+          "score_fault": -97.0,
+          "delta_score": 0.5
+        },
+        {
+          "score_baseline": -47.5,
+          "score_fault": -50.75,
+          "delta_score": -3.25
+        },
+        {
+          "score_baseline": -118.5,
+          "score_fault": -118.0,
+          "delta_score": 0.5
+        }
+      ]
+    },
+    {
+      "ind": 46310,
+      "label": 0,
+      "pred_baseline": 0,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 0,
+      "choices": [
+        {
+          "score_baseline": -16.625,
+          "score_fault": -35.75,
+          "delta_score": -19.125
+        },
+        {
+          "score_baseline": -40.25,
+          "score_fault": -40.0,
+          "delta_score": 0.25
+        },
+        {
+          "score_baseline": -26.375,
+          "score_fault": -26.625,
+          "delta_score": -0.25
+        },
+        {
+          "score_baseline": -36.5,
+          "score_fault": -47.5,
+          "delta_score": -11.0
+        }
+      ]
+    },
+    {
+      "ind": 19241,
+      "label": 2,
+      "pred_baseline": 2,
+      "pred_fault": 2,
+      "correct_baseline": 1,
+      "correct_fault": 1,
+      "choices": [
+        {
+          "score_baseline": -180.0,
+          "score_fault": -201.0,
+          "delta_score": -21.0
+        },
+        {
+          "score_baseline": -131.0,
+          "score_fault": -132.0,
+          "delta_score": -1.0
+        },
+        {
+          "score_baseline": -72.5,
+          "score_fault": -86.5,
+          "delta_score": -14.0
+        },
+        {
+          "score_baseline": -160.0,
+          "score_fault": -158.0,
+          "delta_score": 2.0
+        }
+      ]
+    }
+  ],
+  "selected_site": "L8_attn"
+}

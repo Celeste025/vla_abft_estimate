@@ -1,0 +1,83 @@
+{
+  "baseline": {
+    "total": 100,
+    "correct": 91,
+    "accuracy": 0.91,
+    "pred_none": 1,
+    "pred_format_fail": 1
+  },
+  "rows": [
+    {
+      "layer": 27,
+      "site_id": "L27_q_proj",
+      "op_type": "q_proj",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.91,
+      "format_fail_rate": 0.01,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_k_proj",
+      "op_type": "k_proj",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.88,
+      "format_fail_rate": 0.03,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_v_proj",
+      "op_type": "v_proj",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.65,
+      "format_fail_rate": 0.27,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_attn_core",
+      "op_type": "attn_core(qk^t+s*v)",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.84,
+      "format_fail_rate": 0.05,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_o_proj",
+      "op_type": "o_proj",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.86,
+      "format_fail_rate": 0.02,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_mlp_gate",
+      "op_type": "mlp_gate",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.89,
+      "format_fail_rate": 0.01,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_mlp_up",
+      "op_type": "mlp_up",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.88,
+      "format_fail_rate": 0.01,
+      "hit_rate": 1.0
+    },
+    {
+      "layer": 27,
+      "site_id": "L27_mlp_down",
+      "op_type": "mlp_down",
+      "acc_baseline": 0.91,
+      "acc_fault": 0.86,
+      "format_fail_rate": 0.02,
+      "hit_rate": 1.0
+    }
+  ]
+}

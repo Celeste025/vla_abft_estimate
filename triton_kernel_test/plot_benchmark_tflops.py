@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 DEFAULT_PROVIDERS = [
     "triton",
     "cublas",
+    "cuda_gemm",
     "triton_abft_kernel",
     "triton_abft_full",
     "triton_abft_naive_kernel",
@@ -51,6 +52,33 @@ ISOLATION_COMPARE_PROVIDERS = [
     "triton_iso_ab_reduce_only",
 ]
 
+# Compare v2c vs v1 (kernel-only and full) against triton baseline.
+V2C_VS_V1_COMPARE_PROVIDERS = [
+    "triton",
+    "triton_abft_kernel",
+    "triton_abft_v2c_kernel",
+    "triton_abft_full",
+    "triton_abft_v2c_full",
+]
+
+# Compare v2c_autotune vs v2c_fixed vs v1_autotune (kernel + full).
+V2C_AUTOTUNE_COMPARE_PROVIDERS = [
+    "triton",
+    "triton_abft_kernel",
+    "triton_abft_full",
+    "triton_abft_v2c_kernel",
+    "triton_abft_v2c_full",
+    "triton_abft_v2c_at_kernel",
+    "triton_abft_v2c_at_full",
+]
+
+# Compare stage4 post-reduce optimization (torch-post vs triton-post).
+POST_REDUCE_COMPARE_PROVIDERS = [
+    "triton",
+    "triton_abft_full",
+    "triton_abft_v2c_at_full",
+    "triton_abft_v2c_at_full_tritonpost",
+]
 
 def load_rows(csv_path):
     rows = []
@@ -227,6 +255,42 @@ def main():
         isolation_output,
         plot_time_vs_dim,
         title="Time t (ms) vs Matrix Dimension (compute-isolation kernels)",
+    )
+
+    v2c_output = Path(__file__).resolve().parent / "plots/tflops_compare_v2c_vs_v1.png"
+    _plot_if_available(
+        rows,
+        V2C_VS_V1_COMPARE_PROVIDERS,
+        v2c_output,
+        plot_tflops_vs_dim,
+        title="TFLOPS vs Matrix Dimension (v2c vs v1 ABFT, kernel+full)",
+    )
+
+    v2c_at_output = Path(__file__).resolve().parent / "plots/tflops_compare_v2c_autotune.png"
+    _plot_if_available(
+        rows,
+        V2C_AUTOTUNE_COMPARE_PROVIDERS,
+        v2c_at_output,
+        plot_tflops_vs_dim,
+        title="TFLOPS vs Matrix Dimension (v2c_autotune vs v2c_fixed vs v1_autotune)",
+    )
+
+    post_reduce_output = Path(__file__).resolve().parent / "plots/tflops_compare_post_reduce.png"
+    _plot_if_available(
+        rows,
+        POST_REDUCE_COMPARE_PROVIDERS,
+        post_reduce_output,
+        plot_tflops_vs_dim,
+        title="TFLOPS vs Matrix Dimension (v2c_autotune + post-reduce: torch vs triton)",
+    )
+
+    post_reduce_time_output = Path(__file__).resolve().parent / "plots/time_compare_post_reduce.png"
+    _plot_if_available(
+        rows,
+        POST_REDUCE_COMPARE_PROVIDERS,
+        post_reduce_time_output,
+        plot_time_vs_dim,
+        title="Time t (ms) vs Matrix Dimension (v2c_autotune + post-reduce: torch vs triton)",
     )
 
 

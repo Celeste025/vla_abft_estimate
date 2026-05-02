@@ -1,0 +1,9 @@
+torch
+torchvision
+tqdm
+transformers
+datasets
+accelerate
+matplotlib
+pandas
+pytest

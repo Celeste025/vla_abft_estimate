@@ -1,0 +1,169 @@
+{
+  "baseline": {
+    "total": 16,
+    "correct": 11,
+    "accuracy": 0.6875
+  },
+  "rows": [
+    {
+      "layer": 0,
+      "site_id": "L0_attn",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_mlp_gate",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_mlp_up",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.8125,
+      "acc_drop": -0.125,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_mlp_down",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 8,
+      "site_id": "L8_attn",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 8,
+      "site_id": "L8_mlp_gate",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 8,
+      "site_id": "L8_mlp_up",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 8,
+      "site_id": "L8_mlp_down",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 16,
+      "site_id": "L16_attn",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 16,
+      "site_id": "L16_mlp_gate",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 16,
+      "site_id": "L16_mlp_up",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.6875,
+      "acc_drop": 0.0,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 16,
+      "site_id": "L16_mlp_down",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 24,
+      "site_id": "L24_attn",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 24,
+      "site_id": "L24_mlp_gate",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 24,
+      "site_id": "L24_mlp_up",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.75,
+      "acc_drop": -0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    },
+    {
+      "layer": 24,
+      "site_id": "L24_mlp_down",
+      "acc_baseline": 0.6875,
+      "acc_fault": 0.625,
+      "acc_drop": 0.0625,
+      "inject_count": 64,
+      "registered_site_count": 112,
+      "expected_site_count": 112
+    }
+  ]
+}
