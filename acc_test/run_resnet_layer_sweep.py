@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+from pathlib import Path
 from typing import Dict, List, Tuple, Type
 
 import torch
@@ -74,6 +75,11 @@ def parse_args():
         help="Comma-separated site ids (named_modules paths).",
     )
     ap.add_argument(
+        "--site-list-file",
+        default=None,
+        help="If set, read comma-separated site ids from this file (overrides --site-list).",
+    )
+    ap.add_argument(
         "--all-sites",
         action="store_true",
         help="Sweep every Conv2d/Linear site (slow).",
@@ -114,10 +120,20 @@ def main():
         local_dataset_dir=args.local_dataset_dir,
     )
 
+    print(
+        f"[sweep] baseline run: max_samples={args.max_samples} batch_size={args.batch_size} "
+        f"device={args.device} inject=off",
+        flush=True,
+    )
     baseline = runner.run_task(
         task,
         inject_site=None,
         target_module_classes=module_classes,
+    )
+    print(
+        f"[sweep] baseline done: top1={baseline['summary']['top1_accuracy']:.4f} "
+        f"top5={baseline['summary']['top5_accuracy']:.4f}",
+        flush=True,
     )
 
     if args.all_sites:
@@ -126,6 +142,10 @@ def main():
             strategy=SITE_STRATEGY_MODULE_SCAN,
             module_classes=module_classes,
         )
+    elif args.site_list_file:
+        p = Path(args.site_list_file).expanduser().resolve()
+        raw = p.read_text(encoding="utf-8").strip()
+        sites = [s.strip() for s in raw.replace("\n", ",").split(",") if s.strip()]
     else:
         sites = [s.strip() for s in args.site_list.split(",") if s.strip()]
 
@@ -140,6 +160,7 @@ def main():
     if not sites:
         raise SystemExit("No valid sites after filtering; check --site-list or model.")
 
+    print(f"[sweep] {len(sites)} site(s): {sites[0]} … {sites[-1]}", flush=True)
     rows = []
     for site in sites:
         fault = runner.run_task(

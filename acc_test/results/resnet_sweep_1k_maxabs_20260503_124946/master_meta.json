@@ -1,0 +1,14 @@
+{
+  "result_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946",
+  "n_rows": 54,
+  "n_sites_expected": 54,
+  "baseline_top1_range": [
+    0.811,
+    0.811
+  ],
+  "baseline_top5_range": [
+    0.952,
+    0.952
+  ],
+  "out_csv": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946/master.csv"
+}

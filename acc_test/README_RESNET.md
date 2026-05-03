@@ -37,7 +37,24 @@ python run_resnet_layer_sweep.py --max-samples 512 --out-csv resnet_sweep.csv
 
 # 全部 Conv2d+Linear 站点（较慢）
 python run_resnet_layer_sweep.py --all-sites --max-samples 256 --out-csv resnet_sweep_all.csv
+
+# 仅扫部分站点（逗号分隔）；或从文件读（适合 tmux 并行分片）
+python run_resnet_layer_sweep.py --site-list-file ./results/my_run/shard0_sites.txt \
+  --max-samples 1000 --batch-size 1 --local-dataset-dir ~/data/imagenet1k_val_hf_5k \
+  --fault-delta 10000 --fault-index-mode random --no-progress --out-csv shard0.csv
 ```
+
+## 全 54 站点并行 sweep（tmux + GPU 1–6）
+
+在 `acc_test/` 下执行 `launch_resnet_sweep_tmux.sh`：会新建 tmux 会话 **`resnet_sweep_1k`**（若已存在会先 kill），窗口 **shard0…shard5** 各用 `CUDA_VISIBLE_DEVICES=1…6` 跑 9 个站点；**agg** 窗口等 6 个 `shard*.done` 后运行 `aggregate_resnet_sweep.py` 合并为 **`master.csv`**，再 `plot_resnet_sweep.py` 生成 **`sweep_top1.png` / `sweep_top5.png`**。
+
+```bash
+# 可选环境变量：LOCAL_DATASET、CONDA_SH、CONDA_ENV、SESSION
+bash launch_resnet_sweep_tmux.sh
+tmux attach -t resnet_sweep_1k   # 窗口 0–5 为各 shard，窗口 6 为 agg
+```
+
+结果目录形如 `results/resnet_sweep_1k_<时间戳>/`。**首个 site 打印前会先跑完 baseline**（1000 张、bs=1 时可能要数分钟），`shard*.log` 开头会有 `[sweep] baseline run ...`。
 
 评测循环默认在 **stderr** 打印 **tqdm** 进度条（按张或按 batch）。关闭：`--no-progress`。需 `pip install tqdm`（已写入 `requirements.txt`）。
 

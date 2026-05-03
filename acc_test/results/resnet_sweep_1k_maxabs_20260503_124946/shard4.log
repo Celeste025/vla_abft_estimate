@@ -1,0 +1,14 @@
+/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/torch/cuda/__init__.py:716: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+[sweep] baseline run: max_samples=1000 batch_size=1 device=cuda inject=off
+[sweep] baseline done: top1=0.8110 top5=0.9520
+[sweep] 9 site(s): layer3.3.conv3 … layer4.0.conv2
+site=layer3.3.conv3 top1: baseline=0.8110 fault=0.0140 protect=0.8110 errors_total=1000
+site=layer3.4.conv1 top1: baseline=0.8110 fault=0.0650 protect=0.8110 errors_total=1000
+site=layer3.4.conv2 top1: baseline=0.8110 fault=0.0220 protect=0.8110 errors_total=1000
+site=layer3.4.conv3 top1: baseline=0.8110 fault=0.0090 protect=0.8110 errors_total=1000
+site=layer3.5.conv1 top1: baseline=0.8110 fault=0.1920 protect=0.8110 errors_total=1000
+site=layer3.5.conv2 top1: baseline=0.8110 fault=0.0130 protect=0.8110 errors_total=1000
+site=layer3.5.conv3 top1: baseline=0.8110 fault=0.1360 protect=0.8110 errors_total=1000
+site=layer4.0.conv1 top1: baseline=0.8110 fault=0.0180 protect=0.8120 errors_total=1000
+site=layer4.0.conv2 top1: baseline=0.8110 fault=0.0070 protect=0.8110 errors_total=1000

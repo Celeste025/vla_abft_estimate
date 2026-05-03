@@ -1,0 +1,4 @@
+[launch] RESULT_DIR=/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946
+[launch] fault_index_mode=max_abs (inject at argmax |x| per forward)
+[launch] after shards: python aggregate_resnet_sweep.py --result-dir /data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946
+[launch] then: python plot_resnet_sweep.py --in-csv /data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946/master.csv --out-dir /data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/resnet_sweep_1k_maxabs_20260503_124946
