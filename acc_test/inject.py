@@ -3,7 +3,7 @@ from __future__ import annotations
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 import random
-from typing import Dict, List, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
 
 import torch
 
@@ -85,6 +85,8 @@ class InjectionContext(AbstractContextManager):
         decode_step_max: int = 150,
         site_strategy: str = SITE_STRATEGY_QWEN,
         target_module_classes: Tuple[Type[torch.nn.Module], ...] = (),
+        protect_only: bool = False,
+        protect_capture_stats: bool = False,
     ) -> None:
         self.model = model
         self.target_site = target_site
@@ -98,6 +100,12 @@ class InjectionContext(AbstractContextManager):
         self.warning_print_limit = int(warning_print_limit)
         self.decode_step_inject_enable = bool(decode_step_inject_enable)
         self.decode_step_max = int(decode_step_max)
+        # protect_only: 不做任何 fault injection；对每个注册站点的张量都执行
+        # mask = abs(x) > fault_delta * clear_threshold_mul; x[mask] = 0。
+        # 用于测量"仅保护"开销（latency benchmark）。
+        self.protect_only = bool(protect_only)
+        # protect_only + True：累计每层 site 上 |x|>threshold 的元素个数（含 GPU→CPU sync）。
+        self.protect_capture_stats = bool(protect_capture_stats)
 
         self.site_strategy = str(site_strategy).strip().lower()
         if self.site_strategy not in {SITE_STRATEGY_QWEN, SITE_STRATEGY_MODULE_SCAN}:
@@ -129,6 +137,8 @@ class InjectionContext(AbstractContextManager):
         self._decode_injected_step: Optional[int] = None
         self._decode_problem_count: int = 0
         self._decode_injected_problem_count: int = 0
+        # protect_only + protect_capture_stats：site_id -> 累计清零元素个数
+        self._protect_clear_counts: Dict[str, int] = {}
 
     def __enter__(self) -> "InjectionContext":
         self._register_model_pre_hook()
@@ -298,6 +308,17 @@ class InjectionContext(AbstractContextManager):
         self._site_to_handle[site_id] = h
 
     def _maybe_inject_output(self, site_id: str, output):
+        if self.protect_only:
+            tensor, tuple_output = self._extract_primary_tensor(output)
+            if tensor is None or tensor.numel() == 0:
+                return output
+            new_tensor = self._apply_protect(site_id, tensor)
+            if new_tensor is tensor:
+                return output
+            if tuple_output:
+                assert isinstance(output, tuple)
+                return (new_tensor, *output[1:])
+            return new_tensor
         if self.target_site is None:
             return output
         if site_id != self.target_site:
@@ -311,6 +332,10 @@ class InjectionContext(AbstractContextManager):
         return self._inject_and_maybe_rebuild(site_id, output, tensor, tuple_output)
 
     def _maybe_inject_tensor(self, site_id: str, x: torch.Tensor) -> torch.Tensor:
+        if self.protect_only:
+            if not isinstance(x, torch.Tensor) or x.numel() == 0:
+                return x
+            return self._apply_protect(site_id, x)
         if self.target_site is None:
             return x
         if site_id != self.target_site:
@@ -364,6 +389,36 @@ class InjectionContext(AbstractContextManager):
             assert isinstance(original_output, tuple)
             return (out, *original_output[1:])
         return out
+
+    def _apply_protect(self, site_id: str, x: torch.Tensor) -> torch.Tensor:
+        """protect_only 模式下的清零保护：threshold mask + masked_fill。
+        默认不计数（无 GPU→CPU sync），latency 友好。
+        protect_capture_stats=True 时累计该 site 上被清零的元素个数（mask.sum）。
+        """
+        threshold = abs(self.fault_delta) * self.clear_threshold_mul
+        mask = x.abs() > threshold
+        if self.protect_capture_stats:
+            n = int(mask.sum().item())
+            if n > 0:
+                self._protect_clear_counts[site_id] = self._protect_clear_counts.get(site_id, 0) + n
+        return x.masked_fill(mask, 0)
+
+    def reset_protect_clear_counts(self) -> None:
+        """下一轮 generate 前清零累计（同一 InjectionContext 内连跑多题时使用）。"""
+        self._protect_clear_counts.clear()
+
+    def get_protect_clear_stats(self) -> Dict[str, Any]:
+        """仅在 protect_only + protect_capture_stats 有意义。"""
+        total = int(sum(self._protect_clear_counts.values()))
+        by_site = dict(sorted(self._protect_clear_counts.items(), key=lambda kv: kv[0]))
+        nonzero_sites = sorted(k for k, v in self._protect_clear_counts.items() if v > 0)
+        return {
+            "threshold": abs(self.fault_delta) * self.clear_threshold_mul,
+            "total_cleared_elements": total,
+            "sites_with_any_clear": len(nonzero_sites),
+            "by_site": by_site,
+            "nonzero_site_ids": nonzero_sites,
+        }
 
     @staticmethod
     def _extract_primary_tensor(output):

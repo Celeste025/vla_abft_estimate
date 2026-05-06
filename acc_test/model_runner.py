@@ -1,13 +1,66 @@
 from __future__ import annotations
 
+import time
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from transformers.generation.logits_process import LogitsProcessor, LogitsProcessorList
 
 from inject import InjectionContext
+
+
+class LatencyHook:
+    """Wrap a model with forward pre/post hooks.
+
+    First forward call is treated as prefill (full prompt forward), every
+    subsequent forward call is one decode step (1 new token + KV cache).
+    Each call is fenced with cuda.synchronize() so we measure GPU wall time,
+    not CUDA launch time.
+    """
+
+    def __init__(self, model: torch.nn.Module) -> None:
+        self.prefill_ns: Optional[int] = None
+        self.decode_ns_list: List[int] = []
+        self._t0_ns: Optional[int] = None
+        self._is_first: bool = True
+        self._h_pre = model.register_forward_pre_hook(self._pre)
+        self._h_post = model.register_forward_hook(self._post)
+
+    def _pre(self, _module: torch.nn.Module, _args) -> None:
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        self._t0_ns = time.perf_counter_ns()
+
+    def _post(self, _module: torch.nn.Module, _args, _output) -> None:
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        if self._t0_ns is None:
+            return
+        dt = time.perf_counter_ns() - self._t0_ns
+        self._t0_ns = None
+        if self._is_first:
+            self.prefill_ns = int(dt)
+            self._is_first = False
+        else:
+            self.decode_ns_list.append(int(dt))
+
+    def reset(self) -> None:
+        self.prefill_ns = None
+        self.decode_ns_list = []
+        self._t0_ns = None
+        self._is_first = True
+
+    def close(self) -> None:
+        self._h_pre.remove()
+        self._h_post.remove()
+
+    def __enter__(self) -> "LatencyHook":
+        return self
+
+    def __exit__(self, _exc_type, _exc, _tb) -> None:
+        self.close()
 
 
 def get_dtype(name: str) -> torch.dtype:
