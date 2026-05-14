@@ -1,0 +1,88 @@
+{
+  "capture_json": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/op_stats_gsm8k_n50.json",
+  "n_testcases": 50,
+  "seed": 2026,
+  "random_sites": [
+    "L12_q_proj",
+    "L19_k_proj",
+    "L24_k_proj",
+    "L24_mlp_up",
+    "L2_v_proj"
+  ],
+  "least_fluctuation": [
+    {
+      "site_id": "L1_k_proj",
+      "fluctuation": 0.0
+    },
+    {
+      "site_id": "L6_k_proj",
+      "fluctuation": 0.0
+    }
+  ],
+  "most_fluctuation": [
+    {
+      "site_id": "L26_mlp_down",
+      "fluctuation": 144.0
+    },
+    {
+      "site_id": "L3_mlp_down",
+      "fluctuation": 128.0
+    }
+  ],
+  "plots": [
+    {
+      "tag": "random",
+      "site_id": "L12_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/01_random_01_L12_q_proj.png",
+      "fluctuation": 3.25
+    },
+    {
+      "tag": "random",
+      "site_id": "L19_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/01_random_02_L19_k_proj.png",
+      "fluctuation": 5.75
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/01_random_03_L24_k_proj.png",
+      "fluctuation": 5.6875
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_mlp_up",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/01_random_04_L24_mlp_up.png",
+      "fluctuation": 12.9375
+    },
+    {
+      "tag": "random",
+      "site_id": "L2_v_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/01_random_05_L2_v_proj.png",
+      "fluctuation": 2.515625
+    },
+    {
+      "tag": "least_fluctuation",
+      "site_id": "L1_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/02_least_fluct_01_L1_k_proj.png",
+      "fluctuation": 0.0
+    },
+    {
+      "tag": "least_fluctuation",
+      "site_id": "L6_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/03_least_fluct_02_L6_k_proj.png",
+      "fluctuation": 0.0
+    },
+    {
+      "tag": "most_fluctuation",
+      "site_id": "L26_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/04_most_fluct_01_L26_mlp_down.png",
+      "fluctuation": 144.0
+    },
+    {
+      "tag": "most_fluctuation",
+      "site_id": "L3_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/05_most_fluct_02_L3_mlp_down.png",
+      "fluctuation": 128.0
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "capture_json": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/op_stats_gsm8k_n50.json",
+  "calib_k": 5,
+  "n_testcases": 50,
+  "n_sites": 224,
+  "seed": 2026,
+  "random_sites": [
+    "L13_attn_core",
+    "L19_mlp_up",
+    "L24_mlp_gate",
+    "L24_q_proj",
+    "L3_k_proj"
+  ],
+  "most_stable_ratio": [
+    {
+      "site_id": "L0_q_proj",
+      "ratio_fluctuation": 0.0
+    },
+    {
+      "site_id": "L10_q_proj",
+      "ratio_fluctuation": 0.0
+    }
+  ],
+  "most_unstable_ratio": [
+    {
+      "site_id": "L18_v_proj",
+      "ratio_fluctuation": 1.323928424234098
+    },
+    {
+      "site_id": "L25_o_proj",
+      "ratio_fluctuation": 1.2363636363636363
+    }
+  ],
+  "plots": [
+    {
+      "tag": "random",
+      "site_id": "L13_attn_core",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_01_random_01_L13_attn_core.png",
+      "ratio_fluctuation": 0.4076923076923076,
+      "M_ref": 3.046875,
+      "m_ref": -4.0625
+    },
+    {
+      "tag": "random",
+      "site_id": "L19_mlp_up",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_01_random_02_L19_mlp_up.png",
+      "ratio_fluctuation": 0.3280696717389223,
+      "M_ref": 8.0625,
+      "m_ref": -7.59375
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_mlp_gate",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_01_random_03_L24_mlp_gate.png",
+      "ratio_fluctuation": 0.48811297991625857,
+      "M_ref": 14.4375,
+      "m_ref": -11.4375
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_01_random_04_L24_q_proj.png",
+      "ratio_fluctuation": 0.09130781499202567,
+      "M_ref": 28.5,
+      "m_ref": -20.625
+    },
+    {
+      "tag": "random",
+      "site_id": "L3_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_01_random_05_L3_k_proj.png",
+      "ratio_fluctuation": 0.1053639846743295,
+      "M_ref": 72.5,
+      "m_ref": -45.0
+    },
+    {
+      "tag": "most_stable_ratio",
+      "site_id": "L0_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_02_stable_01_L0_q_proj.png",
+      "ratio_fluctuation": 0.0,
+      "M_ref": 64.0,
+      "m_ref": -68.0
+    },
+    {
+      "tag": "most_stable_ratio",
+      "site_id": "L10_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_03_stable_02_L10_q_proj.png",
+      "ratio_fluctuation": 0.0,
+      "M_ref": 27.875,
+      "m_ref": -17.875
+    },
+    {
+      "tag": "most_unstable_ratio",
+      "site_id": "L18_v_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_04_unstable_01_L18_v_proj.png",
+      "ratio_fluctuation": 1.323928424234098,
+      "M_ref": 7.84375,
+      "m_ref": -14.5
+    },
+    {
+      "tag": "most_unstable_ratio",
+      "site_id": "L25_o_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/gsm8k_n50/plots/ratio_calib5_05_unstable_02_L25_o_proj.png",
+      "ratio_fluctuation": 1.2363636363636363,
+      "M_ref": 20.625,
+      "m_ref": -37.5
+    }
+  ]
+}

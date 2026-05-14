@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
+import csv
+import json
 import random
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 import torch
@@ -87,6 +90,9 @@ class InjectionContext(AbstractContextManager):
         target_module_classes: Tuple[Type[torch.nn.Module], ...] = (),
         protect_only: bool = False,
         protect_capture_stats: bool = False,
+        acc_v2: bool = False,
+        thr_gamma: float = 3.0,
+        fault_mode: str = "fixed",
     ) -> None:
         self.model = model
         self.target_site = target_site
@@ -140,7 +146,25 @@ class InjectionContext(AbstractContextManager):
         # protect_only + protect_capture_stats：site_id -> 累计清零元素个数
         self._protect_clear_counts: Dict[str, int] = {}
 
+        # --- ACC v2: warmup min/max per site, interval [m*γ, M*γ], golden restore, metrics ---
+        self.acc_v2 = bool(acc_v2)
+        self.thr_gamma = float(thr_gamma)
+        self.fault_mode = str(fault_mode).strip().lower()
+        if self.fault_mode not in {"fixed", "rand2pow"}:
+            raise ValueError(f"fault_mode must be fixed|rand2pow, got {fault_mode!r}")
+        self._warmup_active: bool = False
+        self._site_min_max: Dict[str, Tuple[float, float]] = {}
+        self._acc_metrics: Dict[str, int] = {
+            "runs": 0,
+            "tp": 0,
+            "fp": 0,
+            "fn": 0,
+            "normal": 0,
+        }
+
     def __enter__(self) -> "InjectionContext":
+        if self.acc_v2 and self.site_strategy != SITE_STRATEGY_QWEN:
+            raise NotImplementedError("acc_v2 is only implemented for site_strategy=qwen_decoder")
         self._register_model_pre_hook()
         self._register_model_forward_hook()
         self._register_layer_hooks()
@@ -182,6 +206,121 @@ class InjectionContext(AbstractContextManager):
             decode_problem_count=self._decode_problem_count,
             decode_injected_problem_count=self._decode_injected_problem_count,
         )
+
+    # --- ACC v2 API ---
+    def set_warmup(self, active: bool) -> None:
+        self._warmup_active = bool(active)
+
+    def reset_site_bounds(self) -> None:
+        self._site_min_max.clear()
+
+    def reset_acc_metrics(self) -> None:
+        for k in self._acc_metrics:
+            self._acc_metrics[k] = 0
+
+    def get_acc_v2_metrics(self) -> Dict[str, int]:
+        return dict(self._acc_metrics)
+
+    def export_acc_v2_metrics(self, paths: Dict[str, Path], *, site_id: str) -> None:
+        """Write site_metrics.json + site_metrics.csv under paths['json']/paths['csv']."""
+        row = {
+            "site_id": site_id,
+            **self.get_acc_v2_metrics(),
+            "thr_gamma": self.thr_gamma,
+            "fault_mode": self.fault_mode,
+        }
+        jp = paths["json"] / "site_metrics.json"
+        with open(jp, "w", encoding="utf-8") as f:
+            json.dump(row, f, ensure_ascii=False, indent=2)
+        cp = paths["csv"] / "site_metrics.csv"
+        with open(cp, "w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(row.keys()))
+            w.writeheader()
+            w.writerow(row)
+
+    def _warmup_obs(self, site_id: str, x: torch.Tensor) -> None:
+        with torch.no_grad():
+            xf = x.detach().float()
+            lo = float(xf.amin().item())
+            hi = float(xf.amax().item())
+        prev = self._site_min_max.get(site_id)
+        if prev is None:
+            self._site_min_max[site_id] = (lo, hi)
+        else:
+            self._site_min_max[site_id] = (min(prev[0], lo), max(prev[1], hi))
+
+    def _can_inject_fault(self, site_id: str) -> bool:
+        if self.target_site is None or site_id != self.target_site:
+            return False
+        if self._injected_this_forward:
+            return False
+        if self._decode_active:
+            if self._decode_already_injected:
+                return False
+            if self._decode_target_step is None or self._decode_current_step is None:
+                return False
+            if self._decode_current_step != self._decode_target_step:
+                return False
+        return True
+
+    def _inject_fault_into(self, out: torch.Tensor) -> None:
+        flat = out.reshape(-1)
+        if self.fault_mode == "rand2pow":
+            k = self.rng.randint(-14, 15)
+            idx = self.rng.randrange(flat.numel())
+            flat[idx] = flat[idx] * (2.0**k)
+        else:
+            if self.fault_index_mode == "max_abs":
+                idx = int(flat.abs().argmax().item())
+            else:
+                idx = self.rng.randrange(flat.numel())
+            flat[idx] = flat[idx] + self.fault_delta
+        if self._decode_active:
+            self._decode_already_injected = True
+            self._decode_injected_step = self._decode_current_step
+
+    def _acc_tick_metrics(self, site_id: str, injected: bool, mask: torch.Tensor) -> None:
+        if self.target_site is None or site_id != self.target_site:
+            return
+        self._acc_metrics["runs"] += 1
+        hit = bool(mask.any().item()) if mask.numel() else False
+        if injected:
+            if hit:
+                self._acc_metrics["tp"] += 1
+            else:
+                self._acc_metrics["fn"] += 1
+        else:
+            if hit:
+                self._acc_metrics["fp"] += 1
+            else:
+                self._acc_metrics["normal"] += 1
+
+    def _acc_v2_transform_tensor(self, site_id: str, tensor: torch.Tensor, *, allow_inject: bool) -> torch.Tensor:
+        if tensor.numel() == 0:
+            return tensor
+        if self._warmup_active:
+            self._warmup_obs(site_id, tensor)
+            return tensor
+        golden = tensor.detach().clone()
+        work = tensor.clone()
+        injected = False
+        if allow_inject and self._can_inject_fault(site_id):
+            self._inject_fault_into(work)
+            injected = True
+            self._injected_this_forward = True
+            self._inject_count += 1
+        bounds = self._site_min_max.get(site_id)
+        if bounds is None:
+            return work
+        m, M = bounds
+        lo = m * self.thr_gamma
+        hi = M * self.thr_gamma
+        wf = work.float()
+        mask = (wf < lo) | (wf > hi)
+        out = work.clone()
+        out[mask] = golden[mask]
+        self._acc_tick_metrics(site_id, injected, mask)
+        return out
 
     def begin_decode(self, step_max: Optional[int] = None) -> None:
         """
@@ -308,6 +447,22 @@ class InjectionContext(AbstractContextManager):
         self._site_to_handle[site_id] = h
 
     def _maybe_inject_output(self, site_id: str, output):
+        if self.acc_v2:
+            tensor, tuple_output = self._extract_primary_tensor(output)
+            if tensor is None or tensor.numel() == 0:
+                return output
+            allow_inject = (
+                not self.protect_only
+                and self.target_site is not None
+                and site_id == self.target_site
+            )
+            new_tensor = self._acc_v2_transform_tensor(site_id, tensor, allow_inject=allow_inject)
+            if new_tensor is tensor:
+                return output
+            if tuple_output:
+                assert isinstance(output, tuple)
+                return (new_tensor, *output[1:])
+            return new_tensor
         if self.protect_only:
             tensor, tuple_output = self._extract_primary_tensor(output)
             if tensor is None or tensor.numel() == 0:
@@ -332,6 +487,15 @@ class InjectionContext(AbstractContextManager):
         return self._inject_and_maybe_rebuild(site_id, output, tensor, tuple_output)
 
     def _maybe_inject_tensor(self, site_id: str, x: torch.Tensor) -> torch.Tensor:
+        if self.acc_v2:
+            if not isinstance(x, torch.Tensor) or x.numel() == 0:
+                return x
+            allow_inject = (
+                not self.protect_only
+                and self.target_site is not None
+                and site_id == self.target_site
+            )
+            return self._acc_v2_transform_tensor(site_id, x, allow_inject=allow_inject)
         if self.protect_only:
             if not isinstance(x, torch.Tensor) or x.numel() == 0:
                 return x
