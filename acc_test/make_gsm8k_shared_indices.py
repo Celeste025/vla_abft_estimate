@@ -5,13 +5,16 @@ import json
 
 from datasets import load_dataset
 
+from results_layout import default_results_root
+
 
 def parse_args():
+    rr = default_results_root()
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", default="test")
     ap.add_argument("--n", type=int, default=100)
     ap.add_argument("--seed", type=int, default=2026)
-    ap.add_argument("--out-json", default="results/gsm8k_test_shared100_indices.json")
+    ap.add_argument("--out-json", default=str(rr / "gsm8k_test_shared100_indices.json"))
     return ap.parse_args()
 
 

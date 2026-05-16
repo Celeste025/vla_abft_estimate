@@ -10,8 +10,11 @@ import os
 import re
 from typing import Any, Dict, List, Tuple
 
+from results_layout import default_results_root
+
 
 def parse_args():
+    rr = default_results_root()
     ap = argparse.ArgumentParser()
     ap.add_argument("--model-id", default="Qwen/Qwen2.5-7B-Instruct")
     ap.add_argument("--device", default="cuda")
@@ -19,7 +22,7 @@ def parse_args():
     ap.add_argument("--attn-implementation", default=None)
     ap.add_argument("--split", default="test")
     ap.add_argument("--seed", type=int, default=2026)
-    ap.add_argument("--indices-json", default="results/gsm8k_test_shared100_indices.json")
+    ap.add_argument("--indices-json", default=str(rr / "gsm8k_test_shared100_indices.json"))
     ap.add_argument("--max-samples", type=int, default=100)
     ap.add_argument("--max-new-tokens", type=int, default=512)
     ap.add_argument("--fault-delta", type=float, default=10000.0)
@@ -39,9 +42,9 @@ def parse_args():
         default="",
         help="Optional: comma-separated explicit site_ids (e.g. L14_v_proj). Overrides --layer-list/--scope.",
     )
-    ap.add_argument("--out-csv", default="results/gsm8k_sweep_shared100.csv")
-    ap.add_argument("--out-json", default="results/gsm8k_sweep_shared100.json")
-    ap.add_argument("--out-baseline-json", default="results/gsm8k_baseline_shared100.json")
+    ap.add_argument("--out-csv", default=str(rr / "gsm8k_sweep_shared100.csv"))
+    ap.add_argument("--out-json", default=str(rr / "gsm8k_sweep_shared100.json"))
+    ap.add_argument("--out-baseline-json", default=str(rr / "gsm8k_baseline_shared100.json"))
     ap.add_argument(
         "--baseline-only",
         action="store_true",

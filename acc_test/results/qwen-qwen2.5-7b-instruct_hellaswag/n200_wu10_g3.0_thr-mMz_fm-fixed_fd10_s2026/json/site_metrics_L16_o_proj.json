@@ -1,0 +1,17 @@
+{
+  "site_id": "L16_o_proj",
+  "layer": 16,
+  "op_type": "o_proj",
+  "summary": {
+    "total": 200,
+    "correct": 129,
+    "accuracy": 0.645
+  },
+  "acc_v2_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 800,
+    "normal": 0
+  }
+}

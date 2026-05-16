@@ -1,0 +1,43 @@
+[acc_zero g4] start 2026-05-16T14:55:25+0800 CUDA_VISIBLE_DEVICES=4
+[acc_zero g4] === fixed 100 thr-mMz ===
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  72%|███████▏  | 244/339 [00:00<00:00, 2438.44it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 3154.99it/s]
+[baseline] acc=0.640000 total=200
+[1/32] site=L0_q_proj layer=0 op=q_proj acc=0.640000 runs=800 tp=0 fp=0 fn=800
+[2/32] site=L0_k_proj layer=0 op=k_proj acc=0.605000 runs=800 tp=0 fp=0 fn=800
+[3/32] site=L0_v_proj layer=0 op=v_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[4/32] site=L0_attn_core layer=0 op=attn_core(qk^t+s*v) acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[5/32] site=L0_o_proj layer=0 op=o_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[6/32] site=L0_mlp_gate layer=0 op=mlp_gate acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[7/32] site=L0_mlp_up layer=0 op=mlp_up acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[8/32] site=L0_mlp_down layer=0 op=mlp_down acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[9/32] site=L8_q_proj layer=8 op=q_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[10/32] site=L8_k_proj layer=8 op=k_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[11/32] site=L8_v_proj layer=8 op=v_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[12/32] site=L8_attn_core layer=8 op=attn_core(qk^t+s*v) acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[13/32] site=L8_o_proj layer=8 op=o_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[14/32] site=L8_mlp_gate layer=8 op=mlp_gate acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[15/32] site=L8_mlp_up layer=8 op=mlp_up acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[16/32] site=L8_mlp_down layer=8 op=mlp_down acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[17/32] site=L16_q_proj layer=16 op=q_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[18/32] site=L16_k_proj layer=16 op=k_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[19/32] site=L16_v_proj layer=16 op=v_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[20/32] site=L16_attn_core layer=16 op=attn_core(qk^t+s*v) acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[21/32] site=L16_o_proj layer=16 op=o_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[22/32] site=L16_mlp_gate layer=16 op=mlp_gate acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[23/32] site=L16_mlp_up layer=16 op=mlp_up acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[24/32] site=L16_mlp_down layer=16 op=mlp_down acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[25/32] site=L24_q_proj layer=24 op=q_proj acc=0.640000 runs=800 tp=799 fp=0 fn=1
+[26/32] site=L24_k_proj layer=24 op=k_proj acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[27/32] site=L24_v_proj layer=24 op=v_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[28/32] site=L24_attn_core layer=24 op=attn_core(qk^t+s*v) acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[29/32] site=L24_o_proj layer=24 op=o_proj acc=0.645000 runs=800 tp=800 fp=0 fn=0
+[30/32] site=L24_mlp_gate layer=24 op=mlp_gate acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[31/32] site=L24_mlp_up layer=24 op=mlp_up acc=0.640000 runs=800 tp=800 fp=0 fn=0
+[32/32] site=L24_mlp_down layer=24 op=mlp_down acc=0.635000 runs=800 tp=0 fp=0 fn=800
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026", "fault_group_count": 32, "expected_fault_group_count": 32, "baseline_acc": 0.64}
+/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_acc_fault_by_layer_op.png
+/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_tp_rate_by_layer_op.png
+/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_fpr_by_op.png
+[acc_zero g4] done /data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026
+[acc_zero g4] all finished 2026-05-16T15:18:03+0800

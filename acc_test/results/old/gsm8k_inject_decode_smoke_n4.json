@@ -1,0 +1,61 @@
+{
+  "benchmark": "gsm8k",
+  "mode": "generate",
+  "summary": {
+    "total": 4,
+    "correct": 0,
+    "accuracy": 0.0,
+    "pred_none": 4,
+    "pred_format_fail": 4
+  },
+  "per_example": [
+    {
+      "idx": 0,
+      "question": "According to its nutritional info, a bag of chips has 250 calories per serving. If a 300g bag has 5 servings, how many grams can you eat if your daily calorie target is 2000 and you have already consumed 1800 calories?",
+      "gold": "48",
+      "pred": null,
+      "correct": 0,
+      "raw_generation": " To solve this problem, we need to follow these steps:\n\n1. **Determine the total number of calories available for consumption:**\n   - Your daily.statusText (去买\", \"g\") hasأوضحت المعلومات الغذائية للطعام من 2\", \"20 experimental cooldowns总热量总附加净豆的克数和) = sembler\n   可总消耗总数的豆子 总共的豆数) = 2000,有20总豆的豆数) = 2000\n   - 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆 总数) = 2000\n\n2. **Calculate the total number of calories you can consume:**\n   - Total calories = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 200 总数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2"
+    },
+    {
+      "idx": 1,
+      "question": "Baldur gets water from a well. He gets 5 pails of water every morning and 6 pails of water every afternoon. If each pail contains 5 liters of water, how many liters of water does he get every day?",
+      "gold": "55",
+      "pred": null,
+      "correct": 0,
+      "raw_generation": " To determine how many liters of water Baldur gets every day, we need to follow these steps:\n\n1. Calculate the total number of pails of water Baldur gets in one day.\n2. Convert the total number of pails into liters, given that each pail contains 5 liters.\n\nFirst, let's find the total number of pails of water Baldur gets in one day:\n- In the morning, he gets 5 pails.\n- In the afternoon, he gets 6 pails.\n- Therefore, the total number of pails per day is \\(5 + 6 = 11\\) pails.\n\nNext, we convert the total the number of p互联\n\np\nairs家都知道，每桶水含有5升。水的总量是每天有水的，计算步骤如下：\n\n1. 计算巴尔杜每天获取的桶数⼿的\n2. 将总水量转换为升，每天有水的总所含水量每天有水的总数量与其直接相关。\n\n首先，我们来计算巴尔单日的总水量所含水量：\n根据题目描述，巴尔杜每天早上获取5桶水，在一天中，巴尔杜每天的总水量所含水量每天所含水量每天所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量所含水量\n桶⼯\n3. �CREEN\n4. 计算巴尔杜每天获取的水量。\n5. 巴尔杜每天获取的水量为：5桶 shouluan\n6. �\n7. 巴尔杜每天获取的水量为：5桶\n8. 巴尔杜每天获取的水量为：55桶 whatsoever\n9. 巴尔杜每天获取的水量为：55\n10. 巴尔杜每天获取的水量为：55\n11. 巴尔杜每天获取的水量为：55\n12. �\n13. 巴尔杜每天获取的水量为：55\n14. 巴尔杜每天获取的水量为：55\n15"
+    },
+    {
+      "idx": 2,
+      "question": "There are forty apples in one box. Uncle Franky ordered two boxes of apples. He is planning to pack the apples with eight apples in one pack. How many packs of apples can he make with the two boxes of apples?",
+      "gold": "10",
+      "pred": null,
+      "correct": 0,
+      "raw_generation": " To determine how many packs of apples Uncle Franky can make, we need to follow these steps:\n\n1. **Calculate the total number of apples in two boxes:**\n   - Each box contains 40 apples.\n   - Uncle Franky ordered 2 boxes.\n   \\[\n   ens'=>\"2'=>\" possibly the - - - new apples might be from the  apples\n  ‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘——‘—‘—‘—‘—‘—‘Zero—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—‘—"
+    },
+    {
+      "idx": 3,
+      "question": "Sitti and Juris bought 34 and 22 oranges, respectively. If both of them decide to share them equally with their 6 other friends, how many oranges will everyone get?",
+      "gold": "7",
+      "pred": null,
+      "correct": 0,
+      "raw_generation": " To solve this problem, we need to follow these steps:\n\n1. **Calculate the total number of oranges:**\n   - Sitti bought 34 oranges.\n   - Juris bought 22 oranges.\n   - Total oranges = 34 + 22 = 56 oranges.\n\n2. **Determine the total number of people sharing the oranges:**\n   - Sitti and Juris are sharing the oranges with 6 other friends.\n   - Total people = 2 (Sitti and Juris) + 6 (friends) = 8 people.\n\n3. **Divide the total number of oranges by the total number of people:**\n   - Total oranges = 56\n   -(iOSSubview =Subview SubSubviewben<tbodyormsgbox> =Subview</msgbox>打着开窗子，让新鲜空气进来。</Subview> </msgcode> </msgbody> </msg> ####  *（S\":\"\";$(this).html('');$(this).append('<div class=\"msgbody\"><msgbody>打</msgbody><msgbody>着</msgbody><msgbody>开</msgbody><msgbody>窗</msgbody><msgbody>子</msgbody><msgbody>，</msgbody><msgbody>让</msgbody><msgbody>新</msgbody><msgbody>鲜</msgbody><msgbody>空</msgbody><msgbody>气</msgbody><msgbody>进</msgbody><msgbody>来</msgbody><msgbody>。</msgbody></msgbody></div>');});$(document).on('click','.msgbody .msgbox',function(){var msgbox=$(this);var msgbody=msgbox.parent();var msg=msgbody.html();msg=msg.replace(/<msgbody>/g,'').replace(/<\\/msgbody>/g,'');alert(msg);});$(document).on('mouseover','.msgbody .msgbox',function(){var msgbox=$(this);msgbox.css('text-decoration','underline');}).on('mouseout','.msgbody .msgbox',function(){var msgbox=$(this);msgbox.css('text-decoration','none');});$(document).on('click','.msgbody .msgcode',function(){var msgcode=$(this);var msgbody=msgcode.parent().parent();var msg=msgbody.html();msg=msg.replace(/<msgbody>/g,'').replace(/<\\/msgbody>/g,'').replace(/<msgcode>/g,'').replace"
+    }
+  ],
+  "run_meta": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": "L14_v_proj",
+    "fault_delta": 10000.0,
+    "inject_count": 4,
+    "expected_site_count": 224,
+    "registered_site_count": 224,
+    "missing_sites": [],
+    "injected_forward_count": 4,
+    "bad_forward_count": 4,
+    "errors_total": 0,
+    "warning_printed": 4
+  }
+}

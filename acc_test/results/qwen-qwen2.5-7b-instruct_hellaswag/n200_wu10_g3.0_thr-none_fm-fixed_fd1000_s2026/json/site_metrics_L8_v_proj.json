@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_v_proj",
+  "layer": 8,
+  "op_type": "v_proj",
+  "summary": {
+    "total": 200,
+    "correct": 117,
+    "accuracy": 0.585
+  },
+  "acc_v2_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

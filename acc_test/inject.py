@@ -92,6 +92,10 @@ class InjectionContext(AbstractContextManager):
         protect_capture_stats: bool = False,
         acc_v2: bool = False,
         thr_gamma: float = 3.0,
+        acc_v2_threshold_enable: bool = True,
+        acc_v2_restore_mode: str = "golden",
+        acc_v2_inject_enable: bool = True,
+        acc_v2_metrics_scope: str = "target",
         fault_mode: str = "fixed",
     ) -> None:
         self.model = model
@@ -149,9 +153,21 @@ class InjectionContext(AbstractContextManager):
         # --- ACC v2: warmup min/max per site, interval [m*γ, M*γ], golden restore, metrics ---
         self.acc_v2 = bool(acc_v2)
         self.thr_gamma = float(thr_gamma)
+        self.acc_v2_threshold_enable = bool(acc_v2_threshold_enable)
+        self.acc_v2_restore_mode = str(acc_v2_restore_mode).strip().lower()
+        if self.acc_v2_restore_mode not in {"golden", "zero"}:
+            raise ValueError(
+                f"acc_v2_restore_mode must be golden|zero, got {acc_v2_restore_mode!r}"
+            )
+        self.acc_v2_inject_enable = bool(acc_v2_inject_enable)
+        self.acc_v2_metrics_scope = str(acc_v2_metrics_scope).strip().lower()
+        if self.acc_v2_metrics_scope not in {"target", "all"}:
+            raise ValueError(
+                f"acc_v2_metrics_scope must be target|all, got {acc_v2_metrics_scope!r}"
+            )
         self.fault_mode = str(fault_mode).strip().lower()
-        if self.fault_mode not in {"fixed", "rand2pow"}:
-            raise ValueError(f"fault_mode must be fixed|rand2pow, got {fault_mode!r}")
+        if self.fault_mode not in {"fixed", "rand2pow", "none"}:
+            raise ValueError(f"fault_mode must be fixed|rand2pow|none, got {fault_mode!r}")
         self._warmup_active: bool = False
         self._site_min_max: Dict[str, Tuple[float, float]] = {}
         self._acc_metrics: Dict[str, int] = {
@@ -161,6 +177,10 @@ class InjectionContext(AbstractContextManager):
             "fn": 0,
             "normal": 0,
         }
+        # acc_v2_metrics_scope=="all": per-site buckets (same keys as _acc_metrics).
+        self._acc_metrics_by_site: Dict[str, Dict[str, int]] = {}
+        # Flat index of the single element corrupted in this forward at target_site (ACC v2).
+        self._acc_v2_inj_flat_idx: Optional[int] = None
 
     def __enter__(self) -> "InjectionContext":
         if self.acc_v2 and self.site_strategy != SITE_STRATEGY_QWEN:
@@ -217,9 +237,14 @@ class InjectionContext(AbstractContextManager):
     def reset_acc_metrics(self) -> None:
         for k in self._acc_metrics:
             self._acc_metrics[k] = 0
+        self._acc_metrics_by_site.clear()
 
     def get_acc_v2_metrics(self) -> Dict[str, int]:
         return dict(self._acc_metrics)
+
+    def get_acc_v2_metrics_by_site(self) -> Dict[str, Dict[str, int]]:
+        """Per-site ACC v2 counters (meaningful when acc_v2_metrics_scope=='all')."""
+        return {k: dict(v) for k, v in sorted(self._acc_metrics_by_site.items())}
 
     def export_acc_v2_metrics(self, paths: Dict[str, Path], *, site_id: str) -> None:
         """Write site_metrics.json + site_metrics.csv under paths['json']/paths['csv']."""
@@ -250,6 +275,8 @@ class InjectionContext(AbstractContextManager):
             self._site_min_max[site_id] = (min(prev[0], lo), max(prev[1], hi))
 
     def _can_inject_fault(self, site_id: str) -> bool:
+        if not self.acc_v2_inject_enable:
+            return False
         if self.target_site is None or site_id != self.target_site:
             return False
         if self._injected_this_forward:
@@ -264,6 +291,8 @@ class InjectionContext(AbstractContextManager):
         return True
 
     def _inject_fault_into(self, out: torch.Tensor) -> None:
+        if self.fault_mode == "none":
+            return
         flat = out.reshape(-1)
         if self.fault_mode == "rand2pow":
             k = self.rng.randint(-14, 15)
@@ -275,25 +304,79 @@ class InjectionContext(AbstractContextManager):
             else:
                 idx = self.rng.randrange(flat.numel())
             flat[idx] = flat[idx] + self.fault_delta
+        self._acc_v2_inj_flat_idx = int(idx)
         if self._decode_active:
             self._decode_already_injected = True
             self._decode_injected_step = self._decode_current_step
 
-    def _acc_tick_metrics(self, site_id: str, injected: bool, mask: torch.Tensor) -> None:
+    def _acc_site_bucket(self, site_id: str) -> Optional[Dict[str, int]]:
+        if self.acc_v2_metrics_scope == "all":
+            return self._acc_metrics_by_site.setdefault(
+                site_id,
+                {"runs": 0, "tp": 0, "fp": 0, "fn": 0, "normal": 0},
+            )
         if self.target_site is None or site_id != self.target_site:
+            return None
+        return self._acc_metrics
+
+    def _acc_tick_metrics(
+        self,
+        site_id: str,
+        injected: bool,
+        mask: torch.Tensor,
+        inj_flat_idx: Optional[int],
+    ) -> None:
+        """ACC v2 counters (one tick per hook evaluation).
+
+        - **tp**: fault injected and the **injected flat element** is out of range (caught).
+        - **fn**: fault injected but the injected element is **not** flagged.
+        - **fp**: threshold flags at least one element that was **not** the injected one
+          (spurious alarm on clean positions); if there was no injection, any flag is fp.
+        Multiple of tp/fp/fn may increment in the same forward when both the fault site
+        and spurious positions are flagged.
+
+        When ``acc_v2_metrics_scope=='all'``, counts are accumulated per ``site_id``;
+        otherwise only ``target_site`` updates the aggregate ``_acc_metrics``.
+        """
+        bucket = self._acc_site_bucket(site_id)
+        if bucket is None:
             return
-        self._acc_metrics["runs"] += 1
-        hit = bool(mask.any().item()) if mask.numel() else False
-        if injected:
-            if hit:
-                self._acc_metrics["tp"] += 1
+        bucket["runs"] += 1
+        if mask.numel() == 0:
+            if not injected:
+                bucket["normal"] += 1
             else:
-                self._acc_metrics["fn"] += 1
+                bucket["fn"] += 1
+            return
+
+        flat_mask = mask.reshape(-1)
+        if not injected:
+            if bool(flat_mask.any().item()):
+                bucket["fp"] += 1
+            else:
+                bucket["normal"] += 1
+            return
+
+        n = int(flat_mask.numel())
+        if inj_flat_idx is None or n == 0:
+            if bool(flat_mask.any().item()):
+                bucket["tp"] += 1
+            else:
+                bucket["fn"] += 1
+            return
+
+        ii = int(inj_flat_idx) % n
+        inj_hit = bool(flat_mask[ii].item())
+        sel = torch.zeros_like(flat_mask, dtype=torch.bool)
+        sel[ii] = True
+        has_spurious = bool((flat_mask & ~sel).any().item())
+
+        if has_spurious:
+            bucket["fp"] += 1
+        if inj_hit:
+            bucket["tp"] += 1
         else:
-            if hit:
-                self._acc_metrics["fp"] += 1
-            else:
-                self._acc_metrics["normal"] += 1
+            bucket["fn"] += 1
 
     def _acc_v2_transform_tensor(self, site_id: str, tensor: torch.Tensor, *, allow_inject: bool) -> torch.Tensor:
         if tensor.numel() == 0:
@@ -309,6 +392,12 @@ class InjectionContext(AbstractContextManager):
             injected = True
             self._injected_this_forward = True
             self._inject_count += 1
+        if not self.acc_v2_threshold_enable:
+            if not self._warmup_active:
+                b = self._acc_site_bucket(site_id)
+                if b is not None:
+                    b["runs"] += 1
+            return work
         bounds = self._site_min_max.get(site_id)
         if bounds is None:
             return work
@@ -318,8 +407,12 @@ class InjectionContext(AbstractContextManager):
         wf = work.float()
         mask = (wf < lo) | (wf > hi)
         out = work.clone()
-        out[mask] = golden[mask]
-        self._acc_tick_metrics(site_id, injected, mask)
+        if self.acc_v2_restore_mode == "zero":
+            out = out.masked_fill(mask, 0)
+        else:
+            out[mask] = golden[mask]
+        inj_idx = self._acc_v2_inj_flat_idx if injected else None
+        self._acc_tick_metrics(site_id, injected, mask, inj_idx)
         return out
 
     def begin_decode(self, step_max: Optional[int] = None) -> None:
@@ -368,6 +461,7 @@ class InjectionContext(AbstractContextManager):
         def _on_forward_start(module: torch.nn.Module, args) -> None:
             self._injected_this_forward = False
             self._errors_this_forward = 0
+            self._acc_v2_inj_flat_idx = None
 
         h = self.model.register_forward_pre_hook(_on_forward_start)
         self._handles.append(h)
@@ -452,7 +546,8 @@ class InjectionContext(AbstractContextManager):
             if tensor is None or tensor.numel() == 0:
                 return output
             allow_inject = (
-                not self.protect_only
+                self.acc_v2_inject_enable
+                and not self.protect_only
                 and self.target_site is not None
                 and site_id == self.target_site
             )
@@ -491,7 +586,8 @@ class InjectionContext(AbstractContextManager):
             if not isinstance(x, torch.Tensor) or x.numel() == 0:
                 return x
             allow_inject = (
-                not self.protect_only
+                self.acc_v2_inject_enable
+                and not self.protect_only
                 and self.target_site is not None
                 and site_id == self.target_site
             )

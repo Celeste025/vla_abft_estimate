@@ -11,11 +11,13 @@ from datasets import load_dataset
 from gsm8k_task import _build_prompt as gsm8k_build_prompt, extract_final_answer
 from inject import SITE_STRATEGY_QWEN, InjectionContext
 from model_runner import ModelRunner
-from results_layout import build_run_config_segment, ensure_results_subdirs, results_run_dir, write_run_meta
-
-
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parent.parent
+from results_layout import (
+    build_run_config_segment,
+    default_results_root,
+    ensure_results_subdirs,
+    results_run_dir,
+    write_run_meta,
+)
 
 
 def main() -> None:
@@ -33,12 +35,22 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--max-new-tokens", type=int, default=64)
     ap.add_argument("--target-site", required=True, help="e.g. L12_q_proj")
-    ap.add_argument("--results-root", default=None, help="default: <repo>/results")
+    ap.add_argument(
+        "--results-root",
+        default=None,
+        help="default: acc_test/results (results_layout.default_results_root)",
+    )
     ap.add_argument("--decode-step-inject", action="store_true")
     ap.add_argument("--decode-step-max", type=int, default=150)
+    ap.add_argument(
+        "--acc-no-threshold",
+        action="store_true",
+        help="ACC v2: inject only; skip thr-mMg + golden restore. Path uses thr-none.",
+    )
     args = ap.parse_args()
 
-    results_root = Path(args.results_root) if args.results_root else _repo_root() / "results"
+    results_root = Path(args.results_root) if args.results_root else default_results_root()
+    acc_thr_enabled = not bool(args.acc_no_threshold)
     run_dir = results_run_dir(
         results_root,
         model_id=args.model_id,
@@ -50,6 +62,7 @@ def main() -> None:
         seed=int(args.seed),
         max_new_tokens=int(args.max_new_tokens),
         fault_delta=float(args.fault_delta) if args.fault_mode == "fixed" else None,
+        acc_thr_enabled=acc_thr_enabled,
     )
     paths = ensure_results_subdirs(run_dir)
 
@@ -62,6 +75,7 @@ def main() -> None:
         "gamma": float(args.gamma),
         "fault_mode": args.fault_mode,
         "fault_delta": float(args.fault_delta),
+        "acc_thr_enabled": acc_thr_enabled,
         "seed": int(args.seed),
         "max_new_tokens": int(args.max_new_tokens),
         "target_site": args.target_site,
@@ -73,6 +87,7 @@ def main() -> None:
             seed=int(args.seed),
             max_new_tokens=int(args.max_new_tokens),
             fault_delta=float(args.fault_delta) if args.fault_mode == "fixed" else None,
+            acc_thr_enabled=acc_thr_enabled,
         ),
         "decode_step_inject": bool(args.decode_step_inject),
     }
@@ -96,6 +111,7 @@ def main() -> None:
         protect_only=False,
         acc_v2=True,
         thr_gamma=float(args.gamma),
+        acc_v2_threshold_enable=acc_thr_enabled,
         fault_mode=str(args.fault_mode),
     )
 

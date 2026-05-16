@@ -1,9 +1,16 @@
-"""results/{model_slug}_{dataset}/{run_config}/plots|csv|json layout for ACC experiments."""
+"""acc_test/results/{model_slug}_{dataset}/{run_config}/plots|csv|json layout for ACC experiments."""
 from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
+
+AccThrAction = Literal["none", "golden", "zero"]
+
+
+def default_results_root() -> Path:
+    """Default writable root for acc_test scripts: ``acc_test/results/`` (next to this file)."""
+    return Path(__file__).resolve().parent / "results"
 
 
 def model_slug_from_id(model_id: str) -> str:
@@ -17,6 +24,26 @@ def dataset_slug(name: str) -> str:
     return re.sub(r"[^\w.-]+", "_", str(name).strip().lower()) or "data"
 
 
+def thr_segment_from_action(action: AccThrAction) -> str:
+    if action == "none":
+        return "thr-none"
+    if action == "golden":
+        return "thr-mMg"
+    if action == "zero":
+        return "thr-mMz"
+    raise ValueError(f"acc_thr_action must be none|golden|zero, got {action!r}")
+
+
+def acc_thr_action_from_enabled(
+    acc_thr_enabled: bool,
+    *,
+    acc_thr_action: Optional[AccThrAction] = None,
+) -> AccThrAction:
+    if acc_thr_action is not None:
+        return acc_thr_action
+    return "golden" if acc_thr_enabled else "none"
+
+
 def build_run_config_segment(
     *,
     n_total: int,
@@ -26,19 +53,25 @@ def build_run_config_segment(
     seed: int,
     max_new_tokens: Optional[int] = None,
     fault_delta: Optional[float] = None,
+    acc_thr_enabled: bool = True,
+    acc_thr_action: Optional[AccThrAction] = None,
 ) -> str:
     """Path segment (no leading/trailing slashes). Examples:
     n200_wu5_g3_thr-mMg_fm-rand2pow_s2026_mnt64
-    n200_wu5_g3_thr-mMg_fm-fixed_fd10000_s2026_mnt64
+    n200_wu5_g3_thr-none_fm-rand2pow_s2026  (no threshold)
+    n200_wu5_g3_thr-mMz_fm-fixed_fd100_s2026  (threshold + zero clear)
+    n200_wu5_g3_thr-mMg_fm-none_s2026  (no fault injection; threshold-only)
     """
     fm = str(fault_mode).strip().lower()
-    if fm not in {"rand2pow", "fixed"}:
-        raise ValueError(f"fault_mode must be rand2pow|fixed, got {fault_mode!r}")
+    if fm not in {"rand2pow", "fixed", "none"}:
+        raise ValueError(f"fault_mode must be rand2pow|fixed|none, got {fault_mode!r}")
+    action = acc_thr_action_from_enabled(acc_thr_enabled, acc_thr_action=acc_thr_action)
+    thr_seg = thr_segment_from_action(action)
     parts = [
         f"n{int(n_total)}",
         f"wu{int(n_warmup)}",
         f"g{float(gamma)}",
-        "thr-mMg",
+        thr_seg,
         f"fm-{fm}",
     ]
     if fm == "fixed":
@@ -64,6 +97,8 @@ def results_run_dir(
     seed: int,
     max_new_tokens: Optional[int] = None,
     fault_delta: Optional[float] = None,
+    acc_thr_enabled: bool = True,
+    acc_thr_action: Optional[AccThrAction] = None,
 ) -> Path:
     root = Path(results_root)
     slug_m = model_slug_from_id(model_id)
@@ -76,6 +111,8 @@ def results_run_dir(
         seed=seed,
         max_new_tokens=max_new_tokens,
         fault_delta=fault_delta,
+        acc_thr_enabled=acc_thr_enabled,
+        acc_thr_action=acc_thr_action,
     )
     return root / f"{slug_m}_{slug_d}" / seg
 

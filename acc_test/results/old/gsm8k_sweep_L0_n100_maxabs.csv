@@ -1,0 +1,9 @@
+layer,site_id,op_type,acc_baseline,acc_fault,format_fail_rate,hit_rate
+0,L0_q_proj,q_proj,0.91,0.9,0.02,1.0
+0,L0_k_proj,k_proj,0.91,0.02,0.92,1.0
+0,L0_v_proj,v_proj,0.91,0.0,0.96,1.0
+0,L0_attn_core,attn_core(qk^t+s*v),0.91,0.9,0.01,1.0
+0,L0_o_proj,o_proj,0.91,0.9,0.01,1.0
+0,L0_mlp_gate,mlp_gate,0.91,0.89,0.03,1.0
+0,L0_mlp_up,mlp_up,0.91,0.84,0.01,1.0
+0,L0_mlp_down,mlp_down,0.91,0.74,0.2,1.0

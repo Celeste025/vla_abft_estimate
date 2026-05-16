@@ -21,9 +21,11 @@ from datasets import load_dataset
 from gsm8k_task import _build_prompt, extract_final_answer
 from inject import SITE_STRATEGY_QWEN, InjectionContext
 from model_runner import ModelRunner
+from results_layout import default_results_root
 
 
 def parse_args() -> argparse.Namespace:
+    rr = default_results_root()
     ap = argparse.ArgumentParser()
     ap.add_argument("--model-id", default="Qwen/Qwen2.5-7B-Instruct")
     ap.add_argument("--device", default="cuda")
@@ -39,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument(
         "--out-json",
         type=str,
-        default="results/gsm8k_protect_capture_per_problem.json",
+        default=str(rr / "gsm8k_protect_capture_per_problem.json"),
     )
     return ap.parse_args()
 

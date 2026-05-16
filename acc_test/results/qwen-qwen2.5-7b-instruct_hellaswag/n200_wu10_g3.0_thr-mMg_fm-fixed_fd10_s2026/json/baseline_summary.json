@@ -1,0 +1,8 @@
+{
+  "mode": "baseline_clean",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  }
+}

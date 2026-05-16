@@ -6,14 +6,16 @@ from typing import Dict, List, Optional, Tuple
 
 from gsm8k_task import Gsm8kTask
 from model_runner import ModelRunner
+from results_layout import default_results_root
 
 
 def parse_args():
+    rr = default_results_root()
     ap = argparse.ArgumentParser()
     ap.add_argument("--model-id", default="Qwen/Qwen2.5-7B-Instruct")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--dtype", default="bfloat16")
-    ap.add_argument("--indices-json", default="results/gsm8k_test_shared100_indices.json")
+    ap.add_argument("--indices-json", default=str(rr / "gsm8k_test_shared100_indices.json"))
     ap.add_argument("--max-samples", type=int, default=10)
     ap.add_argument("--layer", type=int, default=14)
     ap.add_argument(
@@ -25,7 +27,7 @@ def parse_args():
     ap.add_argument("--decode-step-max", type=int, default=150)
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--clear-threshold-mul", type=float, default=0.5)
-    ap.add_argument("--out-json", default="results/gsm8k_recovery_case.json")
+    ap.add_argument("--out-json", default=str(rr / "gsm8k_recovery_case.json"))
     return ap.parse_args()
 
 

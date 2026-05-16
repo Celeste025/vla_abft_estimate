@@ -1,0 +1,27 @@
+{
+  "site": "L14_v_proj",
+  "idx": 0,
+  "question": "According to its nutritional info, a bag of chips has 250 calories per serving. If a 300g bag has 5 servings, how many grams can you eat if your daily calorie target is 2000 and you have already consumed 1800 calories?",
+  "gold": "48",
+  "baseline": {
+    "pred": "48",
+    "correct": 1,
+    "raw_generation": " To solve this problem, we need to follow these steps:\n\n1. **Determine the total number of calories available for consumption:**\n   - Your daily calorie target is 2000 calories.\n   - You have already consumed 1800 calories.\n   - Therefore, the remaining calories you can consume are:\n     \\[\n     2000 - 1800 = 200 \\text{ calories}\n     \\]\n\n2. **Find out how many calories one serving of chips contains:**\n   - A 300g bag has 5 servings.\n   - Each serving has 250 calories.\n\n3. **Calculate how many servings you can consume with the remaining calories:**\n   - You have 200 calories left.\n   - Each serving is 250 calories.\n   - The number of servings you can consume is:\n     \\[\n     \\frac{200}{250} = 0.8 \\text{ servings}\n     \\]\n\n4. **Determine the weight of the chips corresponding to 0.8 servings:**\n   - Since 5 servings correspond to 300g, each serving corresponds to:\n     \\[\n     \\frac{300 \\text{ g}}{5} = 60 \\text{ g}\n     \\]\n   - Therefore, 0.8 servings correspond to:\n     \\[\n     0.8 \\times 60 \\text{ g} = 48 \\text{ g}\n     \\]\n\nThus, you can eat 48 grams of chips while staying within your daily calorie target.\n\n#### 48"
+  },
+  "fault": {
+    "pred": null,
+    "correct": 0,
+    "raw_generation": " To solve this problem, we need to follow these steps:\n\n1. **Determine the total number of calories available for consumption:**\n   - Your daily.statusText (去买\", \"g\") hasأوضحت المعلومات الغذائية للطعام من 2\", \"20 experimental cooldowns总热量总附加净豆的克数和) = sembler\n   可总消耗总数的豆子 总共的豆数) = 2000,有20总豆的豆数) = 2000\n   - 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆 总数) = 2000\n\n2. **Calculate the total number of calories you can consume:**\n   - Total calories = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 200 总数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2000个豆数) = 2",
+    "decode_target_step": 30,
+    "decode_injected": true,
+    "first_diff_token_idx_vs_baseline": 31
+  },
+  "clear": {
+    "pred": "48",
+    "correct": 1,
+    "raw_generation": " To solve this problem, we need to follow these steps:\n\n1. **Determine the total number of calories available for consumption:**\n   - Your daily calorie target is 2000 calories.\n   - You have already consumed 1800 calories.\n   - Therefore, the remaining calories you can consume are:\n     \\[\n     2000 - 1800 = 200 \\text{ calories}\n     \\]\n\n2. **Find out how many calories one serving of chips contains:**\n   - A bag of chips has 250 calories per serving.\n\n3. **Calculate how many servings you can consume with the remaining calories:**\n   - The number of servings you can consume is:\n     \\[\n     \\frac{200 \\text{ calories}}{250 \\text{ calories/serving}} = 0.8 \\text{ servings}\n     \\]\n\n4. **Determine the weight of the chips corresponding to 0.8 servings:**\n   - A 300g bag contains 5 servings.\n   - The weight per serving is:\n     \\[\n     \\frac{300 \\text{ g}}{5 \\text{ servings}} = 60 \\text{ g/serving}\n     \\]\n   - Therefore, the weight of 0.8 servings is:\n     \\[\n     0.8 \\text{ servings} \\times 60 \\text{ g/serving} = 48 \\text{ g}\n     \\]\n\nThus, the number of grams you can eat is:\n#### 48",
+    "decode_target_step": 30,
+    "decode_injected": true,
+    "first_diff_token_idx_vs_baseline": 112
+  }
+}

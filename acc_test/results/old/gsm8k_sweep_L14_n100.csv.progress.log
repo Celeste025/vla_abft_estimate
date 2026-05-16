@@ -1,0 +1,9 @@
+[baseline:reuse] acc=0.9100 total=100
+[1/8] layer=14 site=L14_q_proj op_type=q_proj acc=0.9100 format_fail=0.020 hit_rate=1.000
+[2/8] layer=14 site=L14_k_proj op_type=k_proj acc=0.9000 format_fail=0.020 hit_rate=1.000
+[3/8] layer=14 site=L14_v_proj op_type=v_proj acc=0.2000 format_fail=0.500 hit_rate=1.000
+[4/8] layer=14 site=L14_attn_core op_type=attn_core(qk^t+s*v) acc=0.8200 format_fail=0.010 hit_rate=1.000
+[5/8] layer=14 site=L14_o_proj op_type=o_proj acc=0.8300 format_fail=0.040 hit_rate=1.000
+[6/8] layer=14 site=L14_mlp_gate op_type=mlp_gate acc=0.8400 format_fail=0.020 hit_rate=1.000
+[7/8] layer=14 site=L14_mlp_up op_type=mlp_up acc=0.8200 format_fail=0.030 hit_rate=1.000
+[8/8] layer=14 site=L14_mlp_down op_type=mlp_down acc=0.8400 format_fail=0.030 hit_rate=1.000

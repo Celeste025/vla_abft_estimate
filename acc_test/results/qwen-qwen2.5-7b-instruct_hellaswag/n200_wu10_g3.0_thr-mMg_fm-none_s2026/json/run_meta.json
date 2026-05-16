@@ -1,0 +1,21 @@
+{
+  "experiment": "threshold_monitor_no_fault",
+  "model_id": "Qwen/Qwen2.5-7B-Instruct",
+  "dataset": "hellaswag",
+  "split": "validation",
+  "max_samples": 200,
+  "n_warmup": 10,
+  "gamma": 3.0,
+  "fault_mode": "none",
+  "acc_thr_enabled": true,
+  "acc_v2_inject_enable": false,
+  "acc_v2_metrics_scope": "all",
+  "seed": 2026,
+  "layer_list_filter": [
+    0,
+    8,
+    16,
+    24
+  ],
+  "notes": "No injection; per-site ACC v2 threshold + golden restore; tp should be 0 on clean data."
+}

@@ -1,0 +1,5 @@
+[thr_monitor] start 2026-05-14T23:40:04+0800 CUDA_VISIBLE_DEVICES=7
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 4600.37it/s]
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-none_s2026", "accuracy": 0.64, "sites_with_metrics": 32, "total_tp": 0, "total_fp": 0, "csv_rows": 32}
+[thr_monitor] done 2026-05-14T23:41:43+0800

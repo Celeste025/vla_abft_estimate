@@ -1,0 +1,6 @@
+layer,site_id,op_type,acc_baseline,acc_fault,format_fail_rate,hit_rate
+0,L0_q_proj,q_proj,1.0,1.0,0.0,1.0
+0,L0_k_proj,k_proj,1.0,0.5,0.5,1.0
+0,L0_v_proj,v_proj,1.0,0.0,1.0,1.0
+0,L0_attn_core,attn_core(qk^t+s*v),1.0,0.5,0.0,1.0
+0,L0_o_proj,o_proj,1.0,1.0,0.0,1.0

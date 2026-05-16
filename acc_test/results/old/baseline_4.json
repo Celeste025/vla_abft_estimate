@@ -1,0 +1,71 @@
+{
+  "benchmark": "hellaswag",
+  "mode": "prefill",
+  "summary": {
+    "total": 4,
+    "correct": 3,
+    "accuracy": 0.75
+  },
+  "per_example": [
+    {
+      "ind": 40007,
+      "label": 0,
+      "pred": 0,
+      "correct": 1,
+      "scores": [
+        -70.5,
+        -155.0,
+        -96.5,
+        -107.5
+      ]
+    },
+    {
+      "ind": 40211,
+      "label": 0,
+      "pred": 3,
+      "correct": 0,
+      "scores": [
+        -30.25,
+        -39.0,
+        -116.0,
+        -26.375
+      ]
+    },
+    {
+      "ind": 23296,
+      "label": 3,
+      "pred": 3,
+      "correct": 1,
+      "scores": [
+        -135.0,
+        -123.0,
+        -123.0,
+        -60.0
+      ]
+    },
+    {
+      "ind": 39915,
+      "label": 2,
+      "pred": 2,
+      "correct": 1,
+      "scores": [
+        -96.0,
+        -94.0,
+        -50.25,
+        -82.0
+      ]
+    }
+  ],
+  "run_meta": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "device": "cuda",
+    "dtype": "bfloat16",
+    "attn_implementation": null,
+    "inject_site": null,
+    "fault_delta": 10000.0,
+    "inject_count": 0,
+    "expected_site_count": 224,
+    "registered_site_count": 224,
+    "missing_sites": []
+  }
+}

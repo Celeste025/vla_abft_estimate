@@ -1,0 +1,207 @@
+{
+  "config": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "dtype": "bfloat16",
+    "seed": 2026,
+    "warmup_samples": 1,
+    "max_samples": 8,
+    "max_new_tokens": 256,
+    "threshold": 5000.0,
+    "fault_delta": 10000.0,
+    "clear_threshold_mul": 0.5
+  },
+  "per_problem": [
+    {
+      "position_in_shuffled_batch": 1,
+      "dataset_index_in_batch": 0,
+      "question_head": "Baldur gets water from a well. He gets 5 pails of water every morning and 6 pails of water every afternoon. If each pail",
+      "gold": "55",
+      "pred": "125",
+      "correct": 0,
+      "gen_tokens": 256,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 2,
+      "dataset_index_in_batch": 1,
+      "question_head": "There are forty apples in one box. Uncle Franky ordered two boxes of apples. He is planning to pack the apples with eigh",
+      "gold": "10",
+      "pred": "5",
+      "correct": 0,
+      "gen_tokens": 255,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 3,
+      "dataset_index_in_batch": 2,
+      "question_head": "Sitti and Juris bought 34 and 22 oranges, respectively. If both of them decide to share them equally with their 6 other ",
+      "gold": "7",
+      "pred": "5",
+      "correct": 0,
+      "gen_tokens": 256,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 4,
+      "dataset_index_in_batch": 3,
+      "question_head": "Milo is making a mosaic with chips of glass. It takes twelve glass chips to make every square inch of the mosaic. A bag ",
+      "gold": "4",
+      "pred": "6",
+      "correct": 0,
+      "gen_tokens": 256,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 5,
+      "dataset_index_in_batch": 4,
+      "question_head": "Mrs. Harrington bought 12 boxes of oranges at the market. She gave her mom and her sister 2 boxes of oranges each. Then ",
+      "gold": "120",
+      "pred": "130",
+      "correct": 0,
+      "gen_tokens": 256,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 6,
+      "dataset_index_in_batch": 5,
+      "question_head": "John decides to take a cooking class.  The class meets 4 times a week for 2 hours each time for 6 weeks.  If he learns a",
+      "gold": "32",
+      "pred": null,
+      "correct": 0,
+      "gen_tokens": 255,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 7,
+      "dataset_index_in_batch": 6,
+      "question_head": "Marin and his neighbor Nancy each eat 4 apples a day. How many apples do they eat in 30 days?",
+      "gold": "150",
+      "pred": "60",
+      "correct": 0,
+      "gen_tokens": 255,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    },
+    {
+      "position_in_shuffled_batch": 8,
+      "dataset_index_in_batch": 7,
+      "question_head": "Kyle bought last year's best-selling book for $19.50. This is with a 25% discount from the original price. What was the ",
+      "gold": "26",
+      "pred": "26",
+      "correct": 1,
+      "gen_tokens": 255,
+      "protect_clear": {
+        "threshold": 5000.0,
+        "total_cleared_elements": 2,
+        "sites_with_any_clear": 2,
+        "by_site": {
+          "L3_mlp_down": 1,
+          "L4_mlp_down": 1
+        },
+        "nonzero_site_ids": [
+          "L3_mlp_down",
+          "L4_mlp_down"
+        ]
+      }
+    }
+  ],
+  "summary": {
+    "total_cleared_elements_per_problem": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "total_cleared_elements_sum": 16,
+    "total_cleared_elements_mean": 2.0,
+    "problems_with_zero_clears": 0,
+    "problems_with_nonzero_clears": 8
+  }
+}

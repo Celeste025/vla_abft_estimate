@@ -1,0 +1,6 @@
+layer,site_id,op_type,acc_baseline,acc_fault,mean_abs_delta_score,inject_count,registered_site_count,expected_site_count
+0,L0_q_proj,q_proj,0.75,0.75,0.09375,16,224,224
+0,L0_k_proj,k_proj,0.75,0.75,0.484375,16,224,224
+0,L0_v_proj,v_proj,0.75,0.75,0.171875,16,224,224
+0,L0_attn_core,attn_core(qk^t+s*v),0.75,0.75,0.140625,16,224,224
+0,L0_o_proj,o_proj,0.75,0.75,0.1171875,16,224,224

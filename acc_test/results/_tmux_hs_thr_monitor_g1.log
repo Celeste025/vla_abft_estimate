@@ -1,0 +1,3 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  71%|███████   | 239/339 [00:00<00:00, 2388.76it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 3139.81it/s]
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g1.0_thr-mMg_fm-none_s2026", "accuracy": 0.64, "sites_with_metrics": 32, "total_tp": 0, "total_fp": 1642, "csv_rows": 32}

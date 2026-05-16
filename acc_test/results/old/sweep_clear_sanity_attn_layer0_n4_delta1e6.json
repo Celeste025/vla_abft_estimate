@@ -1,0 +1,64 @@
+{
+  "baseline": {
+    "total": 4,
+    "correct": 3,
+    "accuracy": 0.75
+  },
+  "rows": [
+    {
+      "layer": 0,
+      "site_id": "L0_q_proj",
+      "op_type": "q_proj",
+      "acc_baseline": 0.75,
+      "acc_fault": 0.75,
+      "mean_abs_delta_score": 0.09375,
+      "inject_count": 16,
+      "registered_site_count": 224,
+      "expected_site_count": 224
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_k_proj",
+      "op_type": "k_proj",
+      "acc_baseline": 0.75,
+      "acc_fault": 0.75,
+      "mean_abs_delta_score": 0.484375,
+      "inject_count": 16,
+      "registered_site_count": 224,
+      "expected_site_count": 224
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_v_proj",
+      "op_type": "v_proj",
+      "acc_baseline": 0.75,
+      "acc_fault": 0.75,
+      "mean_abs_delta_score": 0.171875,
+      "inject_count": 16,
+      "registered_site_count": 224,
+      "expected_site_count": 224
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_attn_core",
+      "op_type": "attn_core(qk^t+s*v)",
+      "acc_baseline": 0.75,
+      "acc_fault": 0.75,
+      "mean_abs_delta_score": 0.140625,
+      "inject_count": 16,
+      "registered_site_count": 224,
+      "expected_site_count": 224
+    },
+    {
+      "layer": 0,
+      "site_id": "L0_o_proj",
+      "op_type": "o_proj",
+      "acc_baseline": 0.75,
+      "acc_fault": 0.75,
+      "mean_abs_delta_score": 0.1171875,
+      "inject_count": 16,
+      "registered_site_count": 224,
+      "expected_site_count": 224
+    }
+  ]
+}

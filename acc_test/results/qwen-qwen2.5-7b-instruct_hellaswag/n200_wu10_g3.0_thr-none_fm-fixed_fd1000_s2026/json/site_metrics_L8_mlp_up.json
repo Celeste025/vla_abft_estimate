@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_mlp_up",
+  "layer": 8,
+  "op_type": "mlp_up",
+  "summary": {
+    "total": 200,
+    "correct": 121,
+    "accuracy": 0.605
+  },
+  "acc_v2_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

@@ -6,20 +6,22 @@ import os
 
 from gsm8k_task import Gsm8kTask
 from model_runner import ModelRunner
+from results_layout import default_results_root
 
 
 def parse_args():
+    rr = default_results_root()
     ap = argparse.ArgumentParser()
     ap.add_argument("--model-id", default="Qwen/Qwen2.5-7B-Instruct")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--dtype", default="bfloat16")
-    ap.add_argument("--indices-json", default="results/gsm8k_test_shared100_indices.json")
+    ap.add_argument("--indices-json", default=str(rr / "gsm8k_test_shared100_indices.json"))
     ap.add_argument("--max-samples", type=int, default=3)
     ap.add_argument("--layer", type=int, default=14)
     ap.add_argument("--fault-delta", type=float, default=10000.0)
     ap.add_argument("--decode-step-max", type=int, default=150)
     ap.add_argument("--seed", type=int, default=2026)
-    ap.add_argument("--out-dir", default="results/_trace_smoke")
+    ap.add_argument("--out-dir", default=str(rr / "_trace_smoke"))
     return ap.parse_args()
 
 
