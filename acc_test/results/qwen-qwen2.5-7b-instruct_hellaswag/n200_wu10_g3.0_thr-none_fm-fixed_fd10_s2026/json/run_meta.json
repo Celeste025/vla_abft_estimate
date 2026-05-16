@@ -16,7 +16,11 @@
     24
   ],
   "l_select": 4,
-  "ops_per_layer": 8,
-  "fault_group_count": 32,
-  "notes": "baseline has no threshold detection and no fault injection"
+  "ops_per_layer": 5,
+  "fault_group_count": 20,
+  "notes": "baseline has no threshold detection and no fault injection",
+  "acc_thr_action": "none",
+  "restore_mode": "golden",
+  "site_set": "nonmatmul",
+  "sweep_csv": "sweep_summary_nonmatmul.csv"
 }

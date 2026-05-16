@@ -11,7 +11,7 @@ set -o pipefail
 {
   echo "[acc_zero g4] start $(date -Is) CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
   echo "[acc_zero g4] === fixed 100 thr-mMz ==="
-  "$PY" run_hellaswag_acc_v2_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 100 --acc-threshold-zero
+  "$PY" run_hellaswag_acc_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 100 --acc-threshold-zero
   RUN_DIR=$("$PY" -c "
 from results_layout import default_results_root, results_run_dir
 print(results_run_dir(
@@ -31,7 +31,7 @@ print(results_run_dir(
   "$PY" plot_sweep_summary.py \
     --in-csv "$RUN_DIR/csv/sweep_summary.csv" \
     --out-png-acc "$RUN_DIR/plots/sweep_acc_fault_by_layer_op.png" \
-    --title "HellaSwag ACC v2 thr-mMz fixed+100 (n200 wu10 g3 s2026)" \
+    --title "HellaSwag ACC thr-mMz fixed+100 (n200 wu10 g3 s2026)" \
     --out-png-tp-rate "$RUN_DIR/plots/sweep_tp_rate_by_layer_op.png"
   echo "[acc_zero g4] done $RUN_DIR"
   echo "[acc_zero g4] all finished $(date -Is)"

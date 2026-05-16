@@ -1,6 +1,6 @@
 """Capture per-site tensor stats for Qwen decoder matmul-related hooks (same sites as inject.py).
 
-Aligns with ``InjectionContext`` qwen_decoder registration:
+Aligns with ``InjectionContext`` Qwen decoder site registration:
 q_proj, k_proj, v_proj, attn_core (o_proj first-arg pre), o_proj, mlp_gate, mlp_up, mlp_down.
 
 Per testcase, aggregates over **all** root-model forward passes in that episode (e.g. prefill+decode

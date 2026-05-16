@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import time
-from dataclasses import asdict, dataclass
 from typing import Any, Dict, List, Optional
 
 import torch
@@ -71,26 +70,6 @@ def get_dtype(name: str) -> torch.dtype:
     return torch.float32
 
 
-@dataclass
-class RunMeta:
-    model_id: str
-    device: str
-    dtype: str
-    attn_implementation: Optional[str]
-    inject_site: Optional[str]
-    fault_delta: float
-    inject_count: int
-    expected_site_count: int
-    registered_site_count: int
-    missing_sites: list[str]
-    injected_forward_count: int
-    bad_forward_count: int
-    errors_total: int
-    warning_printed: int
-    decode_problem_count: int
-    decode_injected_problem_count: int
-
-
 class ModelRunner:
     def __init__(
         self,
@@ -139,7 +118,6 @@ class ModelRunner:
             "pad_token_id": tok.pad_token_id,
             "eos_token_id": tok.eos_token_id,
         }
-        # Remove None to avoid warnings in some transformers versions.
         gen_kwargs = {k: v for k, v in gen_kwargs.items() if v is not None}
         injector = self._active_injector
         if injector is not None and injector.decode_step_inject_enable:
@@ -149,58 +127,9 @@ class ModelRunner:
         out_ids = self.model.generate(**inputs, **gen_kwargs)
         if injector is not None and injector.decode_step_inject_enable:
             injector.end_decode()
-        # Return only the newly generated part.
         prompt_len = int(inputs["input_ids"].shape[1])
         gen_ids = out_ids[0, prompt_len:]
         return tok.decode(gen_ids, skip_special_tokens=True)
-
-    def run_task(
-        self,
-        task,
-        inject_site: Optional[str] = None,
-        fault_delta: float = 10000.0,
-        seed: int = 2026,
-        fault_index_mode: str = "random",
-        clear_exceptions: bool = False,
-        clear_threshold_mul: float = 0.5,
-        decode_step_inject_enable: bool = False,
-        decode_step_max: int = 150,
-    ) -> Dict[str, Any]:
-        with InjectionContext(
-            model=self.model,
-            target_site=inject_site,
-            fault_delta=fault_delta,
-            seed=seed,
-            fault_index_mode=fault_index_mode,
-            clear_exceptions=clear_exceptions,
-            clear_threshold_mul=clear_threshold_mul,
-            decode_step_inject_enable=decode_step_inject_enable,
-            decode_step_max=decode_step_max,
-        ) as inj:
-            self._active_injector = inj
-            result = task.run(self)
-            self._active_injector = None
-            stats = inj.collect_hook_stats()
-            meta = RunMeta(
-                model_id=self.model_id,
-                device=self.device,
-                dtype=self.dtype_name,
-                attn_implementation=self.attn_implementation,
-                inject_site=inject_site,
-                fault_delta=fault_delta,
-                inject_count=inj.inject_count,
-                expected_site_count=stats.expected_site_count,
-                registered_site_count=stats.registered_site_count,
-                missing_sites=stats.missing_sites,
-                injected_forward_count=stats.injected_forward_count,
-                bad_forward_count=stats.bad_forward_count,
-                errors_total=stats.errors_total,
-                warning_printed=stats.warning_printed,
-                decode_problem_count=stats.decode_problem_count,
-                decode_injected_problem_count=stats.decode_injected_problem_count,
-            )
-            result["run_meta"] = asdict(meta)
-            return result
 
 
 class _DecodeStepCounter(LogitsProcessor):
@@ -210,7 +139,6 @@ class _DecodeStepCounter(LogitsProcessor):
         self.step = 0
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
-        # Called once per generation step in HF generate loop.
         self.injector.set_decode_step(self.step)
         self.step += 1
         return scores

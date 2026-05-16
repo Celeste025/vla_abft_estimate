@@ -1,0 +1,52 @@
+[resume g2] start 2026-05-16T20:39:19+0800 fault=rand2pow 
+[resume g2] === rand2pow thr-golden ===
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  51%|█████     | 172/339 [00:00<00:00, 1717.99it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 2966.65it/s]
+[baseline] reuse acc=0.640000 total=200
+[1/20] site=L0_input_norm layer=0 op=input_norm acc=0.645000 runs=800 tp=177 fp=0 fn=623
+[2/20] site=L0_post_attn_norm layer=0 op=post_attn_norm acc=0.640000 runs=800 tp=204 fp=0 fn=596
+[3/20] site=L0_attn_residual layer=0 op=attn_residual acc=0.645000 runs=800 tp=196 fp=0 fn=604
+[4/20] site=L0_mlp_act layer=0 op=mlp_act acc=0.640000 runs=800 tp=63 fp=0 fn=737
+[5/20] site=L0_mlp_residual layer=0 op=mlp_residual acc=0.645000 runs=800 tp=177 fp=0 fn=623
+[6/20] site=L8_input_norm layer=8 op=input_norm acc=0.645000 runs=800 tp=194 fp=0 fn=606
+[7/20] site=L8_post_attn_norm layer=8 op=post_attn_norm acc=0.645000 runs=800 tp=196 fp=0 fn=604
+[8/20] site=L8_attn_residual layer=8 op=attn_residual acc=0.635000 runs=800 tp=13 fp=0 fn=787
+[9/20] site=L8_mlp_act layer=8 op=mlp_act acc=0.650000 runs=800 tp=121 fp=0 fn=679
+[10/20] site=L8_mlp_residual layer=8 op=mlp_residual acc=0.620000 runs=800 tp=8 fp=0 fn=792
+[11/20] site=L16_input_norm layer=16 op=input_norm acc=0.645000 runs=800 tp=173 fp=0 fn=627
+[12/20] site=L16_post_attn_norm layer=16 op=post_attn_norm acc=0.640000 runs=800 tp=222 fp=0 fn=578
+[13/20] site=L16_attn_residual layer=16 op=attn_residual acc=0.635000 runs=800 tp=15 fp=0 fn=785
+[14/20] site=L16_mlp_act layer=16 op=mlp_act acc=0.640000 runs=800 tp=137 fp=0 fn=663
+[15/20] site=L16_mlp_residual layer=16 op=mlp_residual acc=0.620000 runs=800 tp=18 fp=0 fn=782
+[16/20] site=L24_input_norm layer=24 op=input_norm acc=0.640000 runs=800 tp=196 fp=0 fn=604
+[17/20] site=L24_post_attn_norm layer=24 op=post_attn_norm acc=0.645000 runs=800 tp=189 fp=0 fn=611
+[18/20] site=L24_attn_residual layer=24 op=attn_residual acc=0.645000 runs=800 tp=44 fp=0 fn=756
+[19/20] site=L24_mlp_act layer=24 op=mlp_act acc=0.640000 runs=800 tp=110 fp=0 fn=690
+[20/20] site=L24_mlp_residual layer=24 op=mlp_residual acc=0.645000 runs=800 tp=52 fp=0 fn=748
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026", "site_set": "nonmatmul", "sweep_csv": "sweep_summary_nonmatmul.csv", "fault_group_count": 20, "expected_fault_group_count": 20, "baseline_acc": 0.64}
+[resume g2] === rand2pow thr-zero ===
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  81%|████████  | 275/339 [00:00<00:00, 2749.38it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 3233.14it/s]
+[baseline] reuse acc=0.640000 total=200
+[1/20] site=L0_input_norm layer=0 op=input_norm acc=0.645000 runs=800 tp=177 fp=0 fn=623
+[2/20] site=L0_post_attn_norm layer=0 op=post_attn_norm acc=0.640000 runs=800 tp=204 fp=0 fn=596
+[3/20] site=L0_attn_residual layer=0 op=attn_residual acc=0.645000 runs=800 tp=196 fp=0 fn=604
+[4/20] site=L0_mlp_act layer=0 op=mlp_act acc=0.640000 runs=800 tp=63 fp=0 fn=737
+[5/20] site=L0_mlp_residual layer=0 op=mlp_residual acc=0.645000 runs=800 tp=177 fp=0 fn=623
+[6/20] site=L8_input_norm layer=8 op=input_norm acc=0.645000 runs=800 tp=194 fp=0 fn=606
+[7/20] site=L8_post_attn_norm layer=8 op=post_attn_norm acc=0.645000 runs=800 tp=196 fp=0 fn=604
+[8/20] site=L8_attn_residual layer=8 op=attn_residual acc=0.635000 runs=800 tp=13 fp=0 fn=787
+[9/20] site=L8_mlp_act layer=8 op=mlp_act acc=0.650000 runs=800 tp=121 fp=0 fn=679
+[10/20] site=L8_mlp_residual layer=8 op=mlp_residual acc=0.625000 runs=800 tp=8 fp=0 fn=792
+[11/20] site=L16_input_norm layer=16 op=input_norm acc=0.645000 runs=800 tp=173 fp=0 fn=627
+[12/20] site=L16_post_attn_norm layer=16 op=post_attn_norm acc=0.640000 runs=800 tp=222 fp=0 fn=578
+[13/20] site=L16_attn_residual layer=16 op=attn_residual acc=0.635000 runs=800 tp=15 fp=0 fn=785
+[14/20] site=L16_mlp_act layer=16 op=mlp_act acc=0.645000 runs=800 tp=137 fp=0 fn=663
+[15/20] site=L16_mlp_residual layer=16 op=mlp_residual acc=0.620000 runs=800 tp=18 fp=0 fn=782
+[16/20] site=L24_input_norm layer=24 op=input_norm acc=0.640000 runs=800 tp=196 fp=0 fn=604
+[17/20] site=L24_post_attn_norm layer=24 op=post_attn_norm acc=0.645000 runs=800 tp=189 fp=0 fn=611
+[18/20] site=L24_attn_residual layer=24 op=attn_residual acc=0.645000 runs=800 tp=44 fp=0 fn=756
+[19/20] site=L24_mlp_act layer=24 op=mlp_act acc=0.645000 runs=800 tp=110 fp=0 fn=690
+[20/20] site=L24_mlp_residual layer=24 op=mlp_residual acc=0.655000 runs=800 tp=52 fp=0 fn=748
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-rand2pow_s2026", "site_set": "nonmatmul", "sweep_csv": "sweep_summary_nonmatmul.csv", "fault_group_count": 20, "expected_fault_group_count": 20, "baseline_acc": 0.64}
+[resume g2] done 2026-05-16T21:08:24+0800

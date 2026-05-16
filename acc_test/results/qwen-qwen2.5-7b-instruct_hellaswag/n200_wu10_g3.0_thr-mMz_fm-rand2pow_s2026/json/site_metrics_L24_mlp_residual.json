@@ -1,0 +1,17 @@
+{
+  "site_id": "L24_mlp_residual",
+  "layer": 24,
+  "op_type": "mlp_residual",
+  "summary": {
+    "total": 200,
+    "correct": 131,
+    "accuracy": 0.655
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 52,
+    "fp": 0,
+    "fn": 748,
+    "normal": 0
+  }
+}

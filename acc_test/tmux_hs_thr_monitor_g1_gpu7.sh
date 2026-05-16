@@ -9,7 +9,7 @@ mkdir -p results
 set -o pipefail
 {
   echo "[thr_monitor g=1.0] start $(date -Is) CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}"
-  "$PY" run_hellaswag_acc_v2_threshold_monitor.py \
+  "$PY" run_hellaswag_acc_threshold_monitor.py \
     --max-samples 200 --n-warmup 10 --gamma 1.0 --seed 2026 --layer-list 0,8,16,24
   echo "[thr_monitor g=1.0] done $(date -Is)"
 } 2>&1 | tee -a "$LOG"

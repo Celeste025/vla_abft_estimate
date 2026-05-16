@@ -1,0 +1,9 @@
+layer,site_id,op_type,acc_baseline,acc_fault,runs,tp,fp,fn,normal,thr_gamma,acc_thr_enabled,acc_thr_action,fault_mode,fault_delta
+0,L0_q_proj,q_proj,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_k_proj,k_proj,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_v_proj,v_proj,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_attn_core,attn_core(qk^t+s*v),0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_o_proj,o_proj,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_mlp_gate,mlp_gate,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_mlp_up,mlp_up,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0
+0,L0_mlp_down,mlp_down,0.75,0.75,16,16,0,0,0,3.0,1,golden,fixed,10000.0

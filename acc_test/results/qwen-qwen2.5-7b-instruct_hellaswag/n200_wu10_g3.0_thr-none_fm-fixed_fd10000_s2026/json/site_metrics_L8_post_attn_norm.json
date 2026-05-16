@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_post_attn_norm",
+  "layer": 8,
+  "op_type": "post_attn_norm",
+  "summary": {
+    "total": 200,
+    "correct": 116,
+    "accuracy": 0.58
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

@@ -7,7 +7,7 @@ PY=/data/home/jinqiwen/miniconda3/envs/abft_cost/bin/python
 BASE=(--max-samples 200 --n-warmup 10 --gamma 3.0 --seed 2026 --layer-list 0,8,16,24)
 
 echo "[grp2] === fixed 10000 thr-mMg ==="
-"$PY" run_hellaswag_acc_v2_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 10000
+"$PY" run_hellaswag_acc_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 10000
 RUN_DIR=$("$PY" -c "
 from results_layout import default_results_root, results_run_dir
 print(results_run_dir(
@@ -26,12 +26,12 @@ print(results_run_dir(
 "$PY" plot_sweep_summary.py \
   --in-csv "$RUN_DIR/csv/sweep_summary.csv" \
   --out-png-acc "$RUN_DIR/plots/sweep_acc_fault_by_layer_op.png" \
-  --title "HellaSwag ACC v2 thr-mMg fixed+10000 (n200 wu10 g3 s2026)" \
+  --title "HellaSwag ACC thr-mMg fixed+10000 (n200 wu10 g3 s2026)" \
   --out-png-tp-rate "$RUN_DIR/plots/sweep_tp_rate_by_layer_op.png"
 echo "[grp2] done $RUN_DIR"
 
 echo "[grp2] === rand2pow thr-none ==="
-"$PY" run_hellaswag_acc_v2_sweep.py "${BASE[@]}" --fault-mode rand2pow --acc-no-threshold
+"$PY" run_hellaswag_acc_sweep.py "${BASE[@]}" --fault-mode rand2pow --acc-no-threshold
 RUN_DIR=$("$PY" -c "
 from results_layout import default_results_root, results_run_dir
 print(results_run_dir(
@@ -50,12 +50,12 @@ print(results_run_dir(
 "$PY" plot_sweep_summary.py \
   --in-csv "$RUN_DIR/csv/sweep_summary.csv" \
   --out-png-acc "$RUN_DIR/plots/sweep_acc_fault_by_layer_op.png" \
-  --title "HellaSwag ACC v2 thr-none rand2pow (n200 wu10 g3 s2026)" \
+  --title "HellaSwag ACC thr-none rand2pow (n200 wu10 g3 s2026)" \
   --out-png-tp-rate "$RUN_DIR/plots/sweep_tp_rate_by_layer_op.png"
 echo "[grp2] done $RUN_DIR"
 
 echo "[grp2] === fixed 10 thr-none ==="
-"$PY" run_hellaswag_acc_v2_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 10 --acc-no-threshold
+"$PY" run_hellaswag_acc_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta 10 --acc-no-threshold
 RUN_DIR=$("$PY" -c "
 from results_layout import default_results_root, results_run_dir
 print(results_run_dir(
@@ -74,7 +74,7 @@ print(results_run_dir(
 "$PY" plot_sweep_summary.py \
   --in-csv "$RUN_DIR/csv/sweep_summary.csv" \
   --out-png-acc "$RUN_DIR/plots/sweep_acc_fault_by_layer_op.png" \
-  --title "HellaSwag ACC v2 thr-none fixed+10 (n200 wu10 g3 s2026)" \
+  --title "HellaSwag ACC thr-none fixed+10 (n200 wu10 g3 s2026)" \
   --out-png-tp-rate "$RUN_DIR/plots/sweep_tp_rate_by_layer_op.png"
 echo "[grp2] done $RUN_DIR"
 

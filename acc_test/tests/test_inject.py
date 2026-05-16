@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import torch
 
-from inject import SITE_STRATEGY_MODULE_SCAN, InjectionContext, list_sites
+from inject import InjectionContext, list_sites
 
 
 class DummyAttn(torch.nn.Module):
@@ -17,7 +17,6 @@ class DummyAttn(torch.nn.Module):
         q = self.q_proj(x)
         k = self.k_proj(x)
         v = self.v_proj(x)
-        # Simplified "attention output before o_proj"
         attn_out = q + k + v
         y = self.o_proj(attn_out)
         return y, None
@@ -34,15 +33,28 @@ class DummyMLP(torch.nn.Module):
         return self.down_proj(self.gate_proj(x) + self.up_proj(x))
 
 
+class DummyNorm(torch.nn.Module):
+    def forward(self, x):
+        return x
+
+
 class DummyLayer(torch.nn.Module):
     def __init__(self, hidden_size: int):
         super().__init__()
+        self.input_layernorm = DummyNorm()
         self.self_attn = DummyAttn(hidden_size)
+        self.post_attention_layernorm = DummyNorm()
         self.mlp = DummyMLP(hidden_size)
 
     def forward(self, x):
+        residual = x
+        x = self.input_layernorm(x)
         attn_out, _ = self.self_attn(x)
-        return self.mlp(attn_out)
+        x = residual + attn_out
+        residual = x
+        x = self.post_attention_layernorm(x)
+        x = self.mlp(x)
+        return residual + x
 
 
 class Inner(torch.nn.Module):
@@ -98,7 +110,13 @@ def test_inject_only_target_site_changes_output():
     h0.remove()
 
     captured_inj = {}
-    with InjectionContext(model, target_site="L0_q_proj", fault_delta=10000.0, seed=42) as inj:
+    with InjectionContext(
+        model,
+        target_site="L0_q_proj",
+        fault_delta=10000.0,
+        seed=42,
+        threshold_enable=False,
+    ) as inj:
         def _capture_q2(_m, _in, out):
             captured_inj["q"] = out.detach().clone()
 
@@ -112,40 +130,29 @@ def test_inject_only_target_site_changes_output():
     assert nz.numel() == 1
     assert torch.isclose(diff[nz[0]], torch.tensor(10000.0))
 
-    # Final output should differ (can spread through downstream layers).
     diff = (out - base).reshape(-1)
     nz = torch.nonzero(diff != 0, as_tuple=False).reshape(-1)
     assert nz.numel() > 0
 
 
-def test_list_sites_module_class_scan():
-    tiny = torch.nn.Sequential(
-        torch.nn.Conv2d(3, 4, kernel_size=1),
-        torch.nn.Conv2d(4, 2, kernel_size=1),
-        torch.nn.Flatten(),
-        torch.nn.Linear(2, 2),
-    )
-    sites = list_sites(tiny, strategy=SITE_STRATEGY_MODULE_SCAN)
-    assert "0" in sites
-    assert "1" in sites
-    assert "3" in sites
-    assert len(sites) == 3
-
-
-def test_inject_module_scan_conv_output():
-    tiny = torch.nn.Sequential(
-        torch.nn.Conv2d(3, 4, kernel_size=1, bias=False),
-    )
-    x = torch.randn(1, 3, 2, 2)
-    base = tiny(x)
+def test_warmup_collects_bounds_and_clean_forward_is_normal():
+    torch.manual_seed(1)
+    model = DummyModel(n_layers=1)
+    x = torch.randn(1, 4, 8)
     with InjectionContext(
-        tiny,
-        target_site="0",
-        fault_delta=1e4,
-        seed=0,
-        site_strategy=SITE_STRATEGY_MODULE_SCAN,
-        target_module_classes=(torch.nn.Conv2d,),
+        model,
+        target_site="L0_q_proj",
+        thr_gamma=3.0,
+        threshold_enable=True,
+        inject_enable=False,
     ) as inj:
-        out = tiny(x)
-        assert inj.inject_count == 1
-    assert not torch.allclose(out, base)
+        inj.set_warmup(True)
+        _ = _run(model, x)
+        assert "L0_q_proj" in inj._site_min_max
+        inj.set_warmup(False)
+        inj.reset_acc_metrics()
+        _ = _run(model, x)
+        m = inj.get_acc_metrics()
+    assert m["runs"] >= 1
+    assert m["normal"] >= 1
+    assert m["fp"] == 0

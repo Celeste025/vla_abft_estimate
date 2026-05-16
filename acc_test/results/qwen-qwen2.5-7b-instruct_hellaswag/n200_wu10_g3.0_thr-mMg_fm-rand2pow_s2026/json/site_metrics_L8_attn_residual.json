@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_attn_residual",
+  "layer": 8,
+  "op_type": "attn_residual",
+  "summary": {
+    "total": 200,
+    "correct": 127,
+    "accuracy": 0.635
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 13,
+    "fp": 0,
+    "fn": 787,
+    "normal": 0
+  }
+}

@@ -1,0 +1,28 @@
+[g2] start 2026-05-16T20:20:55+0800
+[g2] === rand2pow thr-none ===
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]Loading weights:  73%|███████▎  | 248/339 [00:00<00:00, 2478.28it/s]Loading weights: 100%|██████████| 339/339 [00:00<00:00, 3167.44it/s]
+[baseline] reuse acc=0.640000 total=200
+[1/20] site=L0_input_norm layer=0 op=input_norm acc=0.590000 runs=800 tp=0 fp=0 fn=0
+[2/20] site=L0_post_attn_norm layer=0 op=post_attn_norm acc=0.615000 runs=800 tp=0 fp=0 fn=0
+[3/20] site=L0_attn_residual layer=0 op=attn_residual acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[4/20] site=L0_mlp_act layer=0 op=mlp_act acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[5/20] site=L0_mlp_residual layer=0 op=mlp_residual acc=0.625000 runs=800 tp=0 fp=0 fn=0
+[6/20] site=L8_input_norm layer=8 op=input_norm acc=0.580000 runs=800 tp=0 fp=0 fn=0
+[7/20] site=L8_post_attn_norm layer=8 op=post_attn_norm acc=0.645000 runs=800 tp=0 fp=0 fn=0
+[8/20] site=L8_attn_residual layer=8 op=attn_residual acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[9/20] site=L8_mlp_act layer=8 op=mlp_act acc=0.645000 runs=800 tp=0 fp=0 fn=0
+[10/20] site=L8_mlp_residual layer=8 op=mlp_residual acc=0.620000 runs=800 tp=0 fp=0 fn=0
+[11/20] site=L16_input_norm layer=16 op=input_norm acc=0.590000 runs=800 tp=0 fp=0 fn=0
+[12/20] site=L16_post_attn_norm layer=16 op=post_attn_norm acc=0.615000 runs=800 tp=0 fp=0 fn=0
+[13/20] site=L16_attn_residual layer=16 op=attn_residual acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[14/20] site=L16_mlp_act layer=16 op=mlp_act acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[15/20] site=L16_mlp_residual layer=16 op=mlp_residual acc=0.620000 runs=800 tp=0 fp=0 fn=0
+[16/20] site=L24_input_norm layer=24 op=input_norm acc=0.600000 runs=800 tp=0 fp=0 fn=0
+[17/20] site=L24_post_attn_norm layer=24 op=post_attn_norm acc=0.635000 runs=800 tp=0 fp=0 fn=0
+[18/20] site=L24_attn_residual layer=24 op=attn_residual acc=0.645000 runs=800 tp=0 fp=0 fn=0
+[19/20] site=L24_mlp_act layer=24 op=mlp_act acc=0.630000 runs=800 tp=0 fp=0 fn=0
+[20/20] site=L24_mlp_residual layer=24 op=mlp_residual acc=0.640000 runs=800 tp=0 fp=0 fn=0
+{"run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-rand2pow_s2026", "site_set": "nonmatmul", "sweep_csv": "sweep_summary_nonmatmul.csv", "fault_group_count": 20, "expected_fault_group_count": 20, "baseline_acc": 0.64}
+[g2] === rand2pow thr-golden ===
+/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/tmux_hs_nonmatmul_gpu2.sh: line 19: extra[@]: unbound variable

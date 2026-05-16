@@ -1,0 +1,17 @@
+{
+  "site_id": "L0_input_norm",
+  "layer": 0,
+  "op_type": "input_norm",
+  "summary": {
+    "total": 200,
+    "correct": 129,
+    "accuracy": 0.645
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 800,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

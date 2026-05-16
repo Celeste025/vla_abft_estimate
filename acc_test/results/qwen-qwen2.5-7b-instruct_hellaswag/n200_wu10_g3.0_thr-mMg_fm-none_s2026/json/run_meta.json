@@ -17,5 +17,9 @@
     16,
     24
   ],
-  "notes": "No injection; per-site ACC v2 threshold + golden restore; tp should be 0 on clean data."
+  "notes": "No injection; per-site ACC threshold + golden restore; tp should be 0 on clean data.",
+  "inject_enable": false,
+  "metrics_scope": "all",
+  "site_set": "nonmatmul",
+  "monitor_csv": "threshold_monitor_nonmatmul_by_site.csv"
 }

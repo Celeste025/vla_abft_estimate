@@ -1,0 +1,17 @@
+{
+  "site_id": "L0_mlp_act",
+  "layer": 0,
+  "op_type": "mlp_act",
+  "summary": {
+    "total": 200,
+    "correct": 127,
+    "accuracy": 0.635
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 800,
+    "normal": 0
+  }
+}

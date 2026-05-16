@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_mlp_residual",
+  "layer": 8,
+  "op_type": "mlp_residual",
+  "summary": {
+    "total": 200,
+    "correct": 114,
+    "accuracy": 0.57
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 800,
+    "normal": 0
+  }
+}

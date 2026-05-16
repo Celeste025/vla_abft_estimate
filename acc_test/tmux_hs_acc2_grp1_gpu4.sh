@@ -8,7 +8,7 @@ BASE=(--max-samples 200 --n-warmup 10 --gamma 3.0 --seed 2026 --layer-list 0,8,1
 
 for d in 10 100 1000; do
   echo "[grp1] === fixed fault_delta=${d} thr-mMg ===" 
-  "$PY" run_hellaswag_acc_v2_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta "$d"
+  "$PY" run_hellaswag_acc_sweep.py "${BASE[@]}" --fault-mode fixed --fault-delta "$d"
   RUN_DIR=$("$PY" -c "
 from results_layout import default_results_root, results_run_dir
 print(results_run_dir(
@@ -27,7 +27,7 @@ print(results_run_dir(
   "$PY" plot_sweep_summary.py \
     --in-csv "$RUN_DIR/csv/sweep_summary.csv" \
     --out-png-acc "$RUN_DIR/plots/sweep_acc_fault_by_layer_op.png" \
-    --title "HellaSwag ACC v2 thr-mMg fixed+${d} (n200 wu10 g3 s2026)" \
+    --title "HellaSwag ACC thr-mMg fixed+${d} (n200 wu10 g3 s2026)" \
     --out-png-tp-rate "$RUN_DIR/plots/sweep_tp_rate_by_layer_op.png"
   echo "[grp1] done $RUN_DIR"
 done

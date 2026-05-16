@@ -1,0 +1,67 @@
+[plot] monitor n200_wu10_g1.0_thr-mMg_fm-none_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g1.0_thr-mMg_fm-none_s2026/plots/threshold_fpr_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g1.0_thr-mMg_fm-none_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMg_fm-fixed_fd10000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMg_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMg_fm-fixed_fd100_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd100_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd100_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd100_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMg_fm-fixed_fd10_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-fixed_fd10_s2026/plots/sweep_fpr_by_op.png
+[plot] monitor n200_wu10_g3.0_thr-mMg_fm-none_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-none_s2026/plots/threshold_fpr_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-none_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMz_fm-fixed_fd10000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMz_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd100_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMz_fm-fixed_fd10_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-fixed_fd10_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-mMz_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMz_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-none_fm-fixed_fd10000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-none_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-none_fm-fixed_fd100_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd100_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd100_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd100_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-none_fm-fixed_fd10_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-fixed_fd10_s2026/plots/sweep_fpr_by_op.png
+[plot] sweep n200_wu10_g3.0_thr-none_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot_all] finished 2026-05-16T21:18:46+0800

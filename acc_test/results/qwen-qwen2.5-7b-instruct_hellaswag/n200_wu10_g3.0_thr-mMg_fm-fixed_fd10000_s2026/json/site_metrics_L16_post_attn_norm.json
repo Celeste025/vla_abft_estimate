@@ -1,0 +1,17 @@
+{
+  "site_id": "L16_post_attn_norm",
+  "layer": 16,
+  "op_type": "post_attn_norm",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 800,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

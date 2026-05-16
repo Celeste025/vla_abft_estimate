@@ -1,0 +1,17 @@
+{
+  "site_id": "L24_input_norm",
+  "layer": 24,
+  "op_type": "input_norm",
+  "summary": {
+    "total": 200,
+    "correct": 120,
+    "accuracy": 0.6
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

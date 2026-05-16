@@ -1,0 +1,17 @@
+{
+  "site_id": "L16_mlp_residual",
+  "layer": 16,
+  "op_type": "mlp_residual",
+  "summary": {
+    "total": 200,
+    "correct": 124,
+    "accuracy": 0.62
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 18,
+    "fp": 0,
+    "fn": 782,
+    "normal": 0
+  }
+}

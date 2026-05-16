@@ -82,6 +82,96 @@ def plot_fpr_by_op_type(df: pd.DataFrame, out_path: str, *, title_prefix: str) -
     plt.close(fig)
 
 
+def _is_threshold_monitor_df(df: pd.DataFrame) -> bool:
+    return "fpr" in df.columns and "acc_fault" not in df.columns
+
+
+def plot_fpr_by_layer_op(df: pd.DataFrame, out_path: str, *, title: str) -> None:
+    """Threshold-monitor CSV: FPR vs layer, one curve per op_type."""
+    layers = sorted(df["layer"].unique().tolist())
+    op_types = sorted(df["op_type"].unique().tolist())
+    markers = ["o", "s", "^", "D", "v", "P", "X", "*"]
+    plt.figure(figsize=(10, 5))
+    for i, op in enumerate(op_types):
+        dfo = df[df["op_type"] == op].sort_values("layer")
+        plt.plot(
+            dfo["layer"].tolist(),
+            dfo["fpr"].astype(float).tolist(),
+            marker=markers[i % len(markers)],
+            linewidth=1.8,
+            label=op,
+        )
+    plt.xticks(layers, [str(x) for x in layers])
+    plt.xlabel("layer")
+    plt.ylabel("FPR (fp / runs)")
+    plt.title(f"{title} — FPR vs layer (per op_type, no fault injection)")
+    ymax = max(0.05, float(df["fpr"].max()) * 1.15 + 1e-6)
+    plt.ylim(0.0, ymax)
+    plt.grid(True, alpha=0.25)
+    plt.legend(ncol=2, fontsize=9)
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=160)
+    plt.close()
+
+
+def plot_threshold_monitor(df: pd.DataFrame, args: argparse.Namespace) -> None:
+    plots_dir = Path(args.out_png_acc).parent
+    plots_dir.mkdir(parents=True, exist_ok=True)
+    fpr_layer = args.out_png_acc
+    if fpr_layer.endswith("sweep_acc_fault_by_layer_op.png"):
+        fpr_layer = str(plots_dir / "threshold_fpr_by_layer_op.png")
+    plot_fpr_by_layer_op(df, fpr_layer, title=args.title)
+    print(fpr_layer)
+
+    if "fp" in df.columns and "runs" in df.columns and "normal" in df.columns:
+        fpr_out = args.out_png_fpr_by_op
+        if fpr_out is None:
+            fpr_out = str(plots_dir / "sweep_fpr_by_op.png")
+        plot_fpr_by_op_type(df, fpr_out, title_prefix=args.title)
+        print(fpr_out)
+
+
+def load_sweep_dataframe(run_dir: Path | str) -> pd.DataFrame:
+    """Merge matmul + nonmatmul sweep CSVs when both exist under run_dir/csv/."""
+    rd = Path(run_dir)
+    csv_dir = rd / "csv"
+    parts: list[pd.DataFrame] = []
+    for name in ("sweep_summary.csv", "sweep_summary_nonmatmul.csv"):
+        p = csv_dir / name
+        if p.is_file():
+            parts.append(pd.read_csv(p))
+    if not parts:
+        raise FileNotFoundError(f"no sweep_summary*.csv under {csv_dir}")
+    if len(parts) == 1:
+        return parts[0]
+    return pd.concat(parts, ignore_index=True)
+
+
+def load_threshold_monitor_dataframe(run_dir: Path | str) -> pd.DataFrame:
+    """Merge matmul + nonmatmul threshold-monitor CSVs under run_dir/csv/."""
+    rd = Path(run_dir)
+    csv_dir = rd / "csv"
+    parts: list[pd.DataFrame] = []
+    for name in ("threshold_monitor_by_site.csv", "threshold_monitor_nonmatmul_by_site.csv"):
+        p = csv_dir / name
+        if p.is_file():
+            parts.append(pd.read_csv(p))
+    if not parts:
+        raise FileNotFoundError(f"no threshold_monitor*.csv under {csv_dir}")
+    if len(parts) == 1:
+        return parts[0]
+    return pd.concat(parts, ignore_index=True)
+
+
+def load_run_dataframe(run_dir: Path | str) -> pd.DataFrame:
+    """Load sweep or threshold-monitor CSV(s) from a run directory."""
+    rd = Path(run_dir)
+    csv_dir = rd / "csv"
+    if (csv_dir / "sweep_summary.csv").is_file() or (csv_dir / "sweep_summary_nonmatmul.csv").is_file():
+        return load_sweep_dataframe(rd)
+    return load_threshold_monitor_dataframe(rd)
+
+
 def parse_args():
     rr = default_results_root()
     ap = argparse.ArgumentParser(
@@ -89,9 +179,14 @@ def parse_args():
         "optional tp/runs and FPR-by-op_type when columns exist.",
     )
     ap.add_argument(
+        "--run-dir",
+        default=None,
+        help="If set, read csv/sweep_summary.csv (+ _nonmatmul.csv if present) from this run directory.",
+    )
+    ap.add_argument(
         "--in-csv",
-        default=str(rr / "gsm8k_sweep_shared100.csv"),
-        help="Path to sweep_summary.csv (or compatible columns).",
+        default=None,
+        help="Path to sweep_summary.csv (required if --run-dir not set).",
     )
     ap.add_argument(
         "--out-png-acc",
@@ -119,9 +214,18 @@ def parse_args():
 
 def main():
     args = parse_args()
-    df = pd.read_csv(args.in_csv)
+    if args.run_dir:
+        df = load_run_dataframe(args.run_dir)
+    elif args.in_csv:
+        df = pd.read_csv(args.in_csv)
+    else:
+        raise SystemExit("error: pass --run-dir or --in-csv")
     if df.empty:
         raise RuntimeError("empty input csv")
+
+    if _is_threshold_monitor_df(df):
+        plot_threshold_monitor(df, args)
+        return
 
     layers = sorted(df["layer"].unique().tolist())
     op_types = sorted(df["op_type"].unique().tolist())
@@ -166,7 +270,7 @@ def main():
         plt.xlabel("layer")
         plt.ylabel("tp / runs")
         plt.title(
-            "ACC v2: TP rate vs layer (per op_type)\n"
+            "ACC: TP rate vs layer (per op_type)\n"
             "tp = thr fired while the site was fault-injected; "
             "runs = hook evaluations at the target site."
         )
