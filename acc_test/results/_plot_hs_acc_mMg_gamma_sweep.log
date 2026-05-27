@@ -1,0 +1,26 @@
+[plot_mMg_gamma] start 2026-05-27T22:08:31+0800
+[plot] n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot] n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot] n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026/plots/sweep_fpr_by_op.png
+[plot] n200_wu10_g2.0_thr-mMg_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot] n200_wu10_g5.0_thr-mMg_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot] n200_wu10_g10.0_thr-mMg_fm-fixed_fd1000_s2026
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_acc_fault_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_tp_rate_by_layer_op.png
+results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-fixed_fd1000_s2026/plots/sweep_fpr_by_op.png
+[plot_mMg_gamma] finished 2026-05-27T22:08:40+0800

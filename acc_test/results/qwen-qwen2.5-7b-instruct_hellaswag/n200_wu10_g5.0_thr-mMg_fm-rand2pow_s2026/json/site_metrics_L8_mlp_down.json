@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_mlp_down",
+  "layer": 8,
+  "op_type": "mlp_down",
+  "summary": {
+    "total": 200,
+    "correct": 129,
+    "accuracy": 0.645
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 146,
+    "fp": 0,
+    "fn": 654,
+    "normal": 0
+  }
+}

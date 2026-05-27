@@ -35,11 +35,18 @@ import numpy as np
 
 
 def _find_capture_json(data_dir: str) -> str:
-    paths = sorted(
-        p
-        for p in glob.glob(os.path.join(data_dir, "*.json"))
-        if "analysis" not in os.path.basename(p).lower()
-    )
+    def _is_capture(path: str) -> bool:
+        b = os.path.basename(path).lower()
+        if "analysis" in b:
+            return False
+        if b.startswith("m_ratio") or b.endswith("_summary.json") or "meta_calib" in b:
+            return False
+        return True
+
+    paths = sorted(p for p in glob.glob(os.path.join(data_dir, "*.json")) if _is_capture(p))
+    preferred = sorted(p for p in paths if os.path.basename(p).startswith("op_stats"))
+    if preferred:
+        paths = preferred
     if not paths:
         raise FileNotFoundError(f"no capture JSON in {data_dir!r}")
     if len(paths) > 1:

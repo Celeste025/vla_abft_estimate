@@ -1,0 +1,17 @@
+{
+  "site_id": "L0_v_proj",
+  "layer": 0,
+  "op_type": "v_proj",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 185,
+    "fp": 0,
+    "fn": 615,
+    "normal": 0
+  }
+}

@@ -21,16 +21,9 @@ import matplotlib.pyplot as plt
 
 
 def _find_capture_json(data_dir: str) -> str:
-    paths = sorted(
-        p
-        for p in glob.glob(os.path.join(data_dir, "*.json"))
-        if "analysis" not in os.path.basename(p).lower()
-    )
-    if not paths:
-        raise FileNotFoundError(f"no capture JSON (exclude *analysis*) in {data_dir!r}")
-    if len(paths) > 1:
-        raise RuntimeError(f"multiple capture JSON in {data_dir}: {paths}")
-    return paths[0]
+    from plot_op_stats_calibration_ratio import _find_capture_json as _find
+
+    return _find(data_dir)
 
 
 def _load_series(

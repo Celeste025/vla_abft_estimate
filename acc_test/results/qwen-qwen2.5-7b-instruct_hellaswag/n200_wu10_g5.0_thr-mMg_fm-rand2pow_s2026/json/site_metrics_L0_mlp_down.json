@@ -1,0 +1,17 @@
+{
+  "site_id": "L0_mlp_down",
+  "layer": 0,
+  "op_type": "mlp_down",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 159,
+    "fp": 0,
+    "fn": 641,
+    "normal": 0
+  }
+}

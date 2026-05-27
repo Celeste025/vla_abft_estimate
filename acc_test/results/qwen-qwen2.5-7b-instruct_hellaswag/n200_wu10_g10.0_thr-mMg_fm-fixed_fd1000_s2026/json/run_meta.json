@@ -1,0 +1,26 @@
+{
+  "model_id": "Qwen/Qwen2.5-7B-Instruct",
+  "dataset": "hellaswag",
+  "split": "validation",
+  "max_samples": 200,
+  "n_warmup": 10,
+  "gamma": 10.0,
+  "fault_mode": "fixed",
+  "fault_delta": 1000.0,
+  "acc_thr_enabled": true,
+  "acc_thr_action": "golden",
+  "restore_mode": "golden",
+  "seed": 2026,
+  "layer_list": [
+    0,
+    8,
+    16,
+    24
+  ],
+  "l_select": 4,
+  "site_set": "matmul",
+  "ops_per_layer": 8,
+  "fault_group_count": 32,
+  "sweep_csv": "sweep_summary.csv",
+  "notes": "baseline has no threshold detection and no fault injection"
+}

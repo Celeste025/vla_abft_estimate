@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_q_proj",
+  "layer": 8,
+  "op_type": "q_proj",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 227,
+    "fp": 0,
+    "fn": 573,
+    "normal": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "site_id": "L24_mlp_gate",
+  "layer": 24,
+  "op_type": "mlp_gate",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 293,
+    "fp": 0,
+    "fn": 507,
+    "normal": 0
+  }
+}

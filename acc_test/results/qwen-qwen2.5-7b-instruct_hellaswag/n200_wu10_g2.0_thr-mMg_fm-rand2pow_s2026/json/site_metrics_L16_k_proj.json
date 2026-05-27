@@ -1,0 +1,17 @@
+{
+  "site_id": "L16_k_proj",
+  "layer": 16,
+  "op_type": "k_proj",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 251,
+    "fp": 0,
+    "fn": 549,
+    "normal": 0
+  }
+}

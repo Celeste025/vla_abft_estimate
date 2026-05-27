@@ -1,0 +1,17 @@
+{
+  "site_id": "L16_attn_core",
+  "layer": 16,
+  "op_type": "attn_core(qk^t+s*v)",
+  "summary": {
+    "total": 200,
+    "correct": 128,
+    "accuracy": 0.64
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 800,
+    "fp": 0,
+    "fn": 0,
+    "normal": 0
+  }
+}

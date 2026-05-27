@@ -1,0 +1,17 @@
+{
+  "site_id": "L8_o_proj",
+  "layer": 8,
+  "op_type": "o_proj",
+  "summary": {
+    "total": 200,
+    "correct": 129,
+    "accuracy": 0.645
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 189,
+    "fp": 0,
+    "fn": 611,
+    "normal": 0
+  }
+}

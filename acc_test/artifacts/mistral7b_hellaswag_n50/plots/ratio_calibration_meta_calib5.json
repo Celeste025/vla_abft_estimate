@@ -1,0 +1,213 @@
+{
+  "capture_json": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/op_stats_mistral7b_hellaswag_n50.json",
+  "calib_k": 5,
+  "n_testcases": 50,
+  "n_sites": 256,
+  "seed": 2026,
+  "random_sites": [
+    "L12_v_proj",
+    "L19_mlp_down",
+    "L24_k_proj",
+    "L8_q_proj",
+    "L24_mlp_up"
+  ],
+  "most_stable_ratio": [
+    {
+      "site_id": "L3_k_proj",
+      "ratio_fluctuation": 0.005681818181818121
+    },
+    {
+      "site_id": "L0_q_proj",
+      "ratio_fluctuation": 0.006896551724137945
+    }
+  ],
+  "most_unstable_ratio": [
+    {
+      "site_id": "L31_mlp_down",
+      "ratio_fluctuation": 2.1324521460494137
+    },
+    {
+      "site_id": "L9_mlp_gate",
+      "ratio_fluctuation": 1.6296638165565487
+    }
+  ],
+  "plot_median_aggregate": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_00_median_aggregate.png",
+  "median_rM": [
+    0.934614562553434,
+    0.9766350038213778,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.005588161838162,
+    1.0081312881411844,
+    1.0099347495461903,
+    1.0153276955602537,
+    1.021533613445378,
+    1.0273514851485148,
+    1.0344979032075259,
+    1.0373483052029573,
+    1.042596664834158,
+    1.0439988938053097,
+    1.0483481377590773,
+    1.055333951762523,
+    1.0606060606060606,
+    1.0631178436811037,
+    1.067283950617284,
+    1.067283950617284,
+    1.0712473572938688,
+    1.0728933167289332,
+    1.0752238527546325,
+    1.0773953301127213,
+    1.0800552104899932,
+    1.0800552104899932,
+    1.0812531739521076,
+    1.0841497339138848,
+    1.0866482262030206,
+    1.0871746158717461,
+    1.0871746158717461,
+    1.0871746158717461,
+    1.091613476344015,
+    1.0947802197802199,
+    1.0947802197802199,
+    1.0968945594607606,
+    1.0972879504914452,
+    1.099875378315827,
+    1.099875378315827,
+    1.099875378315827,
+    1.1105794790005317,
+    1.1115555555555556,
+    1.113926829268293,
+    1.113926829268293
+  ],
+  "median_rm": [
+    0.9431490384615384,
+    0.9840847686592367,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0071957343272766,
+    1.0174657534246574,
+    1.0216273088613512,
+    1.0276319003419638,
+    1.0326241134751775,
+    1.034527972027972,
+    1.041222879684418,
+    1.0417914171656686,
+    1.048326414115205,
+    1.064659977703456,
+    1.0697747183979975,
+    1.0722106360792492,
+    1.0724789915966386,
+    1.0737105186902347,
+    1.075511554514914,
+    1.0769230769230769,
+    1.082464894462598,
+    1.0836423405654174,
+    1.0858258928571427,
+    1.0895572263993316,
+    1.0907748824115082,
+    1.0921737283635977,
+    1.0953368899426992,
+    1.1060023654642224,
+    1.1070188551863818,
+    1.1070188551863818,
+    1.107459727862353,
+    1.1092817000351247,
+    1.1119606534544295,
+    1.1119606534544295,
+    1.1141604010025064,
+    1.114559125085441,
+    1.1194394547759932,
+    1.1194394547759932,
+    1.1194394547759932,
+    1.121671597633136,
+    1.121671597633136,
+    1.12631634932454,
+    1.1273937033430705,
+    1.1273937033430705
+  ],
+  "plots": [
+    {
+      "tag": "random",
+      "site_id": "L12_v_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_01_random_01_L12_v_proj.png",
+      "ratio_fluctuation": 0.26734578381437457,
+      "M_ref": 2.90625,
+      "m_ref": -2.96875
+    },
+    {
+      "tag": "random",
+      "site_id": "L19_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_01_random_02_L19_mlp_down.png",
+      "ratio_fluctuation": 0.2102613197177604,
+      "M_ref": 1.8515625,
+      "m_ref": -14.875
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_01_random_03_L24_k_proj.png",
+      "ratio_fluctuation": 0.32467288314032183,
+      "M_ref": 13.625,
+      "m_ref": -15.25
+    },
+    {
+      "tag": "random",
+      "site_id": "L8_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_01_random_04_L8_q_proj.png",
+      "ratio_fluctuation": 0.3924674871257747,
+      "M_ref": 8.375,
+      "m_ref": -10.6875
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_mlp_up",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_01_random_05_L24_mlp_up.png",
+      "ratio_fluctuation": 0.4784716430358632,
+      "M_ref": 6.8125,
+      "m_ref": -11.0
+    },
+    {
+      "tag": "most_stable_ratio",
+      "site_id": "L3_k_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_02_stable_01_L3_k_proj.png",
+      "ratio_fluctuation": 0.005681818181818121,
+      "M_ref": 11.0,
+      "m_ref": -13.3125
+    },
+    {
+      "tag": "most_stable_ratio",
+      "site_id": "L0_q_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_03_stable_02_L0_q_proj.png",
+      "ratio_fluctuation": 0.006896551724137945,
+      "M_ref": 9.0625,
+      "m_ref": -14.1875
+    },
+    {
+      "tag": "most_unstable_ratio",
+      "site_id": "L31_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_04_unstable_01_L31_mlp_down.png",
+      "ratio_fluctuation": 2.1324521460494137,
+      "M_ref": 25.125,
+      "m_ref": -29.5
+    },
+    {
+      "tag": "most_unstable_ratio",
+      "site_id": "L9_mlp_gate",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/ratio_calib5_05_unstable_02_L9_mlp_gate.png",
+      "ratio_fluctuation": 1.6296638165565487,
+      "M_ref": 3.875,
+      "m_ref": -3.890625
+    }
+  ]
+}

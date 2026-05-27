@@ -1,0 +1,17 @@
+{
+  "site_id": "L24_q_proj",
+  "layer": 24,
+  "op_type": "q_proj",
+  "summary": {
+    "total": 200,
+    "correct": 129,
+    "accuracy": 0.645
+  },
+  "acc_metrics": {
+    "runs": 800,
+    "tp": 230,
+    "fp": 0,
+    "fn": 570,
+    "normal": 0
+  }
+}

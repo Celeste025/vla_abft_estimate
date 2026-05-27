@@ -1,0 +1,17 @@
+[mistral g0] start 2026-05-27T20:59:32+0800 CUDA_VISIBLE_DEVICES=0
+[mistral g0] mirror HF_ENDPOINT=https://hf-mirror.com
+[mistral g0] === pre-download model via mirror ===
+[mirror] HF_ENDPOINT=https://hf-mirror.com
+[mirror] downloading mistralai/Mistral-7B-Instruct-v0.3 ...
+snapshot_download(repo='mistralai/Mistral-7B-Instruct-v0.3', endpoint='https://hf-mirror.com')
+/data/home/jinqiwen/miniconda3/envs/abft_cost/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py:189: UserWarning: The `resume_download` argument is deprecated and ignored in `snapshot_download`. Downloads always resume whenever possible.
+  warnings.warn(
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]Fetching 15 files:   7%|▋         | 1/15 [00:02<00:35,  2.55s/it]Fetching 15 files:  27%|██▋       | 4/15 [37:00<1:49:59, 599.95s/it]Fetching 15 files: 100%|██████████| 15/15 [37:00<00:00, 148.04s/it] 
+done: /data/home/jinqiwen/.cache/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.3/snapshots/c170c708c41dac9275d15a8fff4eca08d52bab71
+[mistral g0] === capture hellaswag n50 ===
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/291 [00:00<?, ?it/s]Loading weights: 100%|██████████| 291/291 [00:00<00:00, 3468.37it/s]
+{"wrote": "artifacts/mistral7b_hellaswag_n50/op_stats_mistral7b_hellaswag_n50.json", "n_testcases": 50}
+[mistral g0] === summarize M50/M5 max fluctuation ===
+{"wrote_json": "artifacts/mistral7b_hellaswag_n50/M_ratio_summary.json", "wrote_csv": "artifacts/mistral7b_hellaswag_n50/M_ratio_per_site.csv", "summary": {"meta": {"benchmark": "hellaswag", "model_id": "mistralai/Mistral-7B-Instruct-v0.3", "dtype": "bfloat16", "max_samples": 50, "seed": 2026, "max_new_tokens": null, "registration": {"expected_site_count": 256, "registered_site_count": 256, "missing_sites": []}}, "n_testcases": 50, "k5": 5, "k50": 50, "M50_over_M5": {"n": 256, "min": 1.0, "p10": 1.0057471264367817, "p25": 1.0343137254901962, "median": 1.113926829268293, "mean": 1.1659948694600974, "p75": 1.2394366197183098, "p90": 1.422680412371134, "p95": 1.5877862595419847, "max": 1.8396226415094339, "frac_in_2_3": 0.0, "frac_in_2_5_3_5": 0.0}, "m50_over_m5": {"n": 256, "min": 1.0, "p10": 1.0069444444444444, "p25": 1.0479041916167664, "median": 1.1273937033430705, "mean": 1.1704925717640127, "p75": 1.2307692307692308, "p90": 1.420814479638009, "p95": 1.4978723404255319, "max": 1.8686131386861313, "frac_in_2_3": 0.0, "frac_in_2_5_3_5": 0.0}, "max_min_global_max_over_50tc": {"n": 256, "min": 1.0052631578947369, "p10": 1.1658986175115207, "p25": 1.296, "median": 1.6394104583080962, "mean": 1.774801726969169, "p75": 2.025531914893617, "p90": 2.4927536231884058, "p95": 2.900763358778626, "max": 9.926530612244898, "frac_in_2_3": 0.21875, "frac_in_2_5_3_5": 0.08203125}}}
+[mistral g0] all finished 2026-05-27T21:37:16+0800

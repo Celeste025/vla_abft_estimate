@@ -1,0 +1,88 @@
+{
+  "capture_json": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/op_stats_mistral7b_hellaswag_n50.json",
+  "n_testcases": 50,
+  "seed": 2026,
+  "random_sites": [
+    "L12_v_proj",
+    "L19_mlp_down",
+    "L24_mlp_down",
+    "L8_v_proj",
+    "L24_o_proj"
+  ],
+  "least_fluctuation": [
+    {
+      "site_id": "L0_o_proj",
+      "fluctuation": 0.0433349609375
+    },
+    {
+      "site_id": "L1_o_proj",
+      "fluctuation": 0.095703125
+    }
+  ],
+  "most_fluctuation": [
+    {
+      "site_id": "L31_mlp_down",
+      "fluctuation": 65.9375
+    },
+    {
+      "site_id": "L31_mlp_up",
+      "fluctuation": 33.5
+    }
+  ],
+  "plots": [
+    {
+      "tag": "random",
+      "site_id": "L12_v_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/01_random_01_L12_v_proj.png",
+      "fluctuation": 1.984375
+    },
+    {
+      "tag": "random",
+      "site_id": "L19_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/01_random_02_L19_mlp_down.png",
+      "fluctuation": 4.640625
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/01_random_03_L24_mlp_down.png",
+      "fluctuation": 1.3046875
+    },
+    {
+      "tag": "random",
+      "site_id": "L8_v_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/01_random_04_L8_v_proj.png",
+      "fluctuation": 3.8984375
+    },
+    {
+      "tag": "random",
+      "site_id": "L24_o_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/01_random_05_L24_o_proj.png",
+      "fluctuation": 0.68359375
+    },
+    {
+      "tag": "least_fluctuation",
+      "site_id": "L0_o_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/02_least_fluct_01_L0_o_proj.png",
+      "fluctuation": 0.0433349609375
+    },
+    {
+      "tag": "least_fluctuation",
+      "site_id": "L1_o_proj",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/03_least_fluct_02_L1_o_proj.png",
+      "fluctuation": 0.095703125
+    },
+    {
+      "tag": "most_fluctuation",
+      "site_id": "L31_mlp_down",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/04_most_fluct_01_L31_mlp_down.png",
+      "fluctuation": 65.9375
+    },
+    {
+      "tag": "most_fluctuation",
+      "site_id": "L31_mlp_up",
+      "path": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/artifacts/mistral7b_hellaswag_n50/plots/05_most_fluct_02_L31_mlp_up.png",
+      "fluctuation": 33.5
+    }
+  ]
+}
