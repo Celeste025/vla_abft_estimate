@@ -1,0 +1,177 @@
+{
+  "data_dir": "artifacts/hellaswag_o_proj_tensors/L24_n100_s2026",
+  "plot_dir": "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100",
+  "distributions": [
+    "normal",
+    "laplace",
+    "student_t"
+  ],
+  "meta": {
+    "site_id": "L24_o_proj",
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "dataset": "hellaswag",
+    "seed": 2026,
+    "n_cases_total": 100
+  },
+  "case_limits": [
+    5,
+    10,
+    20,
+    50,
+    100
+  ],
+  "rows": [
+    {
+      "n_cases": 5,
+      "n_cases_requested": 5,
+      "n_forwards_per_case": 4,
+      "n_tensors": 20,
+      "n_elements": 5709312,
+      "fit_subsample_size": 200000,
+      "sample_mean": -0.0005842520040459931,
+      "sample_variance": 0.3084571063518524,
+      "sample_std": 0.5553891658782959,
+      "fits": {
+        "normal": {
+          "loc": -0.0011103568831458688,
+          "scale": 0.562115490436554,
+          "variance": 0.31597384810447693
+        },
+        "laplace": {
+          "loc": 0.00133514404296875,
+          "scale": 0.39528676867485046,
+          "variance": 0.31250324845314026
+        },
+        "student_t": {
+          "df": 6.010339583510925,
+          "loc": 0.001300337945911563,
+          "scale": 0.4289227179821413,
+          "variance": 0.2757248823285325
+        }
+      }
+    },
+    {
+      "n_cases": 10,
+      "n_cases_requested": 10,
+      "n_forwards_per_case": 4,
+      "n_tensors": 40,
+      "n_elements": 11655168,
+      "fit_subsample_size": 200000,
+      "sample_mean": -0.000714400433935225,
+      "sample_variance": 0.30984774231910706,
+      "sample_std": 0.5566396713256836,
+      "fits": {
+        "normal": {
+          "loc": -0.0009993438143283129,
+          "scale": 0.5580061674118042,
+          "variance": 0.3113709092140198
+        },
+        "laplace": {
+          "loc": 0.001903533935546875,
+          "scale": 0.3950948715209961,
+          "variance": 0.3121999204158783
+        },
+        "student_t": {
+          "df": 6.066437171998155,
+          "loc": 0.001339951870723803,
+          "scale": 0.42907104861467105,
+          "variance": 0.2746490244935669
+        }
+      }
+    },
+    {
+      "n_cases": 20,
+      "n_cases_requested": 20,
+      "n_forwards_per_case": 4,
+      "n_tensors": 80,
+      "n_elements": 25786880,
+      "fit_subsample_size": 200000,
+      "sample_mean": -0.0015513855032622814,
+      "sample_variance": 0.32613199949264526,
+      "sample_std": 0.571079671382904,
+      "fits": {
+        "normal": {
+          "loc": -0.0011637737043201923,
+          "scale": 0.5687623023986816,
+          "variance": 0.32349056005477905
+        },
+        "laplace": {
+          "loc": 0.000659942626953125,
+          "scale": 0.3990204930305481,
+          "variance": 0.3184347152709961
+        },
+        "student_t": {
+          "df": 5.9571414840401165,
+          "loc": 0.0010926476996803228,
+          "scale": 0.4321469484802554,
+          "variance": 0.2811377972956227
+        }
+      }
+    },
+    {
+      "n_cases": 50,
+      "n_cases_requested": 50,
+      "n_forwards_per_case": 4,
+      "n_tensors": 200,
+      "n_elements": 64311296,
+      "fit_subsample_size": 200000,
+      "sample_mean": -0.001352030085399747,
+      "sample_variance": 0.3277314603328705,
+      "sample_std": 0.5724783539772034,
+      "fits": {
+        "normal": {
+          "loc": -0.0023028049618005753,
+          "scale": 0.6009255647659302,
+          "variance": 0.36111152172088623
+        },
+        "laplace": {
+          "loc": 0.00036907196044921875,
+          "scale": 0.3994057774543762,
+          "variance": 0.3190499544143677
+        },
+        "student_t": {
+          "df": 6.079560997794271,
+          "loc": 0.0004816444168147692,
+          "scale": 0.4330939892750163,
+          "variance": 0.2795265741476235
+        }
+      }
+    },
+    {
+      "n_cases": 100,
+      "n_cases_requested": 100,
+      "n_forwards_per_case": 4,
+      "n_tensors": 400,
+      "n_elements": 117186048,
+      "fit_subsample_size": 200000,
+      "sample_mean": -0.0013158363290131092,
+      "sample_variance": 0.32701414823532104,
+      "sample_std": 0.5718514919281006,
+      "fits": {
+        "normal": {
+          "loc": 0.0008056924561969936,
+          "scale": 0.5788332223892212,
+          "variance": 0.3350479006767273
+        },
+        "laplace": {
+          "loc": 0.0031890869140625,
+          "scale": 0.3969290554523468,
+          "variance": 0.3151053488254547
+        },
+        "student_t": {
+          "df": 6.260921769779845,
+          "loc": 0.0031475941801772417,
+          "scale": 0.43277540000028125,
+          "variance": 0.2752072366177297
+        }
+      }
+    }
+  ],
+  "plots": [
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n5_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n10_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n20_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n50_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n100_cases_x4.png"
+  ]
+}

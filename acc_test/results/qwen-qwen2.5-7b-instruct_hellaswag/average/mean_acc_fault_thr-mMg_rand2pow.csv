@@ -1,0 +1,5 @@
+gamma,run_dir,site_set,mean_acc_fault,std_acc_fault,n_sites,mean_acc_baseline,thr
+2.0,/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026,matmul,0.64171875,0.002683681880830888,32,0.64,mMg
+3.0,/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026,matmul,0.64171875,0.002683681880830888,32,0.64,mMg
+5.0,/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026,matmul,0.641875,0.0027243118397129234,32,0.64,mMg
+10.0,/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026,matmul,0.6412500000000001,0.0035355339059327407,32,0.64,mMg

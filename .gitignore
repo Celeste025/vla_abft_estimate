@@ -2,3 +2,5 @@
 scripts/push_to_origin_main.sh
 pytorch/data/
 triton_kernel_test/ncu_reports/
+acc_test/artifacts/hellaswag_o_proj_tensors/
+acc_test/artifacts/hellaswag_layer_hidden_diff/

@@ -1,0 +1,77 @@
+{
+  "data_dir": "artifacts/hellaswag_o_proj_tensors/L24_n100_s2026",
+  "plot_dir": "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100",
+  "meta": {
+    "site_id": "L24_o_proj",
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "dataset": "hellaswag",
+    "seed": 2026,
+    "n_cases_total": 100
+  },
+  "case_limits": [
+    5,
+    10,
+    20,
+    50,
+    100
+  ],
+  "fits": [
+    {
+      "n_cases": 5,
+      "n_cases_requested": 5,
+      "n_forwards_per_case": 4,
+      "n_tensors": 20,
+      "n_elements": 5709312,
+      "mean": -0.0005842517712153494,
+      "variance": 0.3084571957588196,
+      "std": 0.5553892254829407
+    },
+    {
+      "n_cases": 10,
+      "n_cases_requested": 10,
+      "n_forwards_per_case": 4,
+      "n_tensors": 40,
+      "n_elements": 11655168,
+      "mean": -0.000714399735443294,
+      "variance": 0.30984777212142944,
+      "std": 0.5566397309303284
+    },
+    {
+      "n_cases": 20,
+      "n_cases_requested": 20,
+      "n_forwards_per_case": 4,
+      "n_tensors": 80,
+      "n_elements": 25786880,
+      "mean": -0.0015513855032622814,
+      "variance": 0.3261320888996124,
+      "std": 0.5710797309875488
+    },
+    {
+      "n_cases": 50,
+      "n_cases_requested": 50,
+      "n_forwards_per_case": 4,
+      "n_tensors": 200,
+      "n_elements": 64311296,
+      "mean": -0.0013520342763513327,
+      "variance": 0.32773151993751526,
+      "std": 0.5724784135818481
+    },
+    {
+      "n_cases": 100,
+      "n_cases_requested": 100,
+      "n_forwards_per_case": 4,
+      "n_tensors": 400,
+      "n_elements": 117186048,
+      "mean": -0.0013158363290131092,
+      "variance": 0.32701432704925537,
+      "std": 0.5718516707420349
+    }
+  ],
+  "plots": [
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n5_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n10_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n20_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n50_cases_x4.png",
+    "results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/L24_o_proj_n100/dist_pooled_n100_cases_x4.png"
+  ]
+}

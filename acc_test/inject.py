@@ -170,6 +170,10 @@ class InjectionContext(AbstractContextManager):
     def inject_count(self) -> int:
         return self._inject_count
 
+    @property
+    def last_inject_flat_idx(self) -> Optional[int]:
+        return self._inj_flat_idx
+
     def collect_hook_stats(self) -> HookStats:
         expected = set(list_sites(self.model, site_set=self.site_set))
         registered = set(self._site_to_handle.keys())

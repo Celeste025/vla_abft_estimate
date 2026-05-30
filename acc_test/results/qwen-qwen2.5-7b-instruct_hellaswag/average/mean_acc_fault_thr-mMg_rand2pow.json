@@ -1,0 +1,65 @@
+{
+  "model_id": "Qwen/Qwen2.5-7B-Instruct",
+  "dataset": "hellaswag",
+  "fault_mode": "rand2pow",
+  "fault_delta": null,
+  "site_set": "matmul",
+  "gammas_requested": [
+    2.0,
+    3.0,
+    5.0,
+    10.0
+  ],
+  "gammas_plotted": [
+    2.0,
+    3.0,
+    5.0,
+    10.0
+  ],
+  "thr_mMg_rows": [
+    {
+      "gamma": 2.0,
+      "run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g2.0_thr-mMg_fm-rand2pow_s2026",
+      "site_set": "matmul",
+      "mean_acc_fault": 0.64171875,
+      "std_acc_fault": 0.002683681880830888,
+      "n_sites": 32,
+      "mean_acc_baseline": 0.64
+    },
+    {
+      "gamma": 3.0,
+      "run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-mMg_fm-rand2pow_s2026",
+      "site_set": "matmul",
+      "mean_acc_fault": 0.64171875,
+      "std_acc_fault": 0.002683681880830888,
+      "n_sites": 32,
+      "mean_acc_baseline": 0.64
+    },
+    {
+      "gamma": 5.0,
+      "run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g5.0_thr-mMg_fm-rand2pow_s2026",
+      "site_set": "matmul",
+      "mean_acc_fault": 0.641875,
+      "std_acc_fault": 0.0027243118397129234,
+      "n_sites": 32,
+      "mean_acc_baseline": 0.64
+    },
+    {
+      "gamma": 10.0,
+      "run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g10.0_thr-mMg_fm-rand2pow_s2026",
+      "site_set": "matmul",
+      "mean_acc_fault": 0.6412500000000001,
+      "std_acc_fault": 0.0035355339059327407,
+      "n_sites": 32,
+      "mean_acc_baseline": 0.64
+    }
+  ],
+  "thr_none_ref": {
+    "run_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/qwen-qwen2.5-7b-instruct_hellaswag/n200_wu10_g3.0_thr-none_fm-rand2pow_s2026",
+    "mean_acc_fault": 0.63109375,
+    "std_acc_fault": 0.01609223293820657,
+    "n_sites": 32,
+    "mean_acc_baseline": 0.64
+  },
+  "plot": "results/qwen-qwen2.5-7b-instruct_hellaswag/average/mean_acc_fault_thr-mMg_rand2pow.png"
+}
