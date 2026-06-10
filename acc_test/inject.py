@@ -152,6 +152,10 @@ class InjectionContext(AbstractContextManager):
         }
         self._acc_metrics_by_site: Dict[str, Dict[str, int]] = {}
         self._inj_flat_idx: Optional[int] = None
+        self._last_pre_inject_min: Optional[float] = None
+        self._last_pre_inject_max: Optional[float] = None
+        self._pre_inject_min: Optional[float] = None
+        self._pre_inject_max: Optional[float] = None
 
     def __enter__(self) -> "InjectionContext":
         self._register_model_pre_hook()
@@ -173,6 +177,42 @@ class InjectionContext(AbstractContextManager):
     @property
     def last_inject_flat_idx(self) -> Optional[int]:
         return self._inj_flat_idx
+
+    @property
+    def last_pre_inject_min(self) -> Optional[float]:
+        return self._last_pre_inject_min
+
+    @property
+    def last_pre_inject_max(self) -> Optional[float]:
+        return self._last_pre_inject_max
+
+    @property
+    def pre_inject_min(self) -> Optional[float]:
+        return self._pre_inject_min
+
+    @property
+    def pre_inject_max(self) -> Optional[float]:
+        return self._pre_inject_max
+
+    def reset_pre_inject_stats(self) -> None:
+        self._last_pre_inject_min = None
+        self._last_pre_inject_max = None
+        self._pre_inject_min = None
+        self._pre_inject_max = None
+
+    def _record_pre_inject_range(self, tensor: torch.Tensor) -> None:
+        with torch.no_grad():
+            xf = tensor.detach().float()
+            lo = float(xf.amin().item())
+            hi = float(xf.amax().item())
+        self._last_pre_inject_min = lo
+        self._last_pre_inject_max = hi
+        if self._pre_inject_min is None:
+            self._pre_inject_min = lo
+            self._pre_inject_max = hi
+        else:
+            self._pre_inject_min = min(self._pre_inject_min, lo)
+            self._pre_inject_max = max(self._pre_inject_max, hi)
 
     def collect_hook_stats(self) -> HookStats:
         expected = set(list_sites(self.model, site_set=self.site_set))
@@ -335,6 +375,7 @@ class InjectionContext(AbstractContextManager):
         work = tensor.clone()
         injected = False
         if allow_inject and self._can_inject_fault(site_id):
+            self._record_pre_inject_range(tensor)
             self._inject_fault_into(work)
             injected = True
             self._injected_this_forward = True

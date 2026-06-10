@@ -1,0 +1,51 @@
+{
+  "artifact_dir": "artifacts/hellaswag_logits_diff/case0_end0_L13_mlp_down_fd10",
+  "meta": {
+    "model_id": "Qwen/Qwen2.5-7B-Instruct",
+    "benchmark": "hellaswag",
+    "case_idx": 0,
+    "ending_idx": 0,
+    "label": 0,
+    "ctx_preview": "[header] How to look after your skin [title] Wash your face in the morning and in the evening. [step] Make sure that you use the right facial cleaner for your skin type. For example, if you have oily ",
+    "ending": "If you have dry skin, use a gentle, moisturizing, fragrance-free face wash. [title] Avoid using hot water while you bath, and limit your bathing time to 20 minutes.",
+    "target_site": "L13_mlp_down",
+    "inject_layer": 13,
+    "inject_site": "mlp_down",
+    "site_set": "matmul",
+    "fault_mode": "fixed",
+    "fault_delta": 10.0,
+    "threshold_enable": false,
+    "inject_count": 1,
+    "last_inject_flat_idx": 62453,
+    "token_meta": {
+      "seq_len": 106,
+      "ctx_token_len": 66,
+      "ending_token_len": 40,
+      "predict_len": 105,
+      "ctx_predict_end": 65,
+      "ending_predict_start": 65,
+      "ending_predict_end": 105
+    },
+    "vector_shape": [
+      105,
+      1
+    ],
+    "clean_path": "artifacts/hellaswag_logits_diff/case0_end0_L13_mlp_down_fd10/clean/token_logp.pt",
+    "fault_path": "artifacts/hellaswag_logits_diff/case0_end0_L13_mlp_down_fd10/fault/token_logp.pt",
+    "ending_logp_sum_clean": -70.55081176757812,
+    "ending_logp_sum_fault": -70.28282165527344
+  },
+  "plot_png": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/logits_diff/logits_case0_end0_L13_mlp_down_fd10/token_logp_heatmaps.png",
+  "vmin_clean": -11.443182945251465,
+  "vmax_clean": -0.00010041666246252134,
+  "vmin_fault": -11.443182945251465,
+  "vmax_fault": -0.00010395444405730814,
+  "lim_diff": 0.241519957780838,
+  "vmax_rel_perturbation": 0.2827685475349426,
+  "rel_metric": "|p_fault-p_clean|/p_clean via |expm1(delta_logp)|",
+  "rel_perturbation_max": 0.4462178945541382,
+  "rel_perturbation_mean": 0.027918512001633644,
+  "rel_perturbation_csv": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/logits_diff/logits_case0_end0_L13_mlp_down_fd10/token_prob_rel_perturbation.csv",
+  "scale_percentile": 99.5,
+  "boundary_token": 65
+}

@@ -1,0 +1,30 @@
+# HellaSwag case0 ending0 — 105 predicted tokens (pos i -> token i+1)
+# seq_len=106 ctx_tokens=66 ending_tokens=40
+# boundary predict pos 65 (ctx|ending)
+# 20 tokens per row
+
+row  0 (pos   0- 19):
+  [  0|ctx|  2708|'header']  [  1|ctx|    60|']']  [  2|ctx|  2585|' How']  [  3|ctx|   311|' to']  [  4|ctx|  1401|' look']  [  5|ctx|  1283|' after']  [  6|ctx|   697|' your']  [  7|ctx|  6787|' skin']  [  8|ctx|   508|' [']  [  9|ctx|  2102|'title']  [ 10|ctx|    60|']']  [ 11|ctx|  5985|' Wash']  [ 12|ctx|   697|' your']  [ 13|ctx|  3579|' face']  [ 14|ctx|   304|' in']  [ 15|ctx|   279|' the']  [ 16|ctx|  6556|' morning']  [ 17|ctx|   323|' and']  [ 18|ctx|   304|' in']  [ 19|ctx|   279|' the']
+
+row  1 (pos  20- 39):
+  [ 20|ctx| 11458|' evening']  [ 21|ctx|    13|'.']  [ 22|ctx|   508|' [']  [ 23|ctx|  9520|'step']  [ 24|ctx|    60|']']  [ 25|ctx|  7405|' Make']  [ 26|ctx|  2704|' sure']  [ 27|ctx|   429|' that']  [ 28|ctx|   498|' you']  [ 29|ctx|   990|' use']  [ 30|ctx|   279|' the']  [ 31|ctx|  1290|' right']  [ 32|ctx| 27800|' facial']  [ 33|ctx| 31881|' cleaner']  [ 34|ctx|   369|' for']  [ 35|ctx|   697|' your']  [ 36|ctx|  6787|' skin']  [ 37|ctx|   943|' type']  [ 38|ctx|    13|'.']  [ 39|ctx|  1752|' For']
+
+row  2 (pos  40- 59):
+  [ 40|ctx|  3110|' example']  [ 41|ctx|    11|',']  [ 42|ctx|   421|' if']  [ 43|ctx|   498|' you']  [ 44|ctx|   614|' have']  [ 45|ctx| 77471|' oily']  [ 46|ctx|  6787|' skin']  [ 47|ctx|   476|' or']  [ 48|ctx| 45805|' acne']  [ 49|ctx|    11|',']  [ 50|ctx|   633|' get']  [ 51|ctx|  2494|' something']  [ 52|ctx|   429|' that']  [ 53|ctx|  5610|' contains']  [ 54|ctx|  4274|' sal']  [ 55|ctx|  2842|'icy']  [ 56|ctx|   415|'lic']  [ 57|ctx| 13621|' acid']  [ 58|ctx|   476|' or']  [ 59|ctx| 70946|' benz']
+
+row  3 (pos  60- 79):
+  [ 60|ctx|  2253|'oy']  [ 61|ctx|    75|'l']  [ 62|ctx|   817|' per']  [ 63|ctx| 54089|'oxide']  [ 64|ctx|    13|'.']  [ 65|end|  1416|' If']  [ 66|end|   498|' you']  [ 67|end|   614|' have']  [ 68|end|  9058|' dry']  [ 69|end|  6787|' skin']  [ 70|end|    11|',']  [ 71|end|   990|' use']  [ 72|end|   264|' a']  [ 73|end| 21700|' gentle']  [ 74|end|    11|',']  [ 75|end| 53802|' moistur']  [ 76|end|  4849|'izing']  [ 77|end|    11|',']  [ 78|end| 55127|' fragrance']  [ 79|end| 12577|'-free']
+
+row  4 (pos  80- 99):
+  [ 80|end|  3579|' face']  [ 81|end| 11369|' wash']  [ 82|end|    13|'.']  [ 83|end|   508|' [']  [ 84|end|  2102|'title']  [ 85|end|    60|']']  [ 86|end| 34006|' Avoid']  [ 87|end|  1667|' using']  [ 88|end|  4017|' hot']  [ 89|end|  3015|' water']  [ 90|end|  1393|' while']  [ 91|end|   498|' you']  [ 92|end|  8885|' bath']  [ 93|end|    11|',']  [ 94|end|   323|' and']  [ 95|end|  3930|' limit']  [ 96|end|   697|' your']  [ 97|end| 72409|' bathing']  [ 98|end|   882|' time']  [ 99|end|   311|' to']
+
+row  5 (pos 100-104):
+  [100|end|   220|' ']  [101|end|    17|'2']  [102|end|    15|'0']  [103|end|  4420|' minutes']  [104|end|    13|'.']
+
+# --- compact (token text only, 20 per line) ---
+'header' ']' ' How' ' to' ' look' ' after' ' your' ' skin' ' [' 'title' ']' ' Wash' ' your' ' face' ' in' ' the' ' morning' ' and' ' in' ' the'
+' evening' '.' ' [' 'step' ']' ' Make' ' sure' ' that' ' you' ' use' ' the' ' right' ' facial' ' cleaner' ' for' ' your' ' skin' ' type' '.' ' For'
+' example' ',' ' if' ' you' ' have' ' oily' ' skin' ' or' ' acne' ',' ' get' ' something' ' that' ' contains' ' sal' 'icy' 'lic' ' acid' ' or' ' benz'
+'oy' 'l' ' per' 'oxide' '.' ' If' ' you' ' have' ' dry' ' skin' ',' ' use' ' a' ' gentle' ',' ' moistur' 'izing' ',' ' fragrance' '-free'
+' face' ' wash' '.' ' [' 'title' ']' ' Avoid' ' using' ' hot' ' water' ' while' ' you' ' bath' ',' ' and' ' limit' ' your' ' bathing' ' time' ' to'
+' ' '2' '0' ' minutes' '.'

@@ -4,3 +4,5 @@ pytorch/data/
 triton_kernel_test/ncu_reports/
 acc_test/artifacts/hellaswag_o_proj_tensors/
 acc_test/artifacts/hellaswag_layer_hidden_diff/
+acc_test/artifacts/hellaswag_logits_diff/
+acc_test/artifacts/hellaswag_four_choice/

@@ -1,0 +1,17 @@
+{
+  "artifact_dir": "artifacts/hellaswag_four_choice/case0_L0_mlp_down",
+  "plot_dir": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/four_choice/case0_L0_mlp_down",
+  "y_scale": "log on softmax probability",
+  "clean_png": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/four_choice/case0_L0_mlp_down/bars_clean.png",
+  "fault_pngs": {
+    "fault_fd10": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/four_choice/case0_L0_mlp_down/bars_fault_fd10.png",
+    "fault_fd100": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/four_choice/case0_L0_mlp_down/bars_fault_fd100.png",
+    "fault_fd1000": "/data/home/jinqiwen/workspace/vla_abft_estimate/acc_test/results/distribution/qwen-qwen2.5-7b-instruct_hellaswag/four_choice/case0_L0_mlp_down/bars_fault_fd1000.png"
+  },
+  "clean_probs": [
+    0.9999999999949254,
+    1.4764169420284634e-37,
+    5.0745150047296624e-12,
+    9.123526171146823e-17
+  ]
+}
